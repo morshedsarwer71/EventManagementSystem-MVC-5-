@@ -1,0 +1,158 @@
+﻿@model EventManagement.Areas.Accounting.ViewModels.AccountHeadsViewModels
+<section class="content-header">
+    <h1>
+        Ledger
+        <small>preview of ledger</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i>Home</a></li>
+        <li><a href="#">Ledger</a></li>
+        <li class="active">Ledger</li>
+    </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div id="dvLoader" class="LoadingDiv" style="display: none; margin-top:150px; margin-left:50px;">
+        <center>
+            <img src="~/Content/img/ajax-loader.gif" alt="Loading" />
+        </center>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Account Head</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calculator"></i>
+                                    </div>
+                                    <select class="form-control" id="accHead">
+                                        @foreach (var item in Model.AccountsHeads)
+                                        {
+                                            <option value="@item.AccountsHeadId">@item.AccountsHeadNameEN</option>
+                                        }
+                                    </select>
+                                </div>
+                                <!-- /.input group -->
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>From Date</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="fromDate" />
+                                </div>
+                                <!-- /.input group -->
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>To Date</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="toDate" />
+                                </div>
+                                <!-- /.input group -->
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <button class="btn btn-primary" id="btnClick" style="margin-top:25px;">View</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Voucher Code</th>
+                                <th>Date</th>
+                                <th>Name</th>
+                                <th>Debit Balance</th>
+                                <th>Credit Balance</th>
+                                <th>Debit</th>
+                                <th>Credit</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tBody"></tbody>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer clearfix">
+
+                    <ul class="pagination pagination-sm no-margin pull-right">
+                        <li><a href="#">&laquo;</a></li>
+                        <li><a href="#">1</a></li>
+                        <li><a href="#">2</a></li>
+                        <li><a href="#">3</a></li>
+                        <li><a href="#">&raquo;</a></li>
+                    </ul>
+                </div>
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+
+    </div>
+</section>
+
+@section scripts{
+    <script src="~/Content/bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#fromDate').datepicker({
+                format: 'yyyy-mm-dd',
+                //startDate: '-3d'
+            });
+            $('#toDate').datepicker({
+                format: 'yyyy-mm-dd',
+                //startDate: '-3d'
+            });
+            $('#btnClick').click(function () {
+                var headId = $('#accHead').val();
+                var fromDate = $('#fromDate').val();
+                var toDate = $('#toDate').val();
+                $('#dvLoader').show();
+                $.ajax({
+                    url: "/AccountingData/Ledger",
+                    type: "POST",
+                    data: JSON.stringify({
+                        "id": headId,
+                        "fromDate": fromDate,
+                        "toDate": toDate
+                    }),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        console.log(data);
+                        var result = data.ResponseLedgers;
+                        var tr = "";
+                        result.forEach(function (element) {
+                            tr += "<tr>";
+                            tr += '<td>' + element.VoucherCode + '</td>';
+                            tr += '<td>' + element.Date + '</td>';
+                            tr += '<td>' + element.AcountHeadName + '</td>';
+                            tr += '<td>' + element.DebitJournalAmount + '</td>';
+                            tr += '<td>' + element.CreditJournalAmount + '</td>';
+                            tr += '<td>' + element.Debit + '</td>';
+                            tr += '<td>' + element.Credit + '</td>';
+                            tr += "</tr>";
+                        });
+                        $("#tBody").html(tr);
+                        $('#dvLoader').hide();
+                    }
+                });
+            });
+        });
+
+    </script>
+}

@@ -1,0 +1,114 @@
+﻿<section class="content">
+    <div id="dvLoader" class="LoadingDiv" style="display: none; margin-left:50px;margin-top:150px;">
+        <center>
+            <img src="~/Content/img/ajax-loader.gif" alt="Loading" />
+        </center>
+    </div>
+    <div class="row">
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title">Account Head Info</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#firstTab">Index</a></li>
+                    <li><a data-toggle="tab" href="#secondTab">Add New</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="firstTab" class="tab-pane fade in active">@Html.Action("AccountHeads")</div>
+                    <div id="secondTab" class="tab-pane fade in">@Html.Action("AddAccountHead")</div>
+                </div>
+            </div>
+        </div>
+        <!-- /.box -->
+        <!-- /.col -->
+
+    </div>
+</section>
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            //add new buyer
+            $('#btnSave').click(function () {
+                var accHeadEN = $('#accHeadEN').val();
+                var accHeadAR = $('#accHeadAR').val();
+                var transType = $('#transType').val();
+                var reportType = $('#reportType').val();
+                $('#dvLoader').show();
+                $.ajax({
+                    url: "/AccountingData/AddAccountHead",
+                    type: "POST",
+                    data: JSON.stringify({
+                        "AccountsHeadNameEN": accHeadEN,
+                        "AccountsHeadNameAR": accHeadAR,
+                        "TransactionType": transType,
+                        "ReportHeadId": reportType
+                    }),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function () { 
+                        LoadData();
+                        Clear();
+                        $('#dvLoader').hide();
+                    }
+                });
+
+            });
+        });
+        function Clear() {
+            $('#accHeadEN').val('');
+            $('#accHeadAR').val('');
+            $('#transType').val('');
+            $('#reportType').val('');
+        }
+        function LoadData()
+        {
+            var page = 1;
+            $.ajax({
+                url: "/AccountingData/JsonAccountHeads",
+                type: "GET",
+                data: JSON.stringify({
+                    "page": page
+                }),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    console.log(data);
+                    var heads = data.ResponseAccountHeads;
+                    var tr = "";
+                    heads.forEach(function (head) {
+                        tr += '<tr>';
+                        tr += '<td>' + head.Serial + '</td>';
+                        tr += '<td>' + head.AccountHeadName + '</td>';
+                        tr += '<td>' + head.TransType + '</td>';
+                        tr += '<td>' + head.ReportHeadName + '</td>';
+                        tr += '</tr>';
+                    });
+                    $("#tBody").html(tr);
+                }
+            });
+        };
+
+        function Delete(id) {
+            //alert(id);
+            var ans = confirm("Are you sure want to delete this record test");
+            if (ans) {
+                $('#dvLoader').show();
+                $.ajax({
+                    url: "/InventoryData/DeleteBuyer",
+                    type: "POST",
+                    data: JSON.stringify({
+                        "id": id
+                    }),
+                    contentType: "application/json;charset=UTF-8",
+                    dataType: "json",
+                    success: function () {
+                        $('#firstTab').reload();
+                        $('#dvLoader').hide();
+                    },
+                });
+            }
+        }
+    </script>
+}

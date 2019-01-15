@@ -1,0 +1,62 @@
+﻿<section class="content">
+    <div id="dvLoader" class="LoadingDiv" style="display: none;">
+        <center>
+            <img src="~/Content/img/ajax-loader.gif" alt="Loading" />
+        </center>
+    </div>
+    <div class="row">
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title">Report Head Info</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#firstTab">Index</a></li>
+                    <li><a data-toggle="tab" href="#secondTab">Add New</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="firstTab" class="tab-pane fade in active">@Html.Action("ReportHeads")</div>
+                    <div id="secondTab" class="tab-pane fade in">@Html.Action("AddReportHead")</div>
+                </div>
+            </div>
+        </div>
+        <!-- /.box -->
+        <!-- /.col -->
+
+    </div>
+</section>
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            //add new buyer
+            $('#btnSave').click(function () {
+                var rHeadEN = $('#rHeadEN').val();
+                var rHeadAR = $('#rHeadAR').val();
+                var reportType = $('#reportType').val();
+                $('#dvLoader').show();
+                $.ajax({
+                    url: "/AccountingData/AddReportHead",
+                    type: "POST",
+                    data: JSON.stringify({
+                        "ReportHeadNameEN": rHeadEN,
+                        "ReportHeadNameAR": rHeadAR,
+                        "ReportType": reportType
+                    }),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function () {                        
+                        $('#dvLoader').hide();
+                        Clear();
+                    }
+                });
+
+            });
+        });
+        function Clear() {
+            $('#rHeadEN').val('');
+            $('#rHeadAR').val('');
+            $('#reportType').val('');
+        }
+    </script>
+}

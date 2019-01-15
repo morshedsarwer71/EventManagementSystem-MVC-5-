@@ -1,0 +1,75 @@
+﻿@model EventManagement.Areas.Accounting.ViewModels.JournalIndexViewModels
+
+@{
+    Layout = null;
+}
+<section class="content-header">
+    <h1>
+        Journals
+        <small>preview of journal index</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i>Home</a></li>
+        <li><a href="#">Journal</a></li>
+        <li class="active">Journals</li>
+    </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th style="width: 10px">#</th>
+                                <th>Voucher Code</th>
+                                <th>Date</th>
+                                <th>Debit Acc Head</th>
+                                <th>Amount.</th>
+                                <th>Credit Acc Head</th>
+                                <th>Amount.</th>
+                                <th>Creator</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tBody">
+                            @foreach (var item in Model.ResponseJournals)
+                            {
+                            <tr>
+                                <td>@item.Row</td>
+                                <td>@item.VoucherCode</td>
+                                <td>@item.Date</td>
+                                <td>@item.DebitAccountHead</td>
+                                <td>@item.DebitAmount</td>
+                                <td>@item.CreditAccountHead</td>
+                                <td>@item.CreditAmount</td>
+                                <td>@item.Creator</td>
+                                <td>@item.Description</td>
+
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer clearfix">
+
+                    <ul class="pagination pagination-sm no-margin pull-right">
+                        <li><a href="#">&laquo;</a></li>
+                        <li><a href="#">1</a></li>
+                        <li><a href="#">2</a></li>
+                        <li><a href="#">3</a></li>
+                        <li><a href="#">&raquo;</a></li>
+                    </ul>
+                </div>
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+
+    </div>
+</section>
