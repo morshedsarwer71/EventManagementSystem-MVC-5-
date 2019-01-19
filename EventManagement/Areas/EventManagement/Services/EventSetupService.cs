@@ -21,6 +21,8 @@ namespace EventManagement.Areas.EventManagement.Services
             eventSetup.CreationDate = DateTime.Now;
             eventSetup.IsDelete = 0;
             eventSetup.ConcernId = ConcernId;
+            eventSetup.ModificationDate = DateTime.Now;
+            eventSetup.ModifierId = userId;
             _context.EventSetups.Add(eventSetup);
             _context.SaveChanges();
         }

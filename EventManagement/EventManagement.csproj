@@ -253,6 +253,8 @@
     <Compile Include="Areas\EventManagement\Services\WorkOrderParentService.cs" />
     <Compile Include="Areas\EventManagement\Services\WorkOrderServiceService.cs" />
     <Compile Include="Areas\EventManagement\Services\WorkOrderSetupService.cs" />
+    <Compile Include="Areas\EventManagement\ViewModels\EmployeeViewModels.cs" />
+    <Compile Include="Areas\EventManagement\ViewModels\WorkOrderViewModels.cs" />
     <Compile Include="Areas\Global\Controllers\GlobalDataController.cs" />
     <Compile Include="Areas\Global\GlobalAreaRegistration.cs" />
     <Compile Include="Areas\Global\Interfaces\ISystemUser.cs" />
@@ -305,6 +307,18 @@
     <Compile Include="Migrations\201901101859438_habGH.cs" />
     <Compile Include="Migrations\201901101859438_habGH.Designer.cs">
       <DependentUpon>201901101859438_habGH.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901160658404_employyeupp.cs" />
+    <Compile Include="Migrations\201901160658404_employyeupp.Designer.cs">
+      <DependentUpon>201901160658404_employyeupp.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901180846254_ghyty.cs" />
+    <Compile Include="Migrations\201901180846254_ghyty.Designer.cs">
+      <DependentUpon>201901180846254_ghyty.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901180915541_ghytygfg.cs" />
+    <Compile Include="Migrations\201901180915541_ghytygfg.Designer.cs">
+      <DependentUpon>201901180915541_ghytygfg.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -7121,6 +7135,21 @@
     <Content Include="Areas\Accounting\Views\AccountingData\TrialBalance.cshtml" />
     <Content Include="Areas\Accounting\Views\AccountingData\IncomeStatement.cshtml" />
     <Content Include="Areas\Accounting\Views\AccountingData\BalanceSheet.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\Employee.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\Employees.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\AddEmployee.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\WorkOrder.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\WorkOrders.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\AddWorkOrder.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\ConfirmedWorkOrders.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\Setup.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\AddSetup.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\Setups.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\EditSetup.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\Service.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\Services.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\AddService.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\EditService.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
@@ -7169,6 +7198,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\EventManagement\Image\" />
+    <Folder Include="Areas\EventManagement\Passport\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
@@ -7213,6 +7244,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201901101859438_habGH.resx">
       <DependentUpon>201901101859438_habGH.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901160658404_employyeupp.resx">
+      <DependentUpon>201901160658404_employyeupp.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901180846254_ghyty.resx">
+      <DependentUpon>201901180846254_ghyty.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901180915541_ghytygfg.resx">
+      <DependentUpon>201901180915541_ghytygfg.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -4,6 +4,7 @@ using EventManagement.Areas.EventManagement.ResponseModels;
 using EventManagement.Context;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
@@ -12,23 +13,19 @@ namespace EventManagement.Areas.EventManagement.Services
 {
     public class WorkOrderParentService: IWorkOrderParent
     {
-        private DataContext _context;
+        private readonly DataContext _context;
         public WorkOrderParentService(DataContext context)
         {
             _context = context;
-        }
-        public void Add(Models.WorkOrderParent workOrder, string UserName, int UserId, int concernId)
+        }        
+
+        public void AddWorkOrder(WorkOrderParent workOrder, string UserName, int UserId, int concernId)
         {
-            var clientCode = _context.EventManagementClients.FirstOrDefault(x => x.ClientId == workOrder.ClientId);
-            var ToDay = DateTime.Now;
-            //var startingDate = workOrder.StartingDate;
-            var DateWithOutTimeStartingDate = ToDay.ToString("yyyymmddhhmm");
-            workOrder.OrderCode = clientCode.ClientCode.ToUpper() + "" + "-" + "" + DateWithOutTimeStartingDate;
-            workOrder.CreationDate = ToDay;
-            workOrder.IsDelete = 0;
+            workOrder.CreationDate = DateTime.Now;
             workOrder.CreatorId = UserId;
+            workOrder.ModificationDate = DateTime.Now;
+            workOrder.ModifierId = UserId;
             workOrder.ConcernId = concernId;
-            workOrder.Status = 1;
             _context.WorkOrderParents.Add(workOrder);
             _context.SaveChanges();
         }
@@ -68,8 +65,8 @@ namespace EventManagement.Areas.EventManagement.Services
                             responseWorkOrder.OrderId = Convert.ToInt32(result[0]);
                             responseWorkOrder.WorkOrderCode = Convert.ToString(result[1]);
                             responseWorkOrder.ClientName = Convert.ToString(result[2]);
-                            responseWorkOrder.StartingDate = Convert.ToDateTime(result[3]);
-                            responseWorkOrder.EndingDate = Convert.ToDateTime(result[4]);
+                            responseWorkOrder.StartingDate = Convert.ToString(result[3]);
+                            responseWorkOrder.EndingDate = Convert.ToString(result[4]);
                             responseWorkOrder.NumberOfManpower = Convert.ToInt32(result[5]);
                             responseWorkOrder.PerHourRate = Convert.ToDecimal(result[6]);
                             //responseWorkOrder.Status = Convert.ToString(result[7]);
@@ -116,11 +113,11 @@ namespace EventManagement.Areas.EventManagement.Services
                             responseWorkOrder.OrderId = Convert.ToInt32(result[0]);
                             responseWorkOrder.WorkOrderCode = Convert.ToString(result[1]);
                             responseWorkOrder.ClientName = Convert.ToString(result[2]);
-                            responseWorkOrder.StartingDate = Convert.ToDateTime(result[3]);
-                            responseWorkOrder.EndingDate = Convert.ToDateTime(result[4]);
+                            responseWorkOrder.StartingDate = Convert.ToString(result[3]);
+                            responseWorkOrder.EndingDate = Convert.ToString(result[4]);
                             responseWorkOrder.NumberOfManpower = Convert.ToInt32(result[5]);
                             responseWorkOrder.PerHourRate = Convert.ToDecimal(result[6]);
-                            //responseWorkOrder.Status = Convert.ToString(result[7]);
+                            responseWorkOrder.Status = Convert.ToString(result[7]);
                             responseWorkOrder.Description = Convert.ToString(result[8]);
                             responseWorkOrder.SerialNumber = Convert.ToInt32(result[10]);
                             responseWorkOrder.Notes = Convert.ToString(result[11]);
@@ -128,6 +125,7 @@ namespace EventManagement.Areas.EventManagement.Services
                             responseWorkOrder.NoOfService = Convert.ToInt32(result[13]);
                             responseWorkOrder.NoOfSetup = Convert.ToInt32(result[14]);
                             responseWorkOrder.TotalDays = Convert.ToString(result[15]);
+                            responseWorkOrder.NumberOfRows = Convert.ToInt32(result[16]);
 
                             ResponseWorkOrder.Add(responseWorkOrder);
 
@@ -188,8 +186,8 @@ namespace EventManagement.Areas.EventManagement.Services
                             responseWorkOrder.OrderId = Convert.ToInt32(result[0]);
                             responseWorkOrder.WorkOrderCode = Convert.ToString(result[1]);
                             responseWorkOrder.ClientName = Convert.ToString(result[2]);
-                            responseWorkOrder.StartingDate = Convert.ToDateTime(result[3]);
-                            responseWorkOrder.EndingDate = Convert.ToDateTime(result[4]);
+                            responseWorkOrder.StartingDate = Convert.ToString(result[3]);
+                            responseWorkOrder.EndingDate = Convert.ToString(result[4]);
                             responseWorkOrder.NumberOfManpower = Convert.ToInt32(result[5]);
                             responseWorkOrder.PerHourRate = Convert.ToDecimal(result[6]);
                             responseWorkOrder.Status = Convert.ToString(result[7]);
@@ -235,21 +233,22 @@ namespace EventManagement.Areas.EventManagement.Services
                         while (result.Read())
                         {
                             ResponseWorkOrderParent responseWorkOrder = new ResponseModels.ResponseWorkOrderParent();
-                            responseWorkOrder.OrderId = Convert.ToInt32(result[0]);
-                            responseWorkOrder.WorkOrderCode = Convert.ToString(result[1]);
-                            responseWorkOrder.ClientName = Convert.ToString(result[2]);
-                            responseWorkOrder.StartingDate = Convert.ToDateTime(result[3]);
-                            responseWorkOrder.EndingDate = Convert.ToDateTime(result[4]);
-                            responseWorkOrder.NumberOfManpower = Convert.ToInt32(result[5]);
-                            responseWorkOrder.PerHourRate = Convert.ToDecimal(result[6]);
-                            responseWorkOrder.Status = Convert.ToString(result[7]);
-                            responseWorkOrder.Description = Convert.ToString(result[8]);
-                            responseWorkOrder.SerialNumber = Convert.ToInt32(result[10]);
-                            responseWorkOrder.Notes = Convert.ToString(result[11]);
-                            responseWorkOrder.NoOfPax = Convert.ToInt32(result[12]);
-                            responseWorkOrder.NoOfService = Convert.ToInt32(result[13]);
-                            responseWorkOrder.NoOfSetup = Convert.ToInt32(result[14]);
-                            responseWorkOrder.TotalDays = Convert.ToString(result[15]);
+                            responseWorkOrder.SerialNumber = Convert.ToInt32(result[0]);
+                            responseWorkOrder.OrderId = Convert.ToInt32(result[1]);
+                            responseWorkOrder.WorkOrderCode = Convert.ToString(result[2]);
+                            responseWorkOrder.ClientName = Convert.ToString(result[3]);
+                            responseWorkOrder.StartingDate = Convert.ToString(result[4]);
+                            responseWorkOrder.EndingDate = Convert.ToString(result[5]);
+                            responseWorkOrder.NumberOfManpower = Convert.ToInt32(result[6]);
+                            responseWorkOrder.PerHourRate = Convert.ToDecimal(result[7]);
+                            responseWorkOrder.Status = Convert.ToString(result[8]);
+                            responseWorkOrder.Description = Convert.ToString(result[9]);                            
+                            responseWorkOrder.Notes = Convert.ToString(result[10]);
+                            responseWorkOrder.NoOfPax = Convert.ToInt32(result[11]);
+                            responseWorkOrder.NoOfService = Convert.ToInt32(result[12]);
+                            responseWorkOrder.NoOfSetup = Convert.ToInt32(result[13]);
+                            responseWorkOrder.TotalDays = Convert.ToString(result[14]);
+                            responseWorkOrder.NumberOfRows = Convert.ToInt32(result[15]);
 
                             ResponseWorkOrder.Add(responseWorkOrder);
 

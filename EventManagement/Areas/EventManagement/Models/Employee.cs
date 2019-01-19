@@ -10,9 +10,7 @@ namespace EventManagement.Areas.EventManagement.Models
     public class Employee
     {
         [Key]
-        public int EmployeeId { get; set; }
-        [Required]
-        public int ConcernId { get; set; }
+        public int EmployeeId { get; set; }        
         [Required(AllowEmptyStrings = false, ErrorMessage = "Employee Code required")]
         public string EmployeeCode { get; set; }
         [Required(AllowEmptyStrings = false, ErrorMessage = "First Name required")]
@@ -25,9 +23,9 @@ namespace EventManagement.Areas.EventManagement.Models
         [EmailAddress]
         public string EmployeeEmail { get; set; }
         [Required(AllowEmptyStrings = false, ErrorMessage = "Contact Number required")]
-        public int ContactNumber { get; set; }
+        public string ContactNumber { get; set; }
         [Required(AllowEmptyStrings = false, ErrorMessage = "Emergency Number required")]
-        public int EmergencyNumber { get; set; }
+        public string EmergencyNumber { get; set; }
         [Required(AllowEmptyStrings = false, ErrorMessage = "Permanent Address required")]
         public string PermanentAddress { get; set; }
         [Required(AllowEmptyStrings = false, ErrorMessage = "Present Address required")]
@@ -61,6 +59,8 @@ namespace EventManagement.Areas.EventManagement.Models
         public string Nationality { get; set; }
         [Required]
         public int IsActive { get; set; }
+        [Required]
+        public int ConcernId { get; set; }
         public DateTime CreationDate { get; set; }
         public int CreatorId { get; set; }
         public DateTime ModificationDate { get; set; }
@@ -70,5 +70,9 @@ namespace EventManagement.Areas.EventManagement.Models
         public int SerialNumber { get; set; }
         [NotMapped]
         public bool IsChecked { get; set; }
+        [NotMapped]
+        public HttpPostedFileBase ImageUrl { get; set; }
+        [NotMapped]
+        public HttpPostedFileBase PassportUrl { get; set; }
     }
 }

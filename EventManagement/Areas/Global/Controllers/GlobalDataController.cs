@@ -46,7 +46,7 @@ namespace EventManagement.Areas.Global.Controllers
                     Session["UserId"] = Convert.ToInt32(query.UserID);
                     Session["UserName"] = Convert.ToString(query.Name);
                     Session["CreationDate"] = Convert.ToDateTime(query.CreationDate);
-                    return RedirectToAction("Index", "AccountingData", new { Area = "Accounting" });
+                    return RedirectToAction("Index", "EventManagementData", new { Area = "EventManagement" });
                 }
                 ViewBag.error = "email or password wrong !";
             }

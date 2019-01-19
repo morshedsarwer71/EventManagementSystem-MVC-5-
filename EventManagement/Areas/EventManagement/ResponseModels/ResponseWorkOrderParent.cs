@@ -9,11 +9,12 @@ namespace EventManagement.Areas.EventManagement.ResponseModels
     {
         public int OrderId { get; set; }
         public int SerialNumber { get; set; }
+        public int NumberOfRows { get; set; }
         public string WorkOrderCode { get; set; }
         public string ConcernName { get; set; }
         public string ClientName { get; set; }
-        public DateTime StartingDate { get; set; }
-        public DateTime EndingDate { get; set; }
+        public string StartingDate { get; set; }
+        public string EndingDate { get; set; }
         public string TotalDays { get; set; }
         public int NumberOfManpower { get; set; }
         public int NoOfManpower { get; set; }

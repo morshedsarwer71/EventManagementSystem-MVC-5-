@@ -1,0 +1,109 @@
+﻿<section class="content">
+    <div id="dvLoader" class="LoadingDiv" style="display: none; margin-top:150px;margin-top:50px;">
+        <center>
+            <img src="~/Content/img/ajax-loader.gif" alt="Loading" />
+        </center>
+    </div>
+    <div class="row">
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title">Order Quotation</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#firstTab">Index</a></li>
+                    <li><a data-toggle="tab" href="#secondTab">Add New</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="firstTab" class="tab-pane fade in active">@Html.Action("WorkOrders")</div>
+                    <div id="secondTab" class="tab-pane fade in">@Html.Action("AddWorkOrder")</div>
+                </div>
+            </div>
+        </div>
+        <!-- /.box -->
+        <!-- /.col -->
+
+    </div>
+</section>
+@section Scripts{
+    <script src="~/Content/bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#endingDate').datepicker({
+                format: 'yyyy-mm-dd',
+                //startYear: '-10y'
+            });
+            $('#startingDate').datepicker({
+                format: 'yyyy-mm-dd',
+                //startYear: '-10y'
+            });
+
+            $('#btnSubmit').click(function () {
+                var orderCode = $('#orderCode').val();
+                var vATCode = $('#vATCode').val();
+                var clientId = $('#clientId').val();
+                var noOfManpower = $('#noOfManpower').val();
+                var noOfSetup = $('#noOfSetup').val();
+                var noOfService = $('#noOfService').val();
+                var noOfPax = $('#noOfPax').val();
+                var paymentStatus = $('#paymentStatus').val();
+                var perHourRate = $('#perHourRate').val();
+                var startingDate = $('#startingDate').val();
+                var endingDate = $('#endingDate').val();
+                var status = $('#status').val();
+                var notes = $('#notes').val();
+                var description = $('#description').val();
+                $('#dvLoader').show();
+                $.ajax({
+                    url: "/EventManagementData/AddWorkOrder",
+                    type: "POST",
+                    data: JSON.stringify({
+                        "OrderCode": orderCode,
+                        "VATCode": vATCode,
+                        "ClientId": clientId,
+                        "NoOfManpower": noOfManpower,
+                        "NoOfSetup": noOfSetup,
+                        "NoOfService": noOfService,
+                        "NoOfPax": noOfPax,
+                        "PaymentStatus": paymentStatus,
+                        "PerHourRate": perHourRate,
+                        "StartingDate": startingDate,
+                        "EndingDate": endingDate,
+                        "Status": status,
+                        "Description": description,
+                        "Notes": notes,
+                    }),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (json) {
+                        if (json.isRedirect) {
+                            window.location.href = json.redirectUrl;
+                        }
+                        Clear();
+                        $('#dvLoader').hide();
+                    }
+                });
+
+
+            });
+        });
+        function Clear()
+        {
+            $('#orderCode').val('');
+            $('#vATCode').val('');
+            $('#clientId').val('');
+            $('#noOfManpower').val('');
+            $('#noOfSetup').val('');
+            $('#noOfService').val('');
+            $('#noOfPax').val('');
+            $('#paymentStatus').val('');
+            $('#perHourRate').val('');
+            $('#startingDate').val('');
+            $('#endingDate').val('');
+            $('#status').val('');
+            $('#notes').val('');
+            $('#description').val('');
+        };
+    </script>
+}

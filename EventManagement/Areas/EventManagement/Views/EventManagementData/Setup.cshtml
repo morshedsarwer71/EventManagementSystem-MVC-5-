@@ -1,0 +1,56 @@
+﻿<section class="content">
+    <div id="dvLoader" class="LoadingDiv" style="display: none; margin-top:150px;margin-top:50px;">
+        <center>
+            <img src="~/Content/img/ajax-loader.gif" alt="Loading" />
+        </center>
+    </div>
+    <div class="row">
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title">Setup</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#firstTab">Index</a></li>
+                    <li><a data-toggle="tab" href="#secondTab">Add New</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="firstTab" class="tab-pane fade in active">@Html.Action("Setups")</div>
+                    <div id="secondTab" class="tab-pane fade in">@Html.Action("AddSetup")</div>
+                </div>
+            </div>
+        </div>
+        <!-- /.box -->
+        <!-- /.col -->
+
+    </div>
+</section>
+@section Scripts{
+    <script src="~/Content/bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#btnSave').click(function () {
+                var eventSetupEN = $('#eventSetupEN').val();
+                var eventSetupAR = $('#eventSetupAR').val();
+                $('#dvLoader').show();
+                $.ajax({
+                    url: "/EventManagementData/AddSetup",
+                    type: "POST",
+                    data: JSON.stringify({
+                        "EventSetupEN": eventSetupEN,
+                        "EventSetupAR": eventSetupAR
+                    }),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (json) {
+                        if (json.isRedirect) {
+                            window.location.href = json.redirectUrl;
+                        }
+                        $('#dvLoader').hide();
+                    }
+                });
+            });
+        });        
+    </script>
+}

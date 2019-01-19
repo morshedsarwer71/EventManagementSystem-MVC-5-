@@ -20,6 +20,8 @@ namespace EventManagement.Areas.EventManagement.Services
             eventService.CreationDate = DateTime.Now;
             eventService.CreatorId = userId;
             eventService.ConcernId = ConcernId;
+            eventService.ModificationDate = DateTime.Now;
+            eventService.ModifierId = userId;
             _context.EventServices.Add(eventService);
             _context.SaveChanges();
         }

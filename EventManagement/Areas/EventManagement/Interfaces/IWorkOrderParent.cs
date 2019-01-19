@@ -13,7 +13,7 @@ namespace EventManagement.Areas.EventManagement.Interfaces
         IEnumerable<ResponseWorkOrderParent> GetWorkOrders(string culture, string UserName, int UserId, int? ConcernId);
         IEnumerable<ResponseWorkOrderParent> GetCompletedWorkOrders(string culture, string UserName, int UserId, int? ConcernId);
         IEnumerable<ResponseWorkOrderParent> GetUpcomingWorkOrders(string culture, string UserName, int UserId, int? ConcernId);
-        void Add(WorkOrderParent workOrder, string UserName, int UserId, int concernId);
+        void AddWorkOrder(WorkOrderParent workOrder, string UserName, int UserId, int concernId);
         WorkOrderParent workOrderById(int id, string UserName, int UserId);
         void Delete(int id, string UserName, int UserId);
         void Update(string UserName, int UserId, WorkOrderParent workOrder, int id);

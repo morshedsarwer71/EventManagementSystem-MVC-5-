@@ -20,9 +20,12 @@ namespace EventManagement.Areas.EventManagement.Services
 
         public void AddEmployee(Employee employee, int userId, string userName, int ConcernId)
         {
+            var date = DateTime.Now;
             employee.CreatorId = userId;
-            employee.CreationDate = DateTime.Now;
+            employee.CreationDate = date;
             employee.ConcernId = ConcernId;
+            employee.ModificationDate = date;
+            employee.ModifierId = userId;
             _context.Employees.Add(employee);
             _context.SaveChanges();
         }
@@ -85,13 +88,14 @@ namespace EventManagement.Areas.EventManagement.Services
             return responseEmployee;
         }
 
-        public IEnumerable<ResponseEmployee> Employees(int userId, string userName, int ConcernId)
+        public IEnumerable<ResponseEmployee> Employees(int userId, string userName, int ConcernId, int Page)
         {
             List<ResponseEmployee> ResponseEmployeeList = new List<ResponseEmployee>();
             using (var command = _context.Database.Connection.CreateCommand())
             {
-                command.CommandText = ("usp_EventManagement_EmployeeIndexByConcernId @concernId");
+                command.CommandText = ("usp_EventManagement_EmployeeIndexByConcernId @concernId,@Page");
                 command.Parameters.Add(new SqlParameter("concernId", ConcernId));
+                command.Parameters.Add(new SqlParameter("Page", Page));
                 _context.Database.Connection.Open();
                 using (var result = command.ExecuteReader())
                 {
@@ -108,6 +112,10 @@ namespace EventManagement.Areas.EventManagement.Services
                             responseEmployee.ContactNumber = Convert.ToInt32(result[5]);
                             responseEmployee.EmployeeCode = Convert.ToString(result[6]);
                             responseEmployee.EmployeeId = Convert.ToInt32(result[7]);
+                            responseEmployee.NumberOfRow = Convert.ToInt32(result[8]);
+                            responseEmployee.EmployeeImage = Convert.ToString(result[9]);
+                            responseEmployee.PassportImage = Convert.ToString(result[10]);
+                            responseEmployee.PassportNumber = Convert.ToString(result[11]);
 
                             ResponseEmployeeList.Add(responseEmployee);
                         }

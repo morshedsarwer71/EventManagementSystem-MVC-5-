@@ -13,7 +13,7 @@ namespace EventManagement.Areas.EventManagement.Interfaces
         void AddEmployee(Employee employee, int userId, string userName, int ConcernId);
         void DeleteEmployee(int EmployeeId, int userId, string userName);
         void UpdateEmployee(Employee employee, int Employeeid, int userId, string userName);
-        IEnumerable<ResponseEmployee> Employees(int userId, string userName, int ConcernId);
+        IEnumerable<ResponseEmployee> Employees(int userId, string userName, int ConcernId,int Page);
         List<Employee> WorkOrderEmployee(int userId, string userName, int ConcernId);
         ResponseEmployee EmployeeDetails(int EmployeeId, int userId, string userName, int concernId);
         Employee EmployeeById(int employeeId, int userId, string userName);

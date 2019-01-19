@@ -31,5 +31,8 @@ namespace EventManagement.Areas.EventManagement.ResponseModels
         public string ConcernName { get; set; }
         public string CreatorName { get; set; }
         public DateTime CreationDate { get; set; }
+        public string  EmployeeImage{ get; set; }
+        public string  PassportImage{ get; set; }
+        public int  NumberOfRow{ get; set; }
     }
 }
