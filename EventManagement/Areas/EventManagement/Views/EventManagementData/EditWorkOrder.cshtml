@@ -1,0 +1,243 @@
+﻿@model EventManagement.Areas.EventManagement.ViewModels.WorkOrderViewModels
+<section class="content-header">
+    <h1>
+        Work Order
+        <small>editing new work order information</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="@Url.Action("#")"><i class="fa fa-dashboard"></i> Home</a></li>
+    </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="box">
+            <!-- /.box-header -->
+            <div class="box-body">
+                <div class="col-md-8 col-sm-8">
+                    @using (Html.BeginForm("EditWorkOrder", "EventManagementData", FormMethod.Post))
+                    {
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="col-form-label">Order Code</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" value="@Model.WorkOrderParent.OrderCode" readonly="readonly" class="form-control" name="OrderCode">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="col-form-label">Order VAT Code</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <select class="form-control" name="VATCode">
+                                        @if (Model.WorkOrderParent.VATCode == "VAT02")
+                                        {
+                                            <option selected="selected" value="VAT02">VAT02</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="Vat01">VAT01</option>
+                                            <option value="Vat02">VAT02</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="col-form-label">Order Client </label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <select class="form-control" name="ClientId">
+                                        @foreach (var item in Model.EventClients)
+                                        {
+                                            if (item.ClientId == Model.WorkOrderParent.ClientId)
+                                            {
+                                                <option selected="selected" value="@item.ClientId">@item.ClientNameEN</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.ClientId">@item.ClientNameEN</option>
+
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="col-form-label">No. Of Manpower </label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" value="@Model.WorkOrderParent.NoOfManpower" class="form-control" name="NoOfManpower">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="col-form-label">No. Of Setup </label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" value="@Model.WorkOrderParent.NoOfSetup" class="form-control" name="NoOfSetup">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="col-form-label">No. Of Service</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" value="@Model.WorkOrderParent.NoOfService" class="form-control" name="NoOfService">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="col-form-label">No. Of Miscell </label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" value="@Model.WorkOrderParent.NoOfPax" class="form-control" name="NoOfPax">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="col-form-label">Payment Status</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <select class="form-control" name="PaymentStatus">
+                                        <option value="1">Installment</option>
+                                        <option value="1">Cash</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="col-form-label">Per Hour Rate</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" value="@Model.WorkOrderParent.PerHourRate" class="form-control" name="PerHourRate">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="col-form-label">Starting Date</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" value="@Model.WorkOrderParent.StartingDate.Date" class="form-control" name="StartingDate" id="startingDate">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="col-form-label">Ending Date</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" value="@Model.WorkOrderParent.EndingDate.Date" class="form-control" name="EndingDate" id="endingDate">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="col-form-label">Status<span style="color:red;"> *</span></label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <select class="form-control" name="Status">
+                                        @foreach (var item in Model.WorkOrderStatus)
+                                        {
+                                            if (item.OrderStatusId == Model.WorkOrderParent.Status)
+                                            {
+                                                <option selected="selected" value="@item.OrderStatusId">@item.OrderStates</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.OrderStatusId">@item.OrderStates</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-form-label">Notes <span style="color:red;"> *</span></label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <textarea class="form-control" name="Notes">@Model.WorkOrderParent.Notes</textarea>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-form-label">Description <span style="color:red;"> *</span></label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <textarea class="form-control" name="Description">@Model.WorkOrderParent.Description</textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <button type="submit" id="btnSubmit" value="submit" class="btn btn-primary"><i class="fa fa-plus"></i> UPDATE ORDER</button>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+@section Scripts{
+    <script src="~/Content/bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#endingDate').datepicker({
+                format: 'yyyy-mm-dd',
+                //startYear: '-10y'
+            });
+            $('#startingDate').datepicker({
+                format: 'yyyy-mm-dd',
+                //startYear: '-10y'
+            });
+        });
+
+    </script>
+}

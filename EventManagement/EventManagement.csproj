@@ -238,6 +238,7 @@
     <Compile Include="Areas\EventManagement\ResponseModels\ResponseEventClient.cs" />
     <Compile Include="Areas\EventManagement\ResponseModels\ResponseProject.cs" />
     <Compile Include="Areas\EventManagement\ResponseModels\ResponseWorkOrderParent.cs" />
+    <Compile Include="Areas\EventManagement\ResponseModels\WorkOrderAssigned.cs" />
     <Compile Include="Areas\EventManagement\Services\AttendanceService.cs" />
     <Compile Include="Areas\EventManagement\Services\EmployeeEntitlementsService.cs" />
     <Compile Include="Areas\EventManagement\Services\EmployeeService.cs" />
@@ -254,6 +255,7 @@
     <Compile Include="Areas\EventManagement\Services\WorkOrderServiceService.cs" />
     <Compile Include="Areas\EventManagement\Services\WorkOrderSetupService.cs" />
     <Compile Include="Areas\EventManagement\ViewModels\EmployeeViewModels.cs" />
+    <Compile Include="Areas\EventManagement\ViewModels\WorkOrderAssignedViewModels.cs" />
     <Compile Include="Areas\EventManagement\ViewModels\WorkOrderViewModels.cs" />
     <Compile Include="Areas\Global\Controllers\GlobalDataController.cs" />
     <Compile Include="Areas\Global\GlobalAreaRegistration.cs" />
@@ -7150,6 +7152,20 @@
     <Content Include="Areas\EventManagement\Views\EventManagementData\Services.cshtml" />
     <Content Include="Areas\EventManagement\Views\EventManagementData\AddService.cshtml" />
     <Content Include="Areas\EventManagement\Views\EventManagementData\EditService.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\Miscellaneous.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\Miscellaneouses.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\AddMiscellaneous.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\EditMiscellaneous.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\AssignManpower.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\AssignedWorkOrders.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\AssignedManpower.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\AssignSetup.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\AssignService.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\AssignMiscellaneous.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\AssignedMiscellaneous.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\AssignedSetup.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\AssignedService.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\EditWorkOrder.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />

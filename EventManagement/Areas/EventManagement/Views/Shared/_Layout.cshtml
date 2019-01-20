@@ -157,6 +157,7 @@
                             <li><a href="@Url.Action("Employee","EventManagementData",new { Area="EventManagement"})"><i class="fa fa-circle-o"></i> Employee</a></li>
                             <li><a href="@Url.Action("Setup","EventManagementData",new { Area="EventManagement"})"><i class="fa fa-circle-o"></i> Setup</a></li>
                             <li><a href="@Url.Action("Service","EventManagementData",new { Area="EventManagement"})"><i class="fa fa-circle-o"></i> Service</a></li>
+                            <li><a href="@Url.Action("Miscellaneous","EventManagementData",new { Area="EventManagement"})"><i class="fa fa-circle-o"></i> Miscellaneous</a></li>
                         </ul>
                     </li>
                     <li class="treeview">
@@ -170,6 +171,18 @@
                         <ul class="treeview-menu">
                             <li><a href="@Url.Action("WorkOrder","EventManagementData",new { Area="EventManagement"})"><i class="fa fa-circle-o"></i> Work Order Quotation</a></li>
                             <li><a href="@Url.Action("ConfirmedWorkOrders","EventManagementData",new { Area="EventManagement"})"><i class="fa fa-circle-o"></i> Confirmed Orders</a></li>
+                        </ul>
+                    </li>
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-pie-chart"></i>
+                            <span>Assigned</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">                            
+                            <li><a href="@Url.Action("AssignedWorkOrders","EventManagementData",new { Area="EventManagement"})"><i class="fa fa-circle-o"></i> Confirmed Orders</a></li>
                         </ul>
                     </li>
 

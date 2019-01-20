@@ -12,5 +12,6 @@ namespace EventManagement.Areas.EventManagement.ViewModels
         public IEnumerable<ResponseWorkOrderParent> WorkOrderParents { get; set; }
         public IEnumerable<WorkOrderStatus> WorkOrderStatus { get; set; }
         public IEnumerable<EventManagementClient> EventClients { get; set; }
+        public WorkOrderParent WorkOrderParent { get; set; }
     }
 }

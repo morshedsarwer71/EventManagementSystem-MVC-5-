@@ -37,7 +37,6 @@
                                 <th>Notes</th>
                                 <th>Details</th>
                                 <th>Edit</th>
-                                <th>Delete</th>
                             </tr>
                         </thead>
                         <tbody id="tBody">
@@ -55,8 +54,7 @@
                                     <td>@item.Status</td>
                                     <td>@item.Notes</td>
                                     <td><a href="#"><i class="fa fa-eye" style="font-size:20px;"></i></a></td>
-                                    <td><a href="#"><i class="fa fa-edit" style="font-size:20px;"></i></a></td>
-                                    <td><a href="#"><i class="fa fa-trash" style="font-size:20px;"></i></a></td>
+                                    <td><a href="@Url.Action("EditWorkOrder","EventManagementData",new {id=item.OrderId })"><i class="fa fa-edit" style="font-size:20px;"></i></a></td>
 
                                 </tr>
                             }

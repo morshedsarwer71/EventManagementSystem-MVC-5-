@@ -151,6 +151,8 @@ namespace EventManagement.Areas.EventManagement.Services
             work.NoOfSetup = workOrder.NoOfSetup;
             work.NoOfPax = workOrder.NoOfPax;
             work.Notes = workOrder.Notes;
+            work.Status = workOrder.Status;
+            work.VATCode = workOrder.VATCode;
             _context.SaveChanges();
         }
 

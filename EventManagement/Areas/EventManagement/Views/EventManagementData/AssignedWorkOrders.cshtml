@@ -31,9 +31,6 @@
                                 <th>Total Days</th>
                                 <th>Status</th>
                                 <th>Notes</th>
-                                <th>Details</th>
-                                <th>Edit</th>
-                                <th style="color:red">Delete</th>
                                 <th>Manpower</th>
                                 <th>Setup</th>
                                 <th>Service</th>
@@ -54,13 +51,10 @@
                                     <td>@item.TotalDays</td>
                                     <td>@item.Status</td>
                                     <td>@item.Notes</td>
-                                    <td class="text-center"><a href="#"><i class="fa fa-eye" style="font-size:20px;"></i></a></td>
-                                    <td class="text-center"><a href="#"><i class="fa fa-edit" style="font-size:20px;"></i></a></td>
-                                    <td class="text-center"><a href="#"><i class="fa fa-trash" style="font-size:20px; color:red"></i></a></td>
-                                    <td class="text-center"> <a href="@Url.Action("AssignManpower","EventManagementData",new {id=item.OrderId })"><i class="fa fa-plus-circle" style="font-size:30px;"></i></a></td>
-                                    <td class="text-center"> <a href="@Url.Action("AssignSetup","EventManagementData",new {id=item.OrderId })"><i class="fa fa-plus-circle" style="font-size:30px;"></i></a></td>
-                                    <td class="text-center"><a href="@Url.Action("AssignService","EventManagementData",new {id=item.OrderId })"><i class="fa fa-plus-circle" style="font-size:30px;"></i></a></td>
-                                    <td class="text-center"><a href="@Url.Action("AssignMiscellaneous","EventManagementData",new {id=item.OrderId })"><i class="fa fa-plus-circle" style="font-size:30px;"></i></a></td>
+                                    <td class="text-center"> <a href="@Url.Action("AssignedManpower","EventManagementData",new {id=item.OrderId })"><i class="fa fa-eye" style="font-size:30px;"></i></a></td>
+                                    <td class="text-center"> <a href="@Url.Action("AssignedSetup","EventManagementData",new {id=item.OrderId })"><i class="fa fa-eye" style="font-size:30px;"></i></a></td>
+                                    <td class="text-center"> <a href="@Url.Action("AssignedService","EventManagementData",new {id=item.OrderId })"><i class="fa fa-eye" style="font-size:30px;"></i></a></td>
+                                    <td class="text-center"> <a href="@Url.Action("AssignedMiscellaneous","EventManagementData",new {id=item.OrderId })"><i class="fa fa-eye" style="font-size:30px;"></i></a></td>
                                 </tr>
                             }
                         </tbody>

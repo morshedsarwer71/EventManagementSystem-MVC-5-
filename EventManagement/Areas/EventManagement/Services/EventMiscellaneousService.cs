@@ -20,6 +20,8 @@ namespace EventManagement.Areas.EventManagement.Services
             eventMiscellaneous.CreationDate = DateTime.Now;
             eventMiscellaneous.CreatorId = userId;
             eventMiscellaneous.ConcernId = ConcernId;
+            eventMiscellaneous.ModificationDate = DateTime.Now;
+            eventMiscellaneous.ModifierId = userId;
             _context.EventMiscellaneouses.Add(eventMiscellaneous);
             _context.SaveChanges();
         }

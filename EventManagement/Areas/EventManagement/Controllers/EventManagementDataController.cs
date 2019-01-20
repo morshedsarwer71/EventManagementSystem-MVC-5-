@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 
 namespace EventManagement.Areas.EventManagement.Controllers
 {
@@ -18,13 +19,23 @@ namespace EventManagement.Areas.EventManagement.Controllers
         private readonly IWorkOrderParent _work;
         private readonly IEventSetup _setup;
         private readonly IEventService _service;
+        private readonly IEventMiscellaneous _miscellaneous;
+        private readonly IWorkOrderManpower _manpower;
+        private readonly IWorkOrderSetup _orderSetup;
+        private readonly IWorkOrderService _orderService;
+        private readonly IWorkOrderMiscellaneous _orderMiscellaneous;
         public EventManagementDataController
             (
             DataContext context,
             IEmployee employee,
             IWorkOrderParent work,
             IEventSetup setup,
-            IEventService service
+            IEventService service,
+            IEventMiscellaneous miscellaneous,
+            IWorkOrderManpower manpower,
+            IWorkOrderSetup orderSetup,
+            IWorkOrderService orderService,
+            IWorkOrderMiscellaneous orderMiscellaneous
             )
         {
             _context = context;
@@ -32,6 +43,11 @@ namespace EventManagement.Areas.EventManagement.Controllers
             _work = work;
             _setup = setup;
             _service = service;
+            _miscellaneous = miscellaneous;
+            _manpower = manpower;
+            _orderSetup = orderSetup;
+            _orderService = orderService;
+            _orderMiscellaneous = orderMiscellaneous;
         }
         public ActionResult Index()
         {
@@ -135,7 +151,7 @@ namespace EventManagement.Areas.EventManagement.Controllers
             var userId = Convert.ToInt32(Session["UserId"]);
             var userName = Convert.ToString(Session["UserName"]);
             if (concernId > 0 && userId > 0)
-            {                
+            {
                 return View();
             }
             return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
@@ -149,9 +165,10 @@ namespace EventManagement.Areas.EventManagement.Controllers
             if (concernId > 0 && userId > 0)
             {
                 _setup.AddEventSetup(eventSetup, userId, userName, concernId);
-                return Json(new {
-                    redirectUrl=Url.Action("Setup","EventManagementData",new {Area= "EventManagement" }),
-                    isRedirect=true
+                return Json(new
+                {
+                    redirectUrl = Url.Action("Setup", "EventManagementData", new { Area = "EventManagement" }),
+                    isRedirect = true
                 });
             }
             return Json(new
@@ -168,13 +185,13 @@ namespace EventManagement.Areas.EventManagement.Controllers
             var userName = Convert.ToString(Session["UserName"]);
             if (concernId > 0 && userId > 0)
             {
-                var setup = _setup.EventSetupById(userId,userName,id);
+                var setup = _setup.EventSetupById(userId, userName, id);
                 return View(setup);
             }
             return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
         }
         [HttpPost]
-        public ActionResult EditSetup(EventSetup eventSetup,int id)
+        public ActionResult EditSetup(EventSetup eventSetup, int id)
         {
             var concernId = Convert.ToInt32(Session["ConcernId"]);
             var userId = Convert.ToInt32(Session["UserId"]);
@@ -231,7 +248,7 @@ namespace EventManagement.Areas.EventManagement.Controllers
             var userName = Convert.ToString(Session["UserName"]);
             if (concernId > 0 && userId > 0)
             {
-                _service.AddEventService(eventService, userId, userName, concernId);      
+                _service.AddEventService(eventService, userId, userName, concernId);
                 return Json(new
                 {
                     redirectUrl = Url.Action("Service", "EventManagementData", new { Area = "EventManagement" }),
@@ -252,7 +269,7 @@ namespace EventManagement.Areas.EventManagement.Controllers
             var userName = Convert.ToString(Session["UserName"]);
             if (concernId > 0 && userId > 0)
             {
-                var service = _service.EventServiceById(userId, userName,id);
+                var service = _service.EventServiceById(userId, userName, id);
                 return View(service);
             }
             return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
@@ -271,7 +288,7 @@ namespace EventManagement.Areas.EventManagement.Controllers
             return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
         }
         [HttpGet]
-        public ActionResult Pax()
+        public ActionResult Miscellaneous()
         {
             var concernId = Convert.ToInt32(Session["ConcernId"]);
             var userId = Convert.ToInt32(Session["UserId"]);
@@ -283,20 +300,20 @@ namespace EventManagement.Areas.EventManagement.Controllers
             return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
         }
         [HttpGet]
-        public ActionResult Paxes()
+        public ActionResult Miscellaneouses()
         {
             var concernId = Convert.ToInt32(Session["ConcernId"]);
             var userId = Convert.ToInt32(Session["UserId"]);
             var userName = Convert.ToString(Session["UserName"]);
             if (concernId > 0 && userId > 0)
             {
-                var services = _service.EventServices(userId, userName, concernId);
-                return View(services);
+                var miscellaneous = _miscellaneous.EventMiscellaneouses(userId, userName, concernId);
+                return View(miscellaneous);
             }
             return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
         }
         [HttpGet]
-        public ActionResult AddPax()
+        public ActionResult AddMiscellaneous()
         {
             var concernId = Convert.ToInt32(Session["ConcernId"]);
             var userId = Convert.ToInt32(Session["UserId"]);
@@ -308,17 +325,17 @@ namespace EventManagement.Areas.EventManagement.Controllers
             return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
         }
         [HttpPost]
-        public JsonResult AddPax(EventService eventService)
+        public JsonResult AddMiscellaneous(EventMiscellaneous eventmiscellaneous)
         {
             var concernId = Convert.ToInt32(Session["ConcernId"]);
             var userId = Convert.ToInt32(Session["UserId"]);
             var userName = Convert.ToString(Session["UserName"]);
             if (concernId > 0 && userId > 0)
             {
-                _service.AddEventService(eventService, userId, userName, concernId);
+                _miscellaneous.AddEventMiscellaneous(eventmiscellaneous, userId, userName, concernId);
                 return Json(new
                 {
-                    redirectUrl = Url.Action("Service", "EventManagementData", new { Area = "EventManagement" }),
+                    redirectUrl = Url.Action("Miscellaneous", "EventManagementData", new { Area = "EventManagement" }),
                     isRedirect = true
                 });
             }
@@ -329,28 +346,28 @@ namespace EventManagement.Areas.EventManagement.Controllers
             });
         }
         [HttpGet]
-        public ActionResult EditPax(int id)
+        public ActionResult EditMiscellaneous(int id)
         {
             var concernId = Convert.ToInt32(Session["ConcernId"]);
             var userId = Convert.ToInt32(Session["UserId"]);
             var userName = Convert.ToString(Session["UserName"]);
             if (concernId > 0 && userId > 0)
             {
-                var service = _service.EventServiceById(userId, userName, id);
-                return View(service);
+                var miscellaneous = _miscellaneous.EventMiscellaneousById(userId, userName, id);
+                return View(miscellaneous);
             }
             return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
         }
         [HttpPost]
-        public ActionResult EditPax(EventService eventService, int id)
+        public ActionResult EditMiscellaneous(EventMiscellaneous eventmiscellaneous, int id)
         {
             var concernId = Convert.ToInt32(Session["ConcernId"]);
             var userId = Convert.ToInt32(Session["UserId"]);
             var userName = Convert.ToString(Session["UserName"]);
             if (concernId > 0 && userId > 0)
             {
-                _service.Update(eventService, userId, userName, id);
-                return RedirectToAction(nameof(Service));
+                _miscellaneous.Update(eventmiscellaneous, userId, userName, id);
+                return RedirectToAction(nameof(Miscellaneous));
             }
             return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
         }
@@ -411,8 +428,9 @@ namespace EventManagement.Areas.EventManagement.Controllers
             if (concernId > 0 && userId > 0)
             {
                 _work.AddWorkOrder(orderParent, userName, userId, concernId);
-                return Json(new {
-                    redirectUrl = Url.Action("WorkOrder", "EventManagementData",new {Area= "EventManagement" }),
+                return Json(new
+                {
+                    redirectUrl = Url.Action("WorkOrder", "EventManagementData", new { Area = "EventManagement" }),
                     isRedirect = true
                 });
             }
@@ -421,6 +439,40 @@ namespace EventManagement.Areas.EventManagement.Controllers
                 redirectUrl = Url.Action("LogIn", "GlobalData", new { Area = "Global" }),
                 isRedirect = true
             });
+        }
+        [HttpGet]
+        public ActionResult EditWorkOrder(int id)
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                var clients = _context.EventManagementClients.ToList();
+                var status = _context.WorkOrderStatuses.ToList();
+                var order = _work.workOrderById(id, userName, userId);
+                WorkOrderViewModels viewModels = new WorkOrderViewModels()
+                {
+                    EventClients = clients,
+                    WorkOrderStatus = status,
+                    WorkOrderParent= order
+                };
+                return View(viewModels);
+            }
+            return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
+        }
+        [HttpPost]
+        public ActionResult EditWorkOrder(WorkOrderParent orderParent,int id)
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                _work.Update(userName, userId, orderParent,id);
+                return RedirectToAction(nameof(WorkOrder));
+            }
+            return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
         }
         [HttpGet]
         public ActionResult ConfirmedWorkOrders()
@@ -438,6 +490,296 @@ namespace EventManagement.Areas.EventManagement.Controllers
                 return View(viewModels);
             }
             return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
+        }
+        [HttpGet]
+        public ActionResult AssignManpower(int id)
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                //var employees = _employee.Employees(userId, userName, concernId,1);
+                var employee = _context.Employees.ToList();
+                WorkOrderChildManpower workOrder = new WorkOrderChildManpower()
+                {
+                    Employee = employee
+                };
+                return View(workOrder);
+            }
+            return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
+        }
+        [HttpPost]
+        public ActionResult AssignManpower(int id, WorkOrderChildManpower childManpower)
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                _manpower.AddWorkOrderManpower(childManpower, id, userId, userName);
+                return RedirectToAction(nameof(ConfirmedWorkOrders));
+            }
+            return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
+        }
+        [HttpGet]
+        public ActionResult AssignSetup(int id)
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                var setups = _context.EventSetups.ToList();
+                WorkOrderChildSetup childSetup = new WorkOrderChildSetup()
+                {
+                    EventSetup= setups
+                };
+                return View(childSetup);
+            }
+            return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
+        }
+        [HttpPost]
+        public ActionResult AssignSetup(int id, WorkOrderChildSetup orderChildSetup)
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                _orderSetup.AddWorkOrderSetup(orderChildSetup, id, userId, userName);
+                return RedirectToAction(nameof(ConfirmedWorkOrders));
+            }
+            return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
+        }
+        [HttpGet]
+        public ActionResult AssignService(int id)
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                var service = _context.EventServices.ToList();
+                WorkOrderChildService orderChildService = new WorkOrderChildService()
+                {
+                    EventService=service
+                };
+                return View(orderChildService);
+            }
+            return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
+        }
+        [HttpPost]
+        public ActionResult AssignService(int id, WorkOrderChildService orderChildService)
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                _orderService.AddWorkOrderService(orderChildService, id, userId, userName);
+                return RedirectToAction(nameof(ConfirmedWorkOrders));
+            }
+            return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
+        }
+        [HttpGet]
+        public ActionResult AssignMiscellaneous(int id)
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                var micell = _context.EventMiscellaneouses.ToList();
+                WorkOrderChildMiscellaneous miscellaneous = new WorkOrderChildMiscellaneous()
+                {
+                    EventMiscellaneous= micell
+                };
+                return View(miscellaneous);
+            }
+            return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
+        }
+        [HttpPost]
+        public ActionResult AssignMiscellaneous(int id, WorkOrderChildMiscellaneous childMiscellaneous)
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                _orderMiscellaneous.AddWorkOrderMiscellaneous(id, childMiscellaneous, userId, userName);
+                return RedirectToAction(nameof(ConfirmedWorkOrders));
+            }
+            return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
+        }
+        [HttpGet]
+        public ActionResult AssignedWorkOrders()
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                var orders = _work.GetUpcomingWorkOrders("en-US", userName, userId, concernId);
+                WorkOrderViewModels viewModels = new WorkOrderViewModels()
+                {
+                    WorkOrderParents = orders
+                };
+                return View(viewModels);
+            }
+            return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
+        } 
+        [HttpGet]
+        public ActionResult AssignedManpower(int id)
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                var assigned = _manpower.WorkOrderAssigneds(id, userId, userName, concernId);
+                WorkOrderAssignedViewModels viewModels = new WorkOrderAssignedViewModels()
+                {
+                    WorkOrderAssigneds = assigned
+                };
+                return View(viewModels);
+            }
+            return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
+        }
+        [HttpPost]
+        public JsonResult DeleteAssignedManpower(int id)
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                _manpower.Delete(id, userId, userName, concernId);
+                return Json(new
+                {
+                    redirectUrl = Url.Action("AssignedWorkOrders", "EventManagementData", new { Area = "EventManagement" }),
+                    isRedirect = true
+                });
+            }
+            return Json(new
+            {
+                redirectUrl = Url.Action("LogIn", "GlobalData", new { Area = "Global" }),
+                isRedirect = true
+            });
+        }
+        [HttpGet]
+        public ActionResult AssignedSetup(int id)
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                var assigned = _orderSetup.WorkOrderAssigneds(id, userId, userName, concernId);
+                WorkOrderAssignedViewModels viewModels = new WorkOrderAssignedViewModels()
+                {
+                    WorkOrderAssigneds = assigned
+                };
+                return View(viewModels);
+            }
+            return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
+        }
+        [HttpPost]
+        public JsonResult DeleteAssignedSetup(int id)
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                _orderSetup.Delete(id, userId, userName, concernId);
+                return Json(new
+                {
+                    redirectUrl = Url.Action("AssignedWorkOrders", "EventManagementData", new { Area = "EventManagement" }),
+                    isRedirect = true
+                });
+            }
+            return Json(new
+            {
+                redirectUrl = Url.Action("LogIn", "GlobalData", new { Area = "Global" }),
+                isRedirect = true
+            });
+        }
+        [HttpGet]
+        public ActionResult AssignedService(int id)
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                var assigned = _orderService.WorkOrderAssigneds(id, userId, userName, concernId);
+                WorkOrderAssignedViewModels viewModels = new WorkOrderAssignedViewModels()
+                {
+                    WorkOrderAssigneds = assigned
+                };
+                return View(viewModels);
+            }
+            return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
+        }
+        [HttpPost]
+        public JsonResult DeleteAssignedService(int id)
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                _orderService.Delete(id, userId, userName, concernId);
+                return Json(new
+                {
+                    redirectUrl = Url.Action("AssignedWorkOrders", "EventManagementData", new { Area = "EventManagement" }),
+                    isRedirect = true
+                });
+            }
+            return Json(new
+            {
+                redirectUrl = Url.Action("LogIn", "GlobalData", new { Area = "Global" }),
+                isRedirect = true
+            });
+        }
+        [HttpGet]
+        public ActionResult AssignedMiscellaneous(int id)
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                var assigned = _orderMiscellaneous.WorkOrderAssigneds(id, userId, userName, concernId);
+                WorkOrderAssignedViewModels viewModels = new WorkOrderAssignedViewModels()
+                {
+                    WorkOrderAssigneds = assigned
+                };
+                return View(viewModels);
+            }
+            return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
+        }
+        [HttpPost]
+        public JsonResult DeleteAssignedMiscellaneous(int id)
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                _orderMiscellaneous.Delete(id, userId, userName, concernId);
+                return Json(new
+                {
+                    redirectUrl = Url.Action("AssignedWorkOrders", "EventManagementData", new { Area = "EventManagement" }),
+                    isRedirect = true
+                });
+            }
+            return Json(new
+            {
+                redirectUrl = Url.Action("LogIn", "GlobalData", new { Area = "Global" }),
+                isRedirect = true
+            });
         }
 
     }
