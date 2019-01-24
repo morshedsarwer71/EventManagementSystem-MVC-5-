@@ -11,6 +11,7 @@ namespace EventManagement.Areas.EventManagement.Interfaces
     public interface IWorkOrderParent
     {
         IEnumerable<ResponseWorkOrderParent> GetWorkOrders(string culture, string UserName, int UserId, int? ConcernId);
+        IEnumerable<ResponseWorkOrderParent> GetWorkOrdersByStatusId(string culture, string UserName, int UserId, int ConcernId,int statusId);
         IEnumerable<ResponseWorkOrderParent> GetCompletedWorkOrders(string culture, string UserName, int UserId, int? ConcernId);
         IEnumerable<ResponseWorkOrderParent> GetUpcomingWorkOrders(string culture, string UserName, int UserId, int? ConcernId);
         void AddWorkOrder(WorkOrderParent workOrder, string UserName, int UserId, int concernId);

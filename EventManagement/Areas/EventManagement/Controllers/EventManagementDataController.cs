@@ -24,6 +24,8 @@ namespace EventManagement.Areas.EventManagement.Controllers
         private readonly IWorkOrderSetup _orderSetup;
         private readonly IWorkOrderService _orderService;
         private readonly IWorkOrderMiscellaneous _orderMiscellaneous;
+        private readonly IDefaultSetting _setting;
+        private readonly IAttendance _attendance;
         public EventManagementDataController
             (
             DataContext context,
@@ -35,7 +37,9 @@ namespace EventManagement.Areas.EventManagement.Controllers
             IWorkOrderManpower manpower,
             IWorkOrderSetup orderSetup,
             IWorkOrderService orderService,
-            IWorkOrderMiscellaneous orderMiscellaneous
+            IWorkOrderMiscellaneous orderMiscellaneous,
+            IDefaultSetting setting,
+            IAttendance attendance
             )
         {
             _context = context;
@@ -48,6 +52,8 @@ namespace EventManagement.Areas.EventManagement.Controllers
             _orderSetup = orderSetup;
             _orderService = orderService;
             _orderMiscellaneous = orderMiscellaneous;
+            _setting = setting;
+            _attendance = attendance;
         }
         public ActionResult Index()
         {
@@ -384,6 +390,36 @@ namespace EventManagement.Areas.EventManagement.Controllers
             return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
         }
         [HttpGet]
+        public ActionResult WorkOrderByStatus()
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                var status = _context.WorkOrderStatuses.ToList();
+                WorkOrderViewModels viewModels = new WorkOrderViewModels()
+                {
+                    WorkOrderStatus = status
+                };
+                return View(viewModels);
+            }
+            return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
+        }
+        [HttpPost]
+        public JsonResult WorkOrderByStatus(int id)
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            var orders = _work.GetWorkOrdersByStatusId("en-US", userName, userId, concernId,id);
+            WorkOrderViewModels viewModels = new WorkOrderViewModels()
+            {
+                WorkOrderParents = orders
+            };
+            return Json(viewModels, JsonRequestBehavior.AllowGet);
+        }
+        [HttpGet]
         public ActionResult WorkOrders()
         {
             var concernId = Convert.ToInt32(Session["ConcernId"]);
@@ -410,10 +446,14 @@ namespace EventManagement.Areas.EventManagement.Controllers
             {
                 var clients = _context.EventManagementClients.ToList();
                 var status = _context.WorkOrderStatuses.ToList();
+                var vat = _setting.GetDefaultSetting(concernId, userId, userName);
+                var pay = _setting.PaymentStatuses();
                 WorkOrderViewModels viewModels = new WorkOrderViewModels()
                 {
                     EventClients = clients,
-                    WorkOrderStatus = status
+                    WorkOrderStatus = status,
+                    VAT = vat,
+                    PaymentStatus = pay
                 };
                 return View(viewModels);
             }
@@ -450,26 +490,55 @@ namespace EventManagement.Areas.EventManagement.Controllers
             {
                 var clients = _context.EventManagementClients.ToList();
                 var status = _context.WorkOrderStatuses.ToList();
-                var order = _work.workOrderById(id, userName, userId);
+                var vat = _setting.GetDefaultSetting(concernId, userId, userName);
+                var pay = _setting.PaymentStatuses();
+                var work = _work.workOrderById(id, userName, userId);
                 WorkOrderViewModels viewModels = new WorkOrderViewModels()
                 {
                     EventClients = clients,
                     WorkOrderStatus = status,
-                    WorkOrderParent= order
+                    VAT = vat,
+                    PaymentStatus = pay,
+                    WorkOrderParent = work
                 };
                 return View(viewModels);
             }
             return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
         }
-        [HttpPost]
-        public ActionResult EditWorkOrder(WorkOrderParent orderParent,int id)
+        [HttpGet]
+        public ActionResult DetailsWorkOrder(int id)
         {
             var concernId = Convert.ToInt32(Session["ConcernId"]);
             var userId = Convert.ToInt32(Session["UserId"]);
             var userName = Convert.ToString(Session["UserName"]);
             if (concernId > 0 && userId > 0)
             {
-                _work.Update(userName, userId, orderParent,id);
+                var clients = _context.EventManagementClients.ToList();
+                var status = _context.WorkOrderStatuses.ToList();
+                var vat = _setting.GetDefaultSetting(concernId, userId, userName);
+                var pay = _setting.PaymentStatuses();
+                var work = _work.workOrderById(id, userName, userId);
+                WorkOrderViewModels viewModels = new WorkOrderViewModels()
+                {
+                    EventClients = clients,
+                    WorkOrderStatus = status,
+                    VAT = vat,
+                    PaymentStatus = pay,
+                    WorkOrderParent = work
+                };
+                return View(viewModels);
+            }
+            return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
+        }
+        [HttpPost]
+        public ActionResult EditWorkOrder(WorkOrderParent orderParent, int id)
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                _work.Update(userName, userId, orderParent, id);
                 return RedirectToAction(nameof(WorkOrder));
             }
             return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
@@ -533,7 +602,7 @@ namespace EventManagement.Areas.EventManagement.Controllers
                 var setups = _context.EventSetups.ToList();
                 WorkOrderChildSetup childSetup = new WorkOrderChildSetup()
                 {
-                    EventSetup= setups
+                    EventSetup = setups
                 };
                 return View(childSetup);
             }
@@ -563,7 +632,7 @@ namespace EventManagement.Areas.EventManagement.Controllers
                 var service = _context.EventServices.ToList();
                 WorkOrderChildService orderChildService = new WorkOrderChildService()
                 {
-                    EventService=service
+                    EventService = service
                 };
                 return View(orderChildService);
             }
@@ -593,7 +662,7 @@ namespace EventManagement.Areas.EventManagement.Controllers
                 var micell = _context.EventMiscellaneouses.ToList();
                 WorkOrderChildMiscellaneous miscellaneous = new WorkOrderChildMiscellaneous()
                 {
-                    EventMiscellaneous= micell
+                    EventMiscellaneous = micell
                 };
                 return View(miscellaneous);
             }
@@ -628,7 +697,7 @@ namespace EventManagement.Areas.EventManagement.Controllers
                 return View(viewModels);
             }
             return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
-        } 
+        }
         [HttpGet]
         public ActionResult AssignedManpower(int id)
         {
@@ -780,6 +849,66 @@ namespace EventManagement.Areas.EventManagement.Controllers
                 redirectUrl = Url.Action("LogIn", "GlobalData", new { Area = "Global" }),
                 isRedirect = true
             });
+        }
+        [HttpGet]
+        public ActionResult Attendance()
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                return View();
+            }
+            return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
+        }
+        [HttpGet]
+        public ActionResult Attendances()
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                var att = _attendance.Attendances(concernId, userName, userId);
+                ResponseAttendanceViewModels viewModels = new ResponseAttendanceViewModels()
+                {
+                    Attendances= att
+                };
+                return View(viewModels);
+            }
+            return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
+        }
+        [HttpGet]
+        public ActionResult AddAttendance()
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                //var employees = _employee.Employees(userId, userName, concernId,1);
+                var employee = _context.Employees.ToList();
+                WorkOrderChildManpower workOrder = new WorkOrderChildManpower()
+                {
+                    Employee = employee
+                };
+                return View(workOrder);
+            }
+            return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
+        }
+        [HttpPost]
+        public ActionResult AddAttendance(Attendance attendance)
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                _attendance.AddAttendance(attendance, userName, userId,concernId);
+                return View(nameof(Index));
+            }
+            return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
         }
 
     }

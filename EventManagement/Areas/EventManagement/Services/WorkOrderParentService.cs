@@ -136,6 +136,56 @@ namespace EventManagement.Areas.EventManagement.Services
             return ResponseWorkOrder;
         }
 
+        public IEnumerable<ResponseWorkOrderParent> GetWorkOrdersByStatusId(string culture, string UserName, int UserId, int ConcernId, int statusId)
+        {
+            var defaultValue = "";
+            if (culture != null)
+            {
+                defaultValue = culture;
+            }
+            else { defaultValue = "en-US"; }
+            List<ResponseWorkOrderParent> ResponseWorkOrder = new List<ResponseModels.ResponseWorkOrderParent>();
+            using (var command = _context.Database.Connection.CreateCommand())
+            {
+                command.CommandText = ("usp_EventManagement_GetWorkOrdersIndexByStatusId @lang,@ConcernId,@StatusId");
+                command.Parameters.Add(new SqlParameter("lang", defaultValue));
+                command.Parameters.Add(new SqlParameter("ConcernId", ConcernId));
+                command.Parameters.Add(new SqlParameter("StatusId", statusId));
+                _context.Database.Connection.Open();
+                using (var result = command.ExecuteReader())
+                {
+                    if (result.HasRows)
+                    {
+                        while (result.Read())
+                        {
+                            ResponseWorkOrderParent responseWorkOrder = new ResponseModels.ResponseWorkOrderParent();
+                            responseWorkOrder.SerialNumber = Convert.ToInt32(result[0]);
+                            responseWorkOrder.OrderId = Convert.ToInt32(result[1]);
+                            responseWorkOrder.WorkOrderCode = Convert.ToString(result[2]);
+                            responseWorkOrder.ClientName = Convert.ToString(result[3]);
+                            responseWorkOrder.StartingDate = Convert.ToString(result[4]);
+                            responseWorkOrder.EndingDate = Convert.ToString(result[5]);
+                            responseWorkOrder.NumberOfManpower = Convert.ToInt32(result[6]);
+                            responseWorkOrder.PerHourRate = Convert.ToDecimal(result[7]);
+                            responseWorkOrder.Status = Convert.ToString(result[8]);
+                            responseWorkOrder.Description = Convert.ToString(result[9]);
+                            responseWorkOrder.Notes = Convert.ToString(result[10]);
+                            responseWorkOrder.NoOfPax = Convert.ToInt32(result[11]);
+                            responseWorkOrder.NoOfService = Convert.ToInt32(result[12]);
+                            responseWorkOrder.NoOfSetup = Convert.ToInt32(result[13]);
+                            responseWorkOrder.TotalDays = Convert.ToString(result[14]);
+                            responseWorkOrder.NumberOfRows = Convert.ToInt32(result[15]);
+
+                            ResponseWorkOrder.Add(responseWorkOrder);
+
+                        }
+                    }
+                }
+                _context.Database.Connection.Close();
+            }
+            return ResponseWorkOrder;
+        }
+
         public void Update(string UserName, int UserId, WorkOrderParent workOrder, int id)
         {
             var work = workOrderById(id, UserName, UserId);

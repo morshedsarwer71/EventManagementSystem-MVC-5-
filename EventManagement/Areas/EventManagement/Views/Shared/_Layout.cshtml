@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="~/Content/dist/css/AdminLTE.min.css">
     <link rel="stylesheet" href="~/Content/Site.css">
     <link href="~/Content/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" rel="stylesheet" />
+    <link href="~/Content/bower_components/timepicker/bootstrap-timepicker.min.css" rel="stylesheet" />
     <!-- AdminLTE Skins. Choose a skin from the css/skins
          folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="~/Content/dist/css/skins/_all-skins.min.css">
@@ -38,11 +39,11 @@
         }
         <header class="main-header">
             <!-- Logo -->
-            <a href="index2.html" class="logo">
+            <a href="@Url.Action("Index","EventManagementData",new {Area="EventManagement" })" class="logo">
                 <!-- mini logo for sidebar mini 50x50 pixels -->
-                <span class="logo-mini"><b>I</b>S</span>
+                <span class="logo-mini"><b>E</b>M</span>
                 <!-- logo for regular state and mobile devices -->
-                <span class="logo-lg"><b>Inventory</b></span>
+                <span class="logo-lg"><b>Event Management</b></span>
             </a>
             <!-- Header Navbar: style can be found in header.less -->
             <nav class="navbar navbar-static-top">
@@ -158,6 +159,7 @@
                             <li><a href="@Url.Action("Setup","EventManagementData",new { Area="EventManagement"})"><i class="fa fa-circle-o"></i> Setup</a></li>
                             <li><a href="@Url.Action("Service","EventManagementData",new { Area="EventManagement"})"><i class="fa fa-circle-o"></i> Service</a></li>
                             <li><a href="@Url.Action("Miscellaneous","EventManagementData",new { Area="EventManagement"})"><i class="fa fa-circle-o"></i> Miscellaneous</a></li>
+                            <li><a href="@Url.Action("Attendance","EventManagementData",new { Area="EventManagement"})"><i class="fa fa-circle-o"></i> Attendance </a></li>
                         </ul>
                     </li>
                     <li class="treeview">
@@ -171,6 +173,7 @@
                         <ul class="treeview-menu">
                             <li><a href="@Url.Action("WorkOrder","EventManagementData",new { Area="EventManagement"})"><i class="fa fa-circle-o"></i> Work Order Quotation</a></li>
                             <li><a href="@Url.Action("ConfirmedWorkOrders","EventManagementData",new { Area="EventManagement"})"><i class="fa fa-circle-o"></i> Confirmed Orders</a></li>
+                            <li><a href="@Url.Action("WorkOrderByStatus","EventManagementData",new { Area="EventManagement"})"><i class="fa fa-circle-o"></i> Orders</a></li>
                         </ul>
                     </li>
                     <li class="treeview">
@@ -181,11 +184,10 @@
                                 <i class="fa fa-angle-left pull-right"></i>
                             </span>
                         </a>
-                        <ul class="treeview-menu">                            
+                        <ul class="treeview-menu">
                             <li><a href="@Url.Action("AssignedWorkOrders","EventManagementData",new { Area="EventManagement"})"><i class="fa fa-circle-o"></i> Confirmed Orders</a></li>
                         </ul>
                     </li>
-
                 </ul>
             </section>
             <!-- /.sidebar -->

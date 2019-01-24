@@ -1,8 +1,8 @@
 ﻿@model EventManagement.Areas.EventManagement.ViewModels.WorkOrderViewModels
 <section class="content-header">
     <h1>
-        Work Order
-        <small>editing work order information</small>
+        Work Order Details
+        <small>details work order information</small>
     </h1>
     <ol class="breadcrumb">
         <li><a href="@Url.Action("#")"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -16,8 +16,6 @@
             <!-- /.box-header -->
             <div class="box-body">
                 <div class="col-md-8 col-sm-8">
-                    @using (Html.BeginForm("EditWorkOrder", "EventManagementData", FormMethod.Post))
-                    {
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label class="col-form-label">Order Code</label>
@@ -36,7 +34,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-calendar"></i>
                                     </div>
-                                    <select class="form-control" name="VATCode">
+                                    <select class="form-control" name="VATCode" readonly="readonly">
                                         @foreach (var item in Model.VAT)
                                         {
                                             if (item.SettingId == Model.WorkOrderParent.VATCode)
@@ -60,7 +58,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-calendar"></i>
                                     </div>
-                                    <select class="form-control" name="ClientId">
+                                    <select class="form-control" name="ClientId" readonly="readonly">
                                         @foreach (var item in Model.EventClients)
                                         {
                                             if (item.ClientId == Model.WorkOrderParent.ClientId)
@@ -84,7 +82,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-calendar"></i>
                                     </div>
-                                    <input type="text" value="@Model.WorkOrderParent.NoOfManpower" class="form-control" name="NoOfManpower">
+                                    <input type="text" readonly="readonly" value="@Model.WorkOrderParent.NoOfManpower" class="form-control" name="NoOfManpower">
                                 </div>
                             </div>
                         </div>
@@ -96,7 +94,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-calendar"></i>
                                     </div>
-                                    <input type="text" value="@Model.WorkOrderParent.NoOfSetup" class="form-control" name="NoOfSetup">
+                                    <input type="text" readonly="readonly" value="@Model.WorkOrderParent.NoOfSetup" class="form-control" name="NoOfSetup">
                                 </div>
                             </div>
                         </div>
@@ -107,7 +105,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-calendar"></i>
                                     </div>
-                                    <input type="text" value="@Model.WorkOrderParent.NoOfService" class="form-control" name="NoOfService">
+                                    <input type="text" readonly="readonly" value="@Model.WorkOrderParent.NoOfService" class="form-control" name="NoOfService">
                                 </div>
                             </div>
                         </div>
@@ -118,7 +116,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-calendar"></i>
                                     </div>
-                                    <input type="text" value="@Model.WorkOrderParent.NoOfPax" class="form-control" name="NoOfPax">
+                                    <input type="text" readonly="readonly" value="@Model.WorkOrderParent.NoOfPax" class="form-control" name="NoOfPax">
                                 </div>
                             </div>
                         </div>
@@ -129,7 +127,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-calendar"></i>
                                     </div>
-                                    <select class="form-control" name="PaymentStatus">
+                                    <select class="form-control" name="PaymentStatus" readonly="readonly">
                                         @foreach (var item in Model.PaymentStatus)
                                         {
                                             if (item.Id == Model.WorkOrderParent.VATCode)
@@ -152,7 +150,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-calendar"></i>
                                     </div>
-                                    <input type="text" value="@Model.WorkOrderParent.PerHourRate" class="form-control" name="PerHourRate">
+                                    <input type="text" readonly="readonly" value="@Model.WorkOrderParent.PerHourRate" class="form-control" name="PerHourRate">
                                 </div>
                             </div>
                         </div>
@@ -163,7 +161,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-calendar"></i>
                                     </div>
-                                    <input type="text" value="@Model.WorkOrderParent.StartingDate.Date" class="form-control" name="StartingDate" id="startingDate">
+                                    <input type="text" readonly="readonly" value="@Model.WorkOrderParent.StartingDate.ToShortDateString()" class="form-control" name="StartingDate" id="startingDate">
                                 </div>
                             </div>
                         </div>
@@ -174,7 +172,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-calendar"></i>
                                     </div>
-                                    <input type="text" value="@Model.WorkOrderParent.EndingDate.Date" class="form-control" name="EndingDate" id="endingDate">
+                                    <input type="text" readonly="readonly" value="@Model.WorkOrderParent.EndingDate.ToShortDateString()" class="form-control" name="EndingDate" id="endingDate">
                                 </div>
                             </div>
                         </div>
@@ -185,7 +183,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-calendar"></i>
                                     </div>
-                                    <select class="form-control" name="Status">
+                                    <select class="form-control" name="Status" readonly="readonly">
                                         @foreach (var item in Model.WorkOrderStatus)
                                         {
                                             if (item.OrderStatusId == Model.WorkOrderParent.Status)
@@ -208,7 +206,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-calendar"></i>
                                     </div>
-                                    <textarea class="form-control" name="Notes">@Model.WorkOrderParent.Notes</textarea>
+                                    <textarea readonly="readonly" class="form-control" name="Notes">@Model.WorkOrderParent.Notes</textarea>
                                 </div>
                             </div>
 
@@ -220,36 +218,19 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-calendar"></i>
                                     </div>
-                                    <textarea class="form-control" name="Description">@Model.WorkOrderParent.Description</textarea>
+                                    <textarea class="form-control" readonly="readonly" name="Description">@Model.WorkOrderParent.Description</textarea>
                                 </div>
                             </div>
                         </div>
 
                         <div class="col-md-12">
                             <div class="form-group">
-                                <button type="submit" id="btnSubmit" value="submit" class="btn btn-primary"><i class="fa fa-plus"></i> UPDATE ORDER</button>
+                                <a class="btn btn-primary" href="@Url.Action("WorkOrder","EventManagementData",new {Area="EventManagement" })">BACK</a>
                             </div>
-                        </div>
-                    }
+                        </div>                    
                 </div>
             </div>
         </div>
 
     </div>
 </section>
-@section Scripts{
-    <script src="~/Content/bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
-    <script>
-        $(document).ready(function () {
-            $('#endingDate').datepicker({
-                format: 'yyyy-mm-dd',
-                //startYear: '-10y'
-            });
-            $('#startingDate').datepicker({
-                format: 'yyyy-mm-dd',
-                //startYear: '-10y'
-            });
-        });
-
-    </script>
-}

@@ -1,17 +1,16 @@
-﻿@model EventManagement.Areas.EventManagement.ViewModels.EmployeeViewModels
-
+﻿@model EventManagement.Areas.EventManagement.ViewModels.ResponseAttendanceViewModels
 @{
     Layout = null;
 }
 <section class="content-header">
     <h1>
-        Employees
-        <small>preview of employee index</small>
+        Attendance
+        <small>preview of attendance index</small>
     </h1>
     <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i>Home</a></li>
-        <li><a href="#">Employee</a></li>
-        <li class="active">Employees</li>
+        <li><a href="#">Attendance</a></li>
+        <li class="active">Attendances</li>
     </ol>
 </section>
 
@@ -26,29 +25,25 @@
                         <thead>
                             <tr>
                                 <th style="width: 10px">#</th>
-                                <th>Code</th>
                                 <th>Name</th>
-                                <th>Type</th>
-                                <th>Mobile Num.</th>
-                                <th>Monthly Salary</th>
-                                <th>Passport Num.</th>
-                                <th>Emp. Image</th>
-                                <th>Pass. Image</th>
+                                <th>Date</th>
+                                <th>In Time</th>
+                                <th>Out Time</th>
+                                <th>Total Hour</th>
+                                <th>Edit</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in Model.Employees)
+                            @foreach (var item in Model.Attendances)
                             {
                                 <tr>
                                     <td>@item.SerialNumber</td>
-                                    <td>@item.EmployeeCode</td>
-                                    <td>@item.FirstName @item.LastName</td>
-                                    <td>@item.EmployeeEntitlement</td>
-                                    <td>@item.ContactNumber</td>
-                                    <td>@item.MonthlySalary</td>
-                                    <td>@item.PassportNumber</td>
-                                    <td><img src="@Url.Content(item.EmployeeImage)" width="70" height="40" /></td>
-                                    <td><img src="@Url.Content(item.PassportImage)" width="70" height="40" /></td>
+                                    <td>@item.EmployeeFirstName @item.EmployeeLastName</td>
+                                    <td>@item.AttendanceDate.ToShortDateString()</td>
+                                    <td>@item.InTime.ToShortTimeString()</td>
+                                    <td>@item.OutTime.ToShortTimeString()</td>
+                                    <td>@item.TotalHour</td>
+                                    <td><a href="#"><i class="fa fa-eye"></i></a></td>
                                 </tr>
                             }
                         </tbody>

@@ -4,13 +4,14 @@ using EventManagement.Areas.EventManagement.ResponseModels;
 using EventManagement.Context;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 
 namespace EventManagement.Areas.EventManagement.Services
 {
-    public class AttendanceService: IAttendance
+    public class AttendanceService : IAttendance
     {
         private DataContext _context;
         public AttendanceService(DataContext context)
@@ -21,12 +22,34 @@ namespace EventManagement.Areas.EventManagement.Services
         public void AddAttendance(Attendance attendance, string userName, int userId, int concernId)
         {
             var todayDate = DateTime.Now;
-            attendance.CreationDate = todayDate;
-            attendance.CreatorId = userId;
-            attendance.IsDelete = 0;
-            attendance.ConcernId = concernId;
-            _context.Attendances.Add(attendance);
-            _context.SaveChanges();
+            List<Attendance> attendances = new List<Attendance>();
+            using (DbContextTransaction transaction = _context.Database.BeginTransaction())
+            {
+                foreach (var item in attendance.Employee)
+                {
+                    if (item.IsChecked == true)
+                    {
+                        attendances.Add(new Attendance()
+                        {
+                            AttendanceDate = attendance.AttendanceDate,
+                            ConcernId= concernId,
+                            CreationDate= todayDate,
+                            EmployeeId=item.EmployeeId,
+                            CreatorId= userId,
+                            InTime= attendance.InTime,
+                            OutTime= attendance.OutTime,
+                            IsDelete=0,
+                            ModificationDate=todayDate,
+                            ModifierId= userId
+
+                        });
+                    }
+                }
+                _context.Attendances.AddRange(attendances);
+                _context.SaveChanges();
+                transaction.Commit();
+            }
+
         }
 
         public ResponseAttendance AttendanceDetails(int attendanceId, string userName, int userId, string culture)
@@ -64,7 +87,8 @@ namespace EventManagement.Areas.EventManagement.Services
                                 EmployeeId = Convert.ToInt32(result[5]),
                                 EmployeeFirstName = Convert.ToString(result[6]),
                                 EmployeeLastName = Convert.ToString(result[7]),
-                                TotalHour = Convert.ToInt32(result[8])
+                                TotalHour = Convert.ToInt32(result[8]),
+                                NumberOfRows = Convert.ToInt32(result[9])
                             };
                             responseAttendancesList.Add(responseAttendance);
                         }

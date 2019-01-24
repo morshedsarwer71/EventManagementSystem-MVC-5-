@@ -12,7 +12,7 @@ namespace EventManagement.Areas.EventManagement.Models
         public int WorkOrderId { get; set; }
         public int ConcernId { get; set; }
         public string OrderCode { get; set; }
-        public string VATCode { get; set; }
+        public int VATCode { get; set; }
         public int ClientId { get; set; }
         public int NoOfManpower { get; set; }
         public int NoOfSetup { get; set; }

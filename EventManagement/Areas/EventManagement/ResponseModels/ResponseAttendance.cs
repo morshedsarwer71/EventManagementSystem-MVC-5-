@@ -16,5 +16,6 @@ namespace EventManagement.Areas.EventManagement.ResponseModels
         public string EmployeeFirstName { get; set; }
         public string EmployeeLastName { get; set; }
         public int TotalHour { get; set; }
+        public int NumberOfRows { get; set; }
     }
 }

@@ -13,5 +13,7 @@ namespace EventManagement.Areas.EventManagement.ViewModels
         public IEnumerable<WorkOrderStatus> WorkOrderStatus { get; set; }
         public IEnumerable<EventManagementClient> EventClients { get; set; }
         public WorkOrderParent WorkOrderParent { get; set; }
+        public IEnumerable<DefaultSetting> VAT { get; set; }
+        public IEnumerable<PaymentStatus> PaymentStatus { get; set; }
     }
 }

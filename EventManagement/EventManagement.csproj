@@ -197,6 +197,7 @@
     <Compile Include="Areas\EventManagement\Controllers\EventManagementDataController.cs" />
     <Compile Include="Areas\EventManagement\EventManagementAreaRegistration.cs" />
     <Compile Include="Areas\EventManagement\Interfaces\IAttendance.cs" />
+    <Compile Include="Areas\EventManagement\Interfaces\IDefaultSetting.cs" />
     <Compile Include="Areas\EventManagement\Interfaces\IEmployee.cs" />
     <Compile Include="Areas\EventManagement\Interfaces\IEmployeeEntitlements.cs" />
     <Compile Include="Areas\EventManagement\Interfaces\IEmployeesMiscellaneousAssignment.cs" />
@@ -212,6 +213,7 @@
     <Compile Include="Areas\EventManagement\Interfaces\IWorkOrderService.cs" />
     <Compile Include="Areas\EventManagement\Interfaces\IWorkOrderSetup.cs" />
     <Compile Include="Areas\EventManagement\Models\Attendance.cs" />
+    <Compile Include="Areas\EventManagement\Models\DefaultSetting.cs" />
     <Compile Include="Areas\EventManagement\Models\Employee.cs" />
     <Compile Include="Areas\EventManagement\Models\EmployeeEntitlement.cs" />
     <Compile Include="Areas\EventManagement\Models\EmployeesMiscellaneousAssignment.cs" />
@@ -228,6 +230,7 @@
     <Compile Include="Areas\EventManagement\Models\WorkOrderParent.cs" />
     <Compile Include="Areas\EventManagement\Models\WorkOrderQuotation.cs" />
     <Compile Include="Areas\EventManagement\Models\WorkOrderStatus.cs" />
+    <Compile Include="Areas\EventManagement\ResponseModels\PaymentStatus.cs" />
     <Compile Include="Areas\EventManagement\ResponseModels\ResponseAttendance.cs" />
     <Compile Include="Areas\EventManagement\ResponseModels\ResponseCategory.cs" />
     <Compile Include="Areas\EventManagement\ResponseModels\ResponseEmployee.cs" />
@@ -240,6 +243,7 @@
     <Compile Include="Areas\EventManagement\ResponseModels\ResponseWorkOrderParent.cs" />
     <Compile Include="Areas\EventManagement\ResponseModels\WorkOrderAssigned.cs" />
     <Compile Include="Areas\EventManagement\Services\AttendanceService.cs" />
+    <Compile Include="Areas\EventManagement\Services\DefaultSettingService.cs" />
     <Compile Include="Areas\EventManagement\Services\EmployeeEntitlementsService.cs" />
     <Compile Include="Areas\EventManagement\Services\EmployeeService.cs" />
     <Compile Include="Areas\EventManagement\Services\EmployeesMiscellaneousAssignmentService.cs" />
@@ -255,6 +259,7 @@
     <Compile Include="Areas\EventManagement\Services\WorkOrderServiceService.cs" />
     <Compile Include="Areas\EventManagement\Services\WorkOrderSetupService.cs" />
     <Compile Include="Areas\EventManagement\ViewModels\EmployeeViewModels.cs" />
+    <Compile Include="Areas\EventManagement\ViewModels\ResponseAttendanceViewModels.cs" />
     <Compile Include="Areas\EventManagement\ViewModels\WorkOrderAssignedViewModels.cs" />
     <Compile Include="Areas\EventManagement\ViewModels\WorkOrderViewModels.cs" />
     <Compile Include="Areas\Global\Controllers\GlobalDataController.cs" />
@@ -321,6 +326,26 @@
     <Compile Include="Migrations\201901180915541_ghytygfg.cs" />
     <Compile Include="Migrations\201901180915541_ghytygfg.Designer.cs">
       <DependentUpon>201901180915541_ghytygfg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901202006236_addingvatTable.cs" />
+    <Compile Include="Migrations\201901202006236_addingvatTable.Designer.cs">
+      <DependentUpon>201901202006236_addingvatTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901202008571_addingvatTableff.cs" />
+    <Compile Include="Migrations\201901202008571_addingvatTableff.Designer.cs">
+      <DependentUpon>201901202008571_addingvatTableff.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901202016557_addingvatTableffss.cs" />
+    <Compile Include="Migrations\201901202016557_addingvatTableffss.Designer.cs">
+      <DependentUpon>201901202016557_addingvatTableffss.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901202018441_addingvatTableffsss.cs" />
+    <Compile Include="Migrations\201901202018441_addingvatTableffsss.Designer.cs">
+      <DependentUpon>201901202018441_addingvatTableffsss.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901210723500_DefaultSetting.cs" />
+    <Compile Include="Migrations\201901210723500_DefaultSetting.Designer.cs">
+      <DependentUpon>201901210723500_DefaultSetting.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -6537,6 +6562,10 @@
     <Content Include="Content\bower_components\select2\tests\vendor\qunit-1.23.1.css" />
     <Content Include="Content\bower_components\select2\tests\vendor\qunit-1.23.1.js" />
     <Content Include="Content\bower_components\select2\vendor\jquery-2.1.0.js" />
+    <Content Include="Content\bower_components\timepicker\bootstrap-timepicker.css" />
+    <Content Include="Content\bower_components\timepicker\bootstrap-timepicker.js" />
+    <Content Include="Content\bower_components\timepicker\bootstrap-timepicker.min.css" />
+    <Content Include="Content\bower_components\timepicker\bootstrap-timepicker.min.js" />
     <Content Include="Content\dist\css\AdminLTE.css" />
     <Content Include="Content\dist\css\AdminLTE.min.css" />
     <Content Include="Content\dist\css\alt\AdminLTE-bootstrap-social.css" />
@@ -7166,6 +7195,11 @@
     <Content Include="Areas\EventManagement\Views\EventManagementData\AssignedSetup.cshtml" />
     <Content Include="Areas\EventManagement\Views\EventManagementData\AssignedService.cshtml" />
     <Content Include="Areas\EventManagement\Views\EventManagementData\EditWorkOrder.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\DetailsWorkOrder.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\WorkOrderByStatus.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\Attendance.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\Attendances.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\AddAttendance.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
@@ -7269,6 +7303,21 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201901180915541_ghytygfg.resx">
       <DependentUpon>201901180915541_ghytygfg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901202006236_addingvatTable.resx">
+      <DependentUpon>201901202006236_addingvatTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901202008571_addingvatTableff.resx">
+      <DependentUpon>201901202008571_addingvatTableff.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901202016557_addingvatTableffss.resx">
+      <DependentUpon>201901202016557_addingvatTableffss.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901202018441_addingvatTableffsss.resx">
+      <DependentUpon>201901202018441_addingvatTableffsss.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901210723500_DefaultSetting.resx">
+      <DependentUpon>201901210723500_DefaultSetting.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

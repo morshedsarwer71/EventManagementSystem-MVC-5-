@@ -42,6 +42,7 @@ namespace EventManagement.Context
         public DbSet<WorkOrderParent> WorkOrderParents { get; set; }
         public DbSet<WorkOrderStatus> WorkOrderStatuses { get; set; }
         public DbSet<WorkOrderQuotation> WorkOrderQuotations { get; set; }
+        public DbSet<DefaultSetting> DefaultSettings { get; set; }
 
     }
 }

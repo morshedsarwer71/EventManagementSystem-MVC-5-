@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
@@ -30,5 +31,7 @@ namespace EventManagement.Areas.EventManagement.Models
         public DateTime ModificationDate { get; set; }
         public int ModifierId { get; set; }
         public int IsDelete { get; set; }
+        [NotMapped]
+        public List<Employee> Employee { get; set; }
     }
 }
