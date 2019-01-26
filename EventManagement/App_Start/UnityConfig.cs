@@ -42,6 +42,7 @@ namespace EventManagement
             container.RegisterType<IWorkOrderService, WorkOrderServiceService>();
             container.RegisterType<IWorkOrderSetup, WorkOrderSetupService>();
             container.RegisterType<IDefaultSetting, DefaultSettingService>();
+            container.RegisterType<ITransaction, TransactionService>();
 
             DependencyResolver.SetResolver(new UnityDependencyResolver(container));
         }

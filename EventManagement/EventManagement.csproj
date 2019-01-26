@@ -207,12 +207,14 @@
     <Compile Include="Areas\EventManagement\Interfaces\IEventMiscellaneous.cs" />
     <Compile Include="Areas\EventManagement\Interfaces\IEventService.cs" />
     <Compile Include="Areas\EventManagement\Interfaces\IEventSetup.cs" />
+    <Compile Include="Areas\EventManagement\Interfaces\ITransaction.cs" />
     <Compile Include="Areas\EventManagement\Interfaces\IWorkOrderManpower.cs" />
     <Compile Include="Areas\EventManagement\Interfaces\IWorkOrderMiscellaneous.cs" />
     <Compile Include="Areas\EventManagement\Interfaces\IWorkOrderParent.cs" />
     <Compile Include="Areas\EventManagement\Interfaces\IWorkOrderService.cs" />
     <Compile Include="Areas\EventManagement\Interfaces\IWorkOrderSetup.cs" />
     <Compile Include="Areas\EventManagement\Models\Attendance.cs" />
+    <Compile Include="Areas\EventManagement\Models\Bank.cs" />
     <Compile Include="Areas\EventManagement\Models\DefaultSetting.cs" />
     <Compile Include="Areas\EventManagement\Models\Employee.cs" />
     <Compile Include="Areas\EventManagement\Models\EmployeeEntitlement.cs" />
@@ -221,8 +223,12 @@
     <Compile Include="Areas\EventManagement\Models\EmployeesSetupAssignment.cs" />
     <Compile Include="Areas\EventManagement\Models\EventManagementClient.cs" />
     <Compile Include="Areas\EventManagement\Models\EventMiscellaneous.cs" />
+    <Compile Include="Areas\EventManagement\Models\EventPayment.cs" />
     <Compile Include="Areas\EventManagement\Models\EventService.cs" />
     <Compile Include="Areas\EventManagement\Models\EventSetup.cs" />
+    <Compile Include="Areas\EventManagement\Models\Expenditure.cs" />
+    <Compile Include="Areas\EventManagement\Models\ExpenditureHead.cs" />
+    <Compile Include="Areas\EventManagement\Models\SalaryPayment.cs" />
     <Compile Include="Areas\EventManagement\Models\WorkOrderChildManpower.cs" />
     <Compile Include="Areas\EventManagement\Models\WorkOrderChildMiscellaneous.cs" />
     <Compile Include="Areas\EventManagement\Models\WorkOrderChildService.cs" />
@@ -241,6 +247,8 @@
     <Compile Include="Areas\EventManagement\ResponseModels\ResponseEventClient.cs" />
     <Compile Include="Areas\EventManagement\ResponseModels\ResponseProject.cs" />
     <Compile Include="Areas\EventManagement\ResponseModels\ResponseWorkOrderParent.cs" />
+    <Compile Include="Areas\EventManagement\ResponseModels\SalaryType.cs" />
+    <Compile Include="Areas\EventManagement\ResponseModels\TransactionType.cs" />
     <Compile Include="Areas\EventManagement\ResponseModels\WorkOrderAssigned.cs" />
     <Compile Include="Areas\EventManagement\Services\AttendanceService.cs" />
     <Compile Include="Areas\EventManagement\Services\DefaultSettingService.cs" />
@@ -253,6 +261,7 @@
     <Compile Include="Areas\EventManagement\Services\EventMiscellaneousService.cs" />
     <Compile Include="Areas\EventManagement\Services\EventServiceService.cs" />
     <Compile Include="Areas\EventManagement\Services\EventSetupService.cs" />
+    <Compile Include="Areas\EventManagement\Services\TransactionService.cs" />
     <Compile Include="Areas\EventManagement\Services\WorkOrderManpowerService.cs" />
     <Compile Include="Areas\EventManagement\Services\WorkOrderMiscellaneousService.cs" />
     <Compile Include="Areas\EventManagement\Services\WorkOrderParentService.cs" />
@@ -260,6 +269,7 @@
     <Compile Include="Areas\EventManagement\Services\WorkOrderSetupService.cs" />
     <Compile Include="Areas\EventManagement\ViewModels\EmployeeViewModels.cs" />
     <Compile Include="Areas\EventManagement\ViewModels\ResponseAttendanceViewModels.cs" />
+    <Compile Include="Areas\EventManagement\ViewModels\TransactionViewModels.cs" />
     <Compile Include="Areas\EventManagement\ViewModels\WorkOrderAssignedViewModels.cs" />
     <Compile Include="Areas\EventManagement\ViewModels\WorkOrderViewModels.cs" />
     <Compile Include="Areas\Global\Controllers\GlobalDataController.cs" />
@@ -346,6 +356,30 @@
     <Compile Include="Migrations\201901210723500_DefaultSetting.cs" />
     <Compile Include="Migrations\201901210723500_DefaultSetting.Designer.cs">
       <DependentUpon>201901210723500_DefaultSetting.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901240827214_salary.cs" />
+    <Compile Include="Migrations\201901240827214_salary.Designer.cs">
+      <DependentUpon>201901240827214_salary.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901240831432_salaryd.cs" />
+    <Compile Include="Migrations\201901240831432_salaryd.Designer.cs">
+      <DependentUpon>201901240831432_salaryd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901241520489_banksdd.cs" />
+    <Compile Include="Migrations\201901241520489_banksdd.Designer.cs">
+      <DependentUpon>201901241520489_banksdd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901241525424_banksddd.cs" />
+    <Compile Include="Migrations\201901241525424_banksddd.Designer.cs">
+      <DependentUpon>201901241525424_banksddd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901250754350_trann.cs" />
+    <Compile Include="Migrations\201901250754350_trann.Designer.cs">
+      <DependentUpon>201901250754350_trann.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901251802453_updateee.cs" />
+    <Compile Include="Migrations\201901251802453_updateee.Designer.cs">
+      <DependentUpon>201901251802453_updateee.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -7200,6 +7234,12 @@
     <Content Include="Areas\EventManagement\Views\EventManagementData\Attendance.cshtml" />
     <Content Include="Areas\EventManagement\Views\EventManagementData\Attendances.cshtml" />
     <Content Include="Areas\EventManagement\Views\EventManagementData\AddAttendance.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\ExpenditureHead.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\ExpenditureHeads.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\AddExpenditureHead.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\Salary.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\Salaries.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\AddSalary.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
@@ -7318,6 +7358,24 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201901210723500_DefaultSetting.resx">
       <DependentUpon>201901210723500_DefaultSetting.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901240827214_salary.resx">
+      <DependentUpon>201901240827214_salary.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901240831432_salaryd.resx">
+      <DependentUpon>201901240831432_salaryd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901241520489_banksdd.resx">
+      <DependentUpon>201901241520489_banksdd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901241525424_banksddd.resx">
+      <DependentUpon>201901241525424_banksddd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901250754350_trann.resx">
+      <DependentUpon>201901250754350_trann.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901251802453_updateee.resx">
+      <DependentUpon>201901251802453_updateee.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -23,7 +23,7 @@ namespace EventManagement.Areas.EventManagement.Models
         [DataType(DataType.DateTime)]
         //[DisplayFormat(DataFormatString = "{0:yyy-MM-dd HH:mm}", ApplyFormatInEditMode = true)]
         public DateTime OutTime { get; set; }
-        [Required(AllowEmptyStrings = false, ErrorMessage = " Employee name required")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Employee name required")]
         public int EmployeeId { get; set; }
         public int ConcernId { get; set; }
         public DateTime CreationDate { get; set; }

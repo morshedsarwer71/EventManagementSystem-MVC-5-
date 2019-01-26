@@ -43,6 +43,11 @@ namespace EventManagement.Context
         public DbSet<WorkOrderStatus> WorkOrderStatuses { get; set; }
         public DbSet<WorkOrderQuotation> WorkOrderQuotations { get; set; }
         public DbSet<DefaultSetting> DefaultSettings { get; set; }
+        public DbSet<EventPayment> EventPayments { get; set; }
+        public DbSet<SalaryPayment> SalaryPayments { get; set; }
+        public DbSet<Bank> Banks { get; set; }
+        public DbSet<Expenditure> Expenditures { get; set; }
+        public DbSet<ExpenditureHead> ExpenditureHeads { get; set; }
 
     }
 }
