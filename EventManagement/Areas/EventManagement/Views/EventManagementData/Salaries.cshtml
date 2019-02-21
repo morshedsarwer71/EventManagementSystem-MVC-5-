@@ -1,4 +1,5 @@
-﻿@{
+﻿@model EventManagement.Areas.EventManagement.ViewModels.TransactionViewModels
+@{
     Layout = null;
 }
 <section class="content-header">
@@ -23,11 +24,27 @@
                         <thead>
                             <tr>
                                 <th style="width: 10px">#</th>
-                                
+                                <th>Employee</th>
+                                <th>Payment Date</th>
+                                <th>Payment Month</th>                              
+                                <th>Salary Type</th>                              
+                                <th>Transaction Type</th>                              
+                                <th>Amount</th>                              
                             </tr>
                         </thead>
                         <tbody>
-                            
+                            @foreach (var item in Model.SalaryPayments)
+                            {
+                            <tr>
+                                <td>@item.Serial</td>
+                                <td>@item.Employee</td>
+                                <td>@item.PaymentDate</td>
+                                <td>@item.SalaryMonth</td>
+                                <td>@item.SalaryType</td>
+                                <td>@item.TransactionType</td>
+                                <td>@item.Amount</td>
+                            </tr>
+                            }
                         </tbody>
                     </table>
                 </div>

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<EventManagement.Areas.EventManagement.Models.EmployeeEntitlement>
+﻿@model EventManagement.Areas.EventManagement.ViewModels.TransactionViewModels
 @{
     Layout = null;
 }
@@ -19,42 +19,90 @@
             <!-- /.box-header -->
             <div class="box-body">
                 <div class="col-md-6 col-sm-6">
-                    @using (Html.BeginForm("AddExpenditureHead", "EventManagementData", FormMethod.Post, new { enctype = "multipart/form-data" }))
-                    {
-                        <div class="form-group">
-                            <label class="col-form-label">Expenditure Head EN</label>
-                            <div class="input-group">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-calendar"></i>
-                                </div>
-                                <input type="text" class="form-control" name="ExpenditureHeadEN">
+                    <div class="form-group">
+                        <label class="col-form-label">Employee</label>
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
                             </div>
+                            <select class="form-control" id="employeeId">
+                                @foreach (var item in Model.Employees)
+                                {
+                                    <option value="@item.EmployeeId">@item.FirstName @item.LastName</option>
+                                }
+                            </select>
                         </div>
-                        <div class="form-group">
-                            <label class="col-form-label">Expenditure Head AR <span style="color:red;"> *</span></label>
-                            <div class="input-group">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-calendar"></i>
-                                </div>
-                                <input type="text" class="form-control" name="ExpenditureHeadAR">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-form-label">Salary Type<span style="color:red;"> *</span></label>
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
                             </div>
+                            <select class="form-control" id="salaryTypeId">
+                                @foreach (var item in Model.SalaryTypes)
+                                {
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+                            </select>
                         </div>
-                        <div class="form-group">
-                            <label class="col-form-label">Description <span style="color:red;"> *</span></label>
-                            <div class="input-group">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-calendar"></i>
-                                </div>
-                                <textarea class="form-control" name="Description"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-form-label">Payment Date <span style="color:red;"> *</span></label>
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
                             </div>
+                            <input type="text" class="form-control" id="paymentDate" />
                         </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-form-label">Transaction Type<span style="color:red;"> *</span></label>
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <select class="form-control" id="transactionTypeId">
+                                @foreach (var item in Model.TransactionTypes)
+                                {
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-form-label">Payment Amount <span style="color:red;"> *</span></label>
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <input type="text" class="form-control" id="amount"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-form-label">Salary/Wages Month <span style="color:red;"> *</span></label>
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <input type="text" class="form-control" id="salaryMonth"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-form-label">Description <span style="color:red;"> *</span></label>
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <textarea class="form-control" id="description"></textarea>
+                        </div>
+                    </div>
 
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <button type="submit" value="submit" class="btn btn-primary"><i class="fa fa-plus"></i> EXPENDITURE</button>
-                            </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <button type="submit" value="submit" id="btnSubmit" class="btn btn-primary"><i class="fa fa-plus"></i> EXPENDITURE</button>
                         </div>
-                    }
+                    </div>
                 </div>
             </div>
         </div>

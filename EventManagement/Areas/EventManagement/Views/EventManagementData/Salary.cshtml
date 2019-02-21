@@ -7,7 +7,7 @@
     <div class="row">
         <div class="box">
             <div class="box-header with-border">
-                <h3 class="box-title">Expenditure Head</h3>
+                <h3 class="box-title">Salary</h3>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
@@ -26,3 +26,62 @@
 
     </div>
 </section>
+
+@section Scripts{
+    <script src="~/Content/bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#paymentDate').datepicker({
+                format: 'yyyy-mm-dd',
+                autoclose: true
+            });
+            $('#salaryMonth').datepicker({
+                format: 'mm-yyyy',
+                startView: "months",
+                minViewMode: "months",
+                autoclose: true
+            });
+            $("#btnSubmit").click(function () {
+                var employeeId = $("#employeeId").val();
+                var salaryTypeId = $("#salaryTypeId").val();
+                var paymentDate = $("#paymentDate").val();
+                var salaryMonth = $("#salaryMonth").val();
+                var transactionTypeId = $("#transactionTypeId").val();
+                var amount = $("#amount").val();
+                var description = $("#description").val();
+                $("#dvLoader").show();
+                $.ajax({
+                    url: "/EventManagementData/AddSalary",
+                    type: "POST",
+                    data: JSON.stringify({
+                        "SalaryTypeId": salaryTypeId,
+                        "EmployeeId": employeeId,
+                        "PaymentDate": paymentDate,
+                        "SalaryMonth": salaryMonth,
+                        "TransactionTypeId": transactionTypeId,
+                        "Amount": amount,
+                        "Description": description
+                    }),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (json) {
+                        if (json.isRedirect) {
+                            window.location.href = json.redirectUrl;
+                        }
+                        Clear();
+                        $('#dvLoader').hide();
+                    }
+                });
+            });
+        });
+        function Clear() {
+             $("#employeeId").val('');
+             $("#salaryTypeId").val('');
+             $("#paymentDate").val('');
+             $("#transactionTypeId").val('');
+             $("#amount").val('');
+             $("#description").val('');
+
+        };
+    </script>
+}

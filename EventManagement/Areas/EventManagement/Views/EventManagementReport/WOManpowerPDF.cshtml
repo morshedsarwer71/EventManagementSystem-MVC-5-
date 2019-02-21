@@ -1,0 +1,69 @@
+﻿@model EventManagement.Areas.EventManagement.ViewModels.WorkOrderAssignedViewModels
+@{
+                /**/
+
+                Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>WOManpower</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.7 -->
+    <link rel="stylesheet" href="~/Content/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="~/Content/bower_components/font-awesome/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="../../bower_components/Ionicons/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/Content/dist/css/AdminLTE.min.css">
+    <!-- iCheck -->
+    <link rel="stylesheet" href="~/Content/dist/css/blue.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+</head>
+<body>
+    @*class="hold-transition login-page" --- body class*@
+    <section class="content" style="padding-top:200px;">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box-body">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th style="width: 10px">#</th>
+                                <th>Name</th>
+                                <th>Nationality</th>
+                                <th>NID</th>
+                                <th>Passport ID</th>
+                                <th>Image</th>
+                                <th>Passport</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.WorkOrderAssigneds)
+                            {
+                                <tr>
+                                    <td>@item.Serial</td>
+                                    <td>@item.Name</td>
+                                    <td>@item.Nationality</td>
+                                    <td>@item.NIDNumber</td>
+                                    <td>@item.PassNumber</td>
+                                    <td><img src="@Url.Content(item.ImagePath)" width="70" height="40" /></td>
+                                    <td><img src="@Url.Content(item.PassPath)" width="70" height="40" /></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="~/Content/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+</body>
+</html>

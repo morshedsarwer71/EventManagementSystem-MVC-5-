@@ -154,19 +154,43 @@
                                 <i class="fa fa-angle-left pull-right"></i>
                             </span>
                         </a>
-                        <ul class="treeview-menu">
-                            <li><a href="@Url.Action("Employee","EventManagementData",new { Area="EventManagement"})"><i class="fa fa-circle-o"></i> Employee</a></li>
+                        <ul class="treeview-menu">                            
                             <li><a href="@Url.Action("Setup","EventManagementData",new { Area="EventManagement"})"><i class="fa fa-circle-o"></i> Setup</a></li>
                             <li><a href="@Url.Action("Service","EventManagementData",new { Area="EventManagement"})"><i class="fa fa-circle-o"></i> Service</a></li>
                             <li><a href="@Url.Action("Miscellaneous","EventManagementData",new { Area="EventManagement"})"><i class="fa fa-circle-o"></i> Miscellaneous</a></li>
-                            <li><a href="@Url.Action("Attendance","EventManagementData",new { Area="EventManagement"})"><i class="fa fa-circle-o"></i> Attendance </a></li>
+                            <li><a href="@Url.Action("EventClient","EventManagementData",new { Area="EventManagement"})"><i class="fa fa-circle-o"></i> Event Client</a></li>
                             <li><a href="@Url.Action("ExpenditureHead","EventManagementData",new { Area="EventManagement"})"><i class="fa fa-circle-o"></i> Expenditure Head </a></li>
                         </ul>
                     </li>
                     <li class="treeview">
                         <a href="#">
-                            <i class="fa fa-pie-chart"></i>
-                            <span>Order</span>
+                            <i class="fa fa-male"></i>
+                            <span>Employee</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a href="@Url.Action("Employee","EventManagementData",new { Area="EventManagement"})"><i class="fa fa-circle-o"></i> Employee</a></li>
+                            <li><a href="@Url.Action("EditEmployees","EventManagementData",new { Area="EventManagement"})"><i class="fa fa-circle-o"></i> Edit Employee</a></li>
+                        </ul>
+                    </li>
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-gear"></i>
+                            <span>Attendance</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a href="@Url.Action("Attendance","EventManagementData",new { Area="EventManagement"})"><i class="fa fa-circle-o"></i> Attendance </a></li>
+                        </ul>
+                    </li>
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-first-order"></i>
+                            <span>Work Order</span>
                             <span class="pull-right-container">
                                 <i class="fa fa-angle-left pull-right"></i>
                             </span>
@@ -179,14 +203,43 @@
                     </li>
                     <li class="treeview">
                         <a href="#">
-                            <i class="fa fa-pie-chart"></i>
-                            <span>Assigned</span>
+                            <i class="fa fa-gears"></i>
+                            <span>Assigned Setting</span>
                             <span class="pull-right-container">
                                 <i class="fa fa-angle-left pull-right"></i>
                             </span>
                         </a>
                         <ul class="treeview-menu">
                             <li><a href="@Url.Action("AssignedWorkOrders","EventManagementData",new { Area="EventManagement"})"><i class="fa fa-circle-o"></i> Confirmed Orders</a></li>
+                        </ul>
+                    </li>
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-dollar"></i>
+                            <span>Account</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a href="@Url.Action("Salary","EventManagementData",new { Area="EventManagement"})"><i class="fa fa-circle-o"></i> Salary </a></li>
+                            <li><a href="@Url.Action("Expenditure","EventManagementData",new { Area="EventManagement"})"><i class="fa fa-circle-o"></i> Expenditure </a></li>
+                            <li><a href="@Url.Action("ClientPayment","EventManagementData",new { Area="EventManagement"})"><i class="fa fa-circle-o"></i> Client Payment </a></li>
+                            
+                        </ul>
+                    </li>
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-bar-chart"></i>
+                            <span>Report</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a href="@Url.Action("SalariesReport","EventManagementData",new { Area="EventManagement"})"><i class="fa fa-circle-o"></i> Salaries Report </a></li>
+                            <li><a href="@Url.Action("TimeSheet","EventManagementData",new { Area="EventManagement"})"><i class="fa fa-circle-o"></i> Time Sheet</a></li>
+                            <li><a href="@Url.Action("ExpendituresReport","EventManagementData",new { Area="EventManagement"})"><i class="fa fa-circle-o"></i> Expenditure Report </a></li>
                         </ul>
                     </li>
                 </ul>

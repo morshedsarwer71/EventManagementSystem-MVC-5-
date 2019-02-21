@@ -50,11 +50,17 @@
     <Reference Include="CommonServiceLocator, Version=2.0.4.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
       <HintPath>..\packages\Unity.5.8.12\lib\net46\CommonServiceLocator.dll</HintPath>
     </Reference>
+    <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.3500.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.ReportSource, Version=13.0.3500.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.Shared, Version=13.0.3500.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.TelemetryCorrelation, Version=1.0.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.TelemetryCorrelation.1.0.4\lib\net45\Microsoft.AspNet.TelemetryCorrelation.dll</HintPath>
@@ -63,8 +69,23 @@
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.ReportViewer.Common, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Report.Viewer.11.0.0.0\lib\net\Microsoft.ReportViewer.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.ProcessingObjectModel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Report.Viewer.11.0.0.0\lib\net\Microsoft.ReportViewer.ProcessingObjectModel.DLL</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Report.Viewer.11.0.0.0\lib\net\Microsoft.ReportViewer.WebForms.DLL</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.Types, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.SqlServer.Types.14.0.1016.290\lib\net40\Microsoft.SqlServer.Types.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Rotativa, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rotativa.1.7.3\lib\net461\Rotativa.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration.ConfigurationManager, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -195,6 +216,7 @@
     <Compile Include="Areas\Accounting\ViewModels\ReportHeadViewModels.cs" />
     <Compile Include="Areas\Accounting\ViewModels\TrailaBalanceViewModels.cs" />
     <Compile Include="Areas\EventManagement\Controllers\EventManagementDataController.cs" />
+    <Compile Include="Areas\EventManagement\Controllers\EventManagementReportController.cs" />
     <Compile Include="Areas\EventManagement\EventManagementAreaRegistration.cs" />
     <Compile Include="Areas\EventManagement\Interfaces\IAttendance.cs" />
     <Compile Include="Areas\EventManagement\Interfaces\IDefaultSetting.cs" />
@@ -207,6 +229,7 @@
     <Compile Include="Areas\EventManagement\Interfaces\IEventMiscellaneous.cs" />
     <Compile Include="Areas\EventManagement\Interfaces\IEventService.cs" />
     <Compile Include="Areas\EventManagement\Interfaces\IEventSetup.cs" />
+    <Compile Include="Areas\EventManagement\Interfaces\IEventReport.cs" />
     <Compile Include="Areas\EventManagement\Interfaces\ITransaction.cs" />
     <Compile Include="Areas\EventManagement\Interfaces\IWorkOrderManpower.cs" />
     <Compile Include="Areas\EventManagement\Interfaces\IWorkOrderMiscellaneous.cs" />
@@ -215,6 +238,7 @@
     <Compile Include="Areas\EventManagement\Interfaces\IWorkOrderSetup.cs" />
     <Compile Include="Areas\EventManagement\Models\Attendance.cs" />
     <Compile Include="Areas\EventManagement\Models\Bank.cs" />
+    <Compile Include="Areas\EventManagement\Models\ClientPayment.cs" />
     <Compile Include="Areas\EventManagement\Models\DefaultSetting.cs" />
     <Compile Include="Areas\EventManagement\Models\Employee.cs" />
     <Compile Include="Areas\EventManagement\Models\EmployeeEntitlement.cs" />
@@ -236,6 +260,8 @@
     <Compile Include="Areas\EventManagement\Models\WorkOrderParent.cs" />
     <Compile Include="Areas\EventManagement\Models\WorkOrderQuotation.cs" />
     <Compile Include="Areas\EventManagement\Models\WorkOrderStatus.cs" />
+    <Compile Include="Areas\EventManagement\PlainModels\IsActive.cs" />
+    <Compile Include="Areas\EventManagement\ReportObject\ExpenditureReport.cs" />
     <Compile Include="Areas\EventManagement\ResponseModels\PaymentStatus.cs" />
     <Compile Include="Areas\EventManagement\ResponseModels\ResponseAttendance.cs" />
     <Compile Include="Areas\EventManagement\ResponseModels\ResponseCategory.cs" />
@@ -245,7 +271,10 @@
     <Compile Include="Areas\EventManagement\ResponseModels\ResponseEmployeesSetupAssignment.cs" />
     <Compile Include="Areas\EventManagement\ResponseModels\ResponseEntitlement.cs" />
     <Compile Include="Areas\EventManagement\ResponseModels\ResponseEventClient.cs" />
+    <Compile Include="Areas\EventManagement\ResponseModels\ResponseExpenditure.cs" />
     <Compile Include="Areas\EventManagement\ResponseModels\ResponseProject.cs" />
+    <Compile Include="Areas\EventManagement\ResponseModels\ResponseSalaryPayments.cs" />
+    <Compile Include="Areas\EventManagement\ResponseModels\ResponseTimeSheet.cs" />
     <Compile Include="Areas\EventManagement\ResponseModels\ResponseWorkOrderParent.cs" />
     <Compile Include="Areas\EventManagement\ResponseModels\SalaryType.cs" />
     <Compile Include="Areas\EventManagement\ResponseModels\TransactionType.cs" />
@@ -261,6 +290,7 @@
     <Compile Include="Areas\EventManagement\Services\EventMiscellaneousService.cs" />
     <Compile Include="Areas\EventManagement\Services\EventServiceService.cs" />
     <Compile Include="Areas\EventManagement\Services\EventSetupService.cs" />
+    <Compile Include="Areas\EventManagement\Services\EventReportService.cs" />
     <Compile Include="Areas\EventManagement\Services\TransactionService.cs" />
     <Compile Include="Areas\EventManagement\Services\WorkOrderManpowerService.cs" />
     <Compile Include="Areas\EventManagement\Services\WorkOrderMiscellaneousService.cs" />
@@ -268,6 +298,7 @@
     <Compile Include="Areas\EventManagement\Services\WorkOrderServiceService.cs" />
     <Compile Include="Areas\EventManagement\Services\WorkOrderSetupService.cs" />
     <Compile Include="Areas\EventManagement\ViewModels\EmployeeViewModels.cs" />
+    <Compile Include="Areas\EventManagement\ViewModels\ReportViewModels.cs" />
     <Compile Include="Areas\EventManagement\ViewModels\ResponseAttendanceViewModels.cs" />
     <Compile Include="Areas\EventManagement\ViewModels\TransactionViewModels.cs" />
     <Compile Include="Areas\EventManagement\ViewModels\WorkOrderAssignedViewModels.cs" />
@@ -282,8 +313,18 @@
     <Compile Include="Areas\Global\ViewModels\SystemUserViewModels.cs" />
     <Compile Include="Context\DataContext.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="EmployeeDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EmployeeDataSet.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="ManpoerByWorkOrderIdDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ManpoerByWorkOrderIdDataSet.xsd</DependentUpon>
     </Compile>
     <Compile Include="Migrations\201812060634145_firstMigration.cs" />
     <Compile Include="Migrations\201812060634145_firstMigration.Designer.cs">
@@ -381,8 +422,17 @@
     <Compile Include="Migrations\201901251802453_updateee.Designer.cs">
       <DependentUpon>201901251802453_updateee.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201901261718229_expense.cs" />
+    <Compile Include="Migrations\201901261718229_expense.Designer.cs">
+      <DependentUpon>201901261718229_expense.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902210902384_ClientPayment.cs" />
+    <Compile Include="Migrations\201902210902384_ClientPayment.Designer.cs">
+      <DependentUpon>201902210902384_ClientPayment.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SqlServerTypes\Loader.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-grid.css" />
@@ -6672,6 +6722,10 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Rotativa\help-wkhtmltoimage.txt" />
+    <Content Include="Rotativa\help-wkhtmltopdf.txt" />
+    <Content Include="Rotativa\wkhtmltoimage.exe" />
+    <Content Include="Rotativa\wkhtmltopdf.exe" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -7240,6 +7294,48 @@
     <Content Include="Areas\EventManagement\Views\EventManagementData\Salary.cshtml" />
     <Content Include="Areas\EventManagement\Views\EventManagementData\Salaries.cshtml" />
     <Content Include="Areas\EventManagement\Views\EventManagementData\AddSalary.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\Expenditure.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\AddExpenditure.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\Expenditures.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\ExpendituresReport.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\SalariesReport.cshtml" />
+    <Content Include="Logs\log4net.log" />
+    <Content Include="EmployeeDataSet.xsc">
+      <DependentUpon>EmployeeDataSet.xsd</DependentUpon>
+    </Content>
+    <Content Include="App_Browsers\qt.browser" />
+    <Content Include="Areas\EventManagement\Views\EventManagementReport\WOManpowerPDF.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\EventClient.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\EventClients.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\AddEventClient.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\EditEventClient.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\DailyTimeSheet.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\TimeSheet.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\TimeSheetSummary.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\EditEmployees.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\EditEmployee.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\ClientPayment.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\ClientPayments.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\AddClientPayment.cshtml" />
+    <None Include="EmployeeDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>EmployeeDataSet.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="EmployeeDataSet.xss">
+      <DependentUpon>EmployeeDataSet.xsd</DependentUpon>
+    </Content>
+    <Content Include="ManpoerByWorkOrderIdDataSet.xsc">
+      <DependentUpon>ManpoerByWorkOrderIdDataSet.xsd</DependentUpon>
+    </Content>
+    <None Include="ManpoerByWorkOrderIdDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>ManpoerByWorkOrderIdDataSet.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="ManpoerByWorkOrderIdDataSet.xss">
+      <DependentUpon>ManpoerByWorkOrderIdDataSet.xsd</DependentUpon>
+    </Content>
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
@@ -7260,6 +7356,19 @@
     <Content Include="Scripts\umd\popper-utils.min.js" />
     <Content Include="Scripts\umd\popper.js" />
     <Content Include="Scripts\umd\popper.min.js" />
+    <Content Include="SqlServerTypes\readme.htm" />
+    <Content Include="SqlServerTypes\x64\msvcr120.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\x64\SqlServerSpatial140.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\x86\msvcr120.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\x86\SqlServerSpatial140.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -7299,12 +7408,15 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+    <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Content\bower_components\moment\moment.d.ts" />
     <TypeScriptCompile Include="Scripts\index.d.ts" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Areas\EventManagement\Reports\WorkOrderManpower.rdlc" />
+    <EmbeddedResource Include="Areas\Reports\Employee.rdlc" />
     <EmbeddedResource Include="Migrations\201812060634145_firstMigration.resx">
       <DependentUpon>201812060634145_firstMigration.cs</DependentUpon>
     </EmbeddedResource>
@@ -7376,6 +7488,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201901251802453_updateee.resx">
       <DependentUpon>201901251802453_updateee.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901261718229_expense.resx">
+      <DependentUpon>201901261718229_expense.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902210902384_ClientPayment.resx">
+      <DependentUpon>201902210902384_ClientPayment.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

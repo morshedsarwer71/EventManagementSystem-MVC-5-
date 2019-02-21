@@ -1,5 +1,6 @@
 ﻿using EventManagement.Areas.EventManagement.Interfaces;
 using EventManagement.Areas.EventManagement.Models;
+using EventManagement.Areas.EventManagement.PlainModels;
 using EventManagement.Areas.EventManagement.ResponseModels;
 using EventManagement.Context;
 using System;
@@ -10,7 +11,7 @@ using System.Web;
 
 namespace EventManagement.Areas.EventManagement.Services
 {
-    public class EmployeeService: IEmployee
+    public class EmployeeService : IEmployee
     {
         private DataContext _context;
         public EmployeeService(DataContext context)
@@ -63,7 +64,7 @@ namespace EventManagement.Areas.EventManagement.Services
                             responseEmployee.LastName = Convert.ToString(result[2]);
                             responseEmployee.NickName = Convert.ToString(result[3]);
                             responseEmployee.EmployeeEmail = Convert.ToString(result[4]);
-                            responseEmployee.ContactNumber = Convert.ToInt32(result[5]);
+                            responseEmployee.ContactNumber = Convert.ToString(result[5]);
                             responseEmployee.EmergencyNumber = Convert.ToInt32(result[6]);
                             responseEmployee.PermanentAddress = Convert.ToString(result[7]);
                             responseEmployee.PresentAddress = Convert.ToString(result[8]);
@@ -109,7 +110,7 @@ namespace EventManagement.Areas.EventManagement.Services
                             responseEmployee.LastName = Convert.ToString(result[2]);
                             responseEmployee.EmployeeEntitlement = Convert.ToString(result[3]);
                             responseEmployee.MonthlySalary = Convert.ToDecimal(result[4]);
-                            responseEmployee.ContactNumber = Convert.ToInt32(result[5]);
+                            responseEmployee.ContactNumber = Convert.ToString(result[5]);
                             responseEmployee.EmployeeCode = Convert.ToString(result[6]);
                             responseEmployee.EmployeeId = Convert.ToInt32(result[7]);
                             responseEmployee.NumberOfRow = Convert.ToInt32(result[8]);
@@ -125,7 +126,53 @@ namespace EventManagement.Areas.EventManagement.Services
             return ResponseEmployeeList;
         }
 
-        public void UpdateEmployee(Employee employee, int EmployeeId, int userId, string userName)
+        public IEnumerable<IsActive> IsActive()
+        {
+            List<IsActive> isActives = new List<IsActive>()
+            {
+                new IsActive()
+                {
+                    Id=1,
+                    Name="Active"
+                },
+                new IsActive()
+                {
+                    Id=0,
+                    Name="Deactive"
+                }
+            };
+            return isActives;
+        }
+
+        public void Update(Employee employee, int Employeeid, int userId, string userName, string image, string passport)
+        {
+
+            var employeeById = _context.Employees.FirstOrDefault(x => x.EmployeeId == Employeeid);
+            employeeById.FirstName = employee.FirstName;
+            employeeById.LastName = employee.LastName;
+            employeeById.NickName = employee.NickName;
+            employeeById.EmployeeEmail = employee.EmployeeEmail;
+            employeeById.ContactNumber = employee.ContactNumber;
+            employeeById.EmergencyNumber = employee.EmergencyNumber;
+            employeeById.DateOfBirth = employee.DateOfBirth;
+            employeeById.PassportNumber = employee.PassportNumber;
+            employeeById.PassportExpiratationDate = employee.PassportExpiratationDate;
+            employeeById.NIDNumber = employee.NIDNumber;
+            employeeById.VisaNumber = employee.VisaNumber;
+            employeeById.VisaExpirationDate = employee.VisaExpirationDate;
+            employeeById.Nationality = employee.Nationality;
+            employeeById.EmployeeEntitlementId = employee.EmployeeEntitlementId;
+            employeeById.MonthlySalary = employee.MonthlySalary;
+            employeeById.RatePerHour = employee.RatePerHour;
+            employeeById.IsActive = employee.IsActive;
+            employeeById.ModificationDate = DateTime.Now;
+            employeeById.ModifierId = userId;
+            _context.SaveChanges();
+
+
+        }
+
+        public void UpdateEmployee(Employee employee, int EmployeeId, int userId, string userName, string image, string passport)
         {
             var employeeById = _context.Employees.FirstOrDefault(x => x.EmployeeId == EmployeeId);
             employeeById.FirstName = employee.FirstName;
@@ -147,6 +194,8 @@ namespace EventManagement.Areas.EventManagement.Services
             employeeById.MonthlySalary = employee.MonthlySalary;
             employeeById.RatePerHour = employee.RatePerHour;
             employeeById.IsActive = employee.IsActive;
+            employeeById.EmployeeImagePath = image;
+            employeeById.PassportImagePath = passport;
             employeeById.ModificationDate = DateTime.Now;
             employeeById.ModifierId = userId;
             _context.SaveChanges();

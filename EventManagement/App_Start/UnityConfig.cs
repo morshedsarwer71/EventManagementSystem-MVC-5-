@@ -26,6 +26,7 @@ namespace EventManagement
             container.RegisterType<ISettings, SettingsServices>();
             container.RegisterType<IJournal, JournalService>();
             container.RegisterType<IReport, ReportService>();
+            container.RegisterType<IEventReport, EventReportService>();
             container.RegisterType<IAttendance, AttendanceService>();
             container.RegisterType<IEmployeeEntitlements, EmployeeEntitlementsService>();
             container.RegisterType<IEmployee, EmployeeService>();

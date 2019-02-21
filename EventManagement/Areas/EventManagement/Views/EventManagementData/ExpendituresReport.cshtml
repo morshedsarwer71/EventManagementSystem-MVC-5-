@@ -1,0 +1,189 @@
+﻿@model EventManagement.Areas.EventManagement.ViewModels.TransactionViewModels
+<section class="content-header">
+    <h1>
+        Expenditure Report
+        <small>preview of expenditure report</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i>Home</a></li>
+        <li><a href="#">Expenditure</a></li>
+        <li class="active">Expenditure Report</li>
+    </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div id="dvLoader" class="LoadingDiv" style="display: none; margin-top:150px;margin-top:50px;">
+        <center>
+            <img src="~/Content/img/ajax-loader.gif" alt="Loading" />
+        </center>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="col-form-label">Transaction Type</label>
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                        <select class="form-control" id="transType">
+                            <option value="0">All</option>
+                            @foreach (var item in Model.TransactionTypes)
+                            {
+                                <option value="@item.Id">@item.Name</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="col-form-label">Expenditure Head</label>
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                        <select class="form-control" id="expenditure">
+                            <option value="0">All</option>
+                            @foreach (var item in Model.ExpenditureHeads)
+                            {
+                                <option value="@item.ExpenditureHeadId">@item.ExpenditureHeadEN</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="col-form-label">From Date</label>
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                        <input type="text" class="form-control" id="fromDate" required/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="col-form-label">To Date</label>
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                        <input type="text" class="form-control" id="toDate" required/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12" style="margin-left:20px;">
+            <div class="form-group">
+                <button type="submit" id="btnView" value="submit" class="btn btn-primary"><i class="fa fa-eye"></i> VIEW</button>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-body">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th style="width: 10px">#</th>
+                                <th>Expenditure</th>
+                                <th>Expenditure Date</th>
+                                <th>Transaction Type</th>
+                                <th>Amount</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tBody">
+                           
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer clearfix">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Total</label>
+                            <input type="text" readonly="readonly" id="total" class="form-control" />
+                        </div>
+                    </div>
+                    <ul class="pagination pagination-sm no-margin pull-right" style="margin-top:50px;">
+                        <li><a href="#">&laquo;</a></li>
+                        <li><a href="#">1</a></li>
+                        <li><a href="#">2</a></li>
+                        <li><a href="#">3</a></li>
+                        <li><a href="#">&raquo;</a></li>
+                    </ul>
+                </div>
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+
+    </div>
+</section>
+@section Scripts{
+    <script src="~/Content/bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#total').val('');
+            $('#fromDate').datepicker({
+                format: 'yyyy-mm-dd',
+                autoclose:true
+            });
+            $('#toDate').datepicker({
+                format: 'yyyy-mm-dd',
+                autoclose: true
+            });
+
+            $('#btnView').click(function () {
+                $('#total').val('');
+                var fromDate = $('#fromDate').val();
+                var toDate = $('#toDate').val();
+                var transType = $('#transType').val();
+                var expenditure = $('#expenditure').val();
+                $('#dvLoader').show();
+                $.ajax({
+                    url: "/EventManagementData/ExpendituresReport",
+                    type: "POST",
+                    data: JSON.stringify({
+                        "fdate": fromDate,
+                        "tDate": toDate,
+                        "transType": transType,
+                        "head": expenditure,
+                    }),                    
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (json) {
+                        if (json.isRedirect) {
+                            window.location.href = json.redirectUrl;
+                        }
+                        else {
+                            var data = json.ResponseExpenditures;
+                            var tr = "";
+                            var total = 0;
+                            data.forEach(function (dt)
+                            {
+                                total += dt.Amount;                                
+                                tr += '<tr>';
+                                tr += '<td>' + dt.Serial + '</td>';
+                                tr += '<td>' + dt.ExpenditureHead + '</td>';
+                                tr += '<td>' + dt.ExpenditureDate + '</td>';
+                                tr += '<td>' + dt.TransactionType + '</td>';
+                                tr += '<td>' + dt.Amount + '</td>';
+                                tr += '<td>' + dt.Description + '</td>';
+                                tr += '</tr>';
+                            });
+                            $("#tBody").html(tr);
+                        }
+                        $('#dvLoader').hide();
+                        $('#total').val(total);
+                    }
+                });
+            });
+        });
+        
+    </script>
+}

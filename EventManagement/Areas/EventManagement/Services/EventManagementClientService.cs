@@ -20,6 +20,7 @@ namespace EventManagement.Areas.EventManagement.Services
         {
             var dateTime = DateTime.Now;
             eventManagementClient.CreationDate = dateTime;
+            eventManagementClient.ModificationDate = dateTime;
             eventManagementClient.CreatorId = UserId;
             eventManagementClient.IsDelete = 0;
             eventManagementClient.ConcernId = concernId;
@@ -46,9 +47,12 @@ namespace EventManagement.Areas.EventManagement.Services
             return EventClient;
         }
 
-        public void Update(int ClientId, EventManagementClient eventManagementClient)
+        public void Update(int ClientId, EventManagementClient eventManagementClient, string UserName, int UserId)
         {
             var Client = EventClientById(ClientId);
+            var dateTime = DateTime.Now;
+            eventManagementClient.ModificationDate = dateTime;
+            eventManagementClient.ModifierId = UserId;
             Client.AccountHeadId = eventManagementClient.AccountHeadId;
             Client.ClientAddress = eventManagementClient.ClientAddress;
             Client.ClientContactInfo = eventManagementClient.ClientContactInfo;

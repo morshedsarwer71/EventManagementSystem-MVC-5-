@@ -1,10 +1,12 @@
 ﻿using EventManagement.Areas.EventManagement.Interfaces;
 using EventManagement.Areas.EventManagement.Models;
+using EventManagement.Areas.EventManagement.ReportObject;
 using EventManagement.Areas.EventManagement.ResponseModels;
 using EventManagement.Context;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 
@@ -79,9 +81,160 @@ namespace EventManagement.Areas.EventManagement.Services
             };
         }
 
+        public IEnumerable<Bank> Banks(int concernId, string userName, int userId)
+        {
+            var bank = _context.Banks.Where(x=>x.ConcernId== concernId).ToList();
+            return bank;
+        }
+
+        public IEnumerable<EventManagementClient> Clients(int concernId, string userName, int userId)
+        {
+            var client = _context.EventManagementClients.Where(x => x.ConcernId == concernId).ToList();
+            return client;
+        }
+
         public IEnumerable<ExpenditureHead> ExpenditureHeads(int concernId, string userName, int userId)
         {
             return _context.ExpenditureHeads.Where(x => x.ConcernId == concernId).ToList();
+        }
+
+        public IEnumerable<ResponseExpenditure> ReportExpenditures(int concernId, ExpenditureReport expenditure, string userName, int userId)
+        {
+            List<ResponseExpenditure> payments = new List<ResponseExpenditure>();
+            using (var command = _context.Database.Connection.CreateCommand())
+            {
+                command.CommandText = ("usp_eventmanagement_TransactionReport @concernId,@fromDate,@toDate,@expenditureHead,@transactionType");
+                command.Parameters.Add(new SqlParameter("concernId", concernId));
+                command.Parameters.Add(new SqlParameter("fromDate", expenditure.FromDate));
+                command.Parameters.Add(new SqlParameter("toDate", expenditure.ToDate));
+                command.Parameters.Add(new SqlParameter("expenditureHead", expenditure.Expenditure));
+                command.Parameters.Add(new SqlParameter("transactionType", expenditure.TransType));
+                _context.Database.Connection.Open();
+                using (var result = command.ExecuteReader())
+                {
+                    if (result.HasRows)
+                    {
+                        while (result.Read())
+                        {
+                            payments.Add(new ResponseExpenditure()
+                            {
+                                Serial = Convert.ToInt32(result[0]),
+                                ExpenditureHead = Convert.ToString(result[3]),
+                                Amount = Convert.ToDecimal(result[4]),
+                                ExpenditureDate = Convert.ToString(result[5]),
+                                TransactionType = Convert.ToString(result[6]),
+                                Description = Convert.ToString(result[7])
+                            });
+                        }
+                    }
+                }
+                _context.Database.Connection.Close();
+            }
+            return payments;
+        }
+
+        public IEnumerable<ResponseExpenditure> ResponseExpenditures(int concernId, string userName, int userId)
+        {
+            List<ResponseExpenditure> payments = new List<ResponseExpenditure>();
+            using (var command = _context.Database.Connection.CreateCommand())
+            {
+                command.CommandText = ("usp_eventmanagement_getExpenditures @concernId");
+                command.Parameters.Add(new SqlParameter("concernId", concernId));
+                _context.Database.Connection.Open();
+                using (var result = command.ExecuteReader())
+                {
+                    if (result.HasRows)
+                    {
+                        while (result.Read())
+                        {
+                            payments.Add(new ResponseExpenditure()
+                            {
+                                Serial=Convert.ToInt32(result[0]),
+                                ExpenditureHead= Convert.ToString(result[1]),
+                                Amount= Convert.ToDecimal(result[2]),
+                                ExpenditureDate= Convert.ToString(result[3]),
+                                TransactionType= Convert.ToString(result[4]),
+                                Description= Convert.ToString(result[5]),
+                                Rows= Convert.ToInt32(result[6])
+                            });
+                        }
+                    }
+                }
+                _context.Database.Connection.Close();
+            }
+            return payments;
+        }
+
+        public IEnumerable<ResponseSalaryPayments> ResponseSalaries(int concernId, string userName, int userId)
+        {
+            List<ResponseSalaryPayments> payments = new List<ResponseSalaryPayments>();
+            using (var command = _context.Database.Connection.CreateCommand())
+            {
+                command.CommandText = ("usp_eventmanagement_getsalarypayments @concernId");                
+                command.Parameters.Add(new SqlParameter("concernId", concernId));
+                _context.Database.Connection.Open();
+                using (var result = command.ExecuteReader())
+                {
+                    if (result.HasRows)
+                    {
+                        while (result.Read())
+                        {
+                            payments.Add(new ResponseSalaryPayments() {
+                                Serial=Convert.ToInt32(result[0]),
+                                SalaryPaymentId=Convert.ToInt32(result[1]),
+                                EmployeeId=Convert.ToInt32(result[2]),
+                                Employee=Convert.ToString(result[3]),
+                                SalaryType= Convert.ToString(result[4]),
+                                Amount = Convert.ToDecimal(result[5]),
+                                TransactionType = Convert.ToString(result[6]),
+                                PaymentDate = Convert.ToString(result[7]),
+                                SalaryMonth = Convert.ToString(result[8]),
+                                Rows = Convert.ToInt32(result[9])
+                            });
+                        }
+                    }
+                }
+                _context.Database.Connection.Close();
+            }
+
+            return payments;
+        }
+
+        public IEnumerable<ResponseSalaryPayments> ResponseSalariesRepor(int concernId, string userName, int userId, string fromDate, string toDate, int employeeId, int transTypeId)
+        {
+            List<ResponseSalaryPayments> payments = new List<ResponseSalaryPayments>();
+            using (var command = _context.Database.Connection.CreateCommand())
+            {
+                command.CommandText = ("usp_eventmanagement_GetsalaryPaymentsReport @concernId,@fromDate,@toDate,@employeeId,@transType");
+                command.Parameters.Add(new SqlParameter("concernId", concernId));
+                command.Parameters.Add(new SqlParameter("fromDate", fromDate));
+                command.Parameters.Add(new SqlParameter("toDate", toDate));
+                command.Parameters.Add(new SqlParameter("employeeId", employeeId));
+                command.Parameters.Add(new SqlParameter("transType", transTypeId));
+                _context.Database.Connection.Open();
+                using (var result = command.ExecuteReader())
+                {
+                    if (result.HasRows)
+                    {
+                        while (result.Read())
+                        {
+                            var sal=new ResponseSalaryPayments();
+                            sal.Serial = Convert.ToInt32(result[0]);
+                            sal.Employee = Convert.ToString(result[4]);
+                            sal.SalaryType = Convert.ToString(result[5]);
+                            sal.Amount = Convert.ToDecimal(result[6]);
+                            sal.TransactionType = Convert.ToString(result[7]);
+                            sal.PaymentDate = Convert.ToString(result[8]);
+                            sal.SalaryMonth = Convert.ToString(result[9]);
+                            sal.Description = Convert.ToString(result[10]);
+                            payments.Add(sal);
+                        }
+                    }
+                }
+                _context.Database.Connection.Close();
+            }
+
+            return payments;
         }
 
         public IEnumerable<SalaryType> SalaryTypes()
@@ -92,15 +245,15 @@ namespace EventManagement.Areas.EventManagement.Services
                     Name="Salary"
                 },
                 new SalaryType{
-                    Id=1,
+                    Id=2,
                     Name="Advance Salary"
                 },
                 new SalaryType{
-                    Id=1,
+                    Id=3,
                     Name="Wages"
                 },
                 new SalaryType{
-                    Id=1,
+                    Id=4,
                     Name="Advance Wages"
                 }
             };

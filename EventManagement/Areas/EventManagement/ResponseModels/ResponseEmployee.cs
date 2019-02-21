@@ -14,7 +14,7 @@ namespace EventManagement.Areas.EventManagement.ResponseModels
         public string LastName { get; set; }
         public string NickName { get; set; }
         public string EmployeeEmail { get; set; }
-        public int ContactNumber { get; set; }
+        public string ContactNumber { get; set; }
         public int EmergencyNumber { get; set; }
         public string PermanentAddress { get; set; }
         public string PresentAddress { get; set; }

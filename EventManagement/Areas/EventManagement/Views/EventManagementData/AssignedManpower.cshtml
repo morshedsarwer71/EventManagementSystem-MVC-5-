@@ -36,9 +36,11 @@
                                 <th>Remove</th>
                             </tr>
                         </thead>
+                        @{var id = 0;}
                         <tbody id="tBody">
                             @foreach (var item in Model.WorkOrderAssigneds)
                             {
+                                id = item.OrderId;
                                 <tr>
                                     <td>@item.Serial</td>
                                     <td>@item.Name</td>
@@ -53,15 +55,11 @@
                         </tbody>
                     </table>
                 </div>
-                <!-- /.box-body -->
+                <div class="col-md-4">
+                    <a href="@Url.Action("WOManpowerPDF","EventManagementReport", new { id=id })" target="_blank"><i class="fa fa-file-pdf-o" style="color:red"></i> Export As PDF</a>
+                </div>
                 <div class="box-footer clearfix">
-                    <ul class="pagination pagination-sm no-margin pull-right">
-                        <li><a href="#">&laquo;</a></li>
-                        <li><a href="#">1</a></li>
-                        <li><a href="#">2</a></li>
-                        <li><a href="#">3</a></li>
-                        <li><a href="#">&raquo;</a></li>
-                    </ul>
+                    
                 </div>
             </div>
             <!-- /.box -->

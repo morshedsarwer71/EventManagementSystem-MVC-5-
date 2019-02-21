@@ -1,4 +1,5 @@
 ﻿using EventManagement.Areas.EventManagement.Models;
+using EventManagement.Areas.EventManagement.ReportObject;
 using EventManagement.Areas.EventManagement.ResponseModels;
 using System;
 using System.Collections.Generic;
@@ -17,5 +18,11 @@ namespace EventManagement.Areas.EventManagement.Interfaces
         IEnumerable<ExpenditureHead> ExpenditureHeads(int concernId, string userName, int userId);
         IEnumerable<TransactionType> TransactionTypes();
         IEnumerable<SalaryType> SalaryTypes();
+        IEnumerable<ResponseSalaryPayments> ResponseSalaries(int concernId, string userName, int userId);
+        IEnumerable<ResponseSalaryPayments> ResponseSalariesRepor(int concernId, string userName, int userId,string fromDate,string toDate,int employeeId,int transTypeId);
+        IEnumerable<ResponseExpenditure> ResponseExpenditures(int concernId, string userName, int userId);        
+        IEnumerable<ResponseExpenditure> ReportExpenditures(int concernId, ExpenditureReport expenditure, string userName, int userId);
+        IEnumerable<Bank> Banks(int concernId, string userName, int userId);
+        IEnumerable<EventManagementClient> Clients(int concernId, string userName, int userId);
     }
 }

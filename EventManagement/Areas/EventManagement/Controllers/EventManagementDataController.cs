@@ -1,7 +1,10 @@
-﻿using EventManagement.Areas.EventManagement.Interfaces;
+﻿using CrystalDecisions.CrystalReports.Engine;
+using EventManagement.Areas.EventManagement.Interfaces;
 using EventManagement.Areas.EventManagement.Models;
+using EventManagement.Areas.EventManagement.ReportObject;
 using EventManagement.Areas.EventManagement.ViewModels;
 using EventManagement.Context;
+using Microsoft.Reporting.WebForms;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -27,6 +30,9 @@ namespace EventManagement.Areas.EventManagement.Controllers
         private readonly IDefaultSetting _setting;
         private readonly IAttendance _attendance;
         private readonly ITransaction _transaction;
+        private readonly IEventManagementClient _client;
+        private readonly IEventReport _report;
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(EventManagementDataController));
         public EventManagementDataController
             (
             DataContext context,
@@ -40,8 +46,10 @@ namespace EventManagement.Areas.EventManagement.Controllers
             IWorkOrderService orderService,
             IWorkOrderMiscellaneous orderMiscellaneous,
             IDefaultSetting setting,
-            IAttendance attendance, 
-            ITransaction transaction
+            IAttendance attendance,
+            ITransaction transaction,
+            IEventManagementClient client,
+            IEventReport report
             )
         {
             _context = context;
@@ -57,6 +65,8 @@ namespace EventManagement.Areas.EventManagement.Controllers
             _setting = setting;
             _attendance = attendance;
             _transaction = transaction;
+            _client = client;
+            _report = report;
         }
         public ActionResult Index()
         {
@@ -75,6 +85,23 @@ namespace EventManagement.Areas.EventManagement.Controllers
         }
         [HttpGet]
         public ActionResult Employees(int page = 1)
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                var emp = _employee.Employees(userId, userName, concernId, page);
+                EmployeeViewModels viewModels = new EmployeeViewModels()
+                {
+                    Employees = emp
+                };
+                return View(viewModels);
+            }
+            return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
+        }
+        [HttpGet]
+        public ActionResult EditEmployees(int page = 1)
         {
             var concernId = Convert.ToInt32(Session["ConcernId"]);
             var userId = Convert.ToInt32(Session["UserId"]);
@@ -110,21 +137,103 @@ namespace EventManagement.Areas.EventManagement.Controllers
             var userName = Convert.ToString(Session["UserName"]);
             if (concernId > 0 && userId > 0)
             {
-                //string empFileName = Path.GetFileNameWithoutExtension(employee.ImageUrl.FileName);
-                string empExtension = Path.GetExtension(employee.ImageUrl.FileName);
-                string empFileName = employee.EmployeeCode + empExtension;
-                employee.EmployeeImagePath = "~/Areas/EventManagement/Image/" + empFileName;
-                empFileName = Path.Combine(Server.MapPath("~/Areas/EventManagement/Image/"), empFileName);
-                employee.ImageUrl.SaveAs(empFileName);
+                try
+                {
+                    string empExtension = Path.GetExtension(employee.ImageUrl.FileName);
+                    string empFileName = employee.EmployeeCode + empExtension;
+                    employee.EmployeeImagePath = "~/Areas/EventManagement/Image/" + empFileName;
+                    empFileName = Path.Combine(Server.MapPath("~/Areas/EventManagement/Image/"), empFileName);
+                    employee.ImageUrl.SaveAs(empFileName);
 
-                string passExtension = Path.GetExtension(employee.PassportUrl.FileName);
-                string passFileName = employee.EmployeeCode + passExtension;
-                employee.PassportImagePath = "~/Areas/EventManagement/Passport/" + passFileName;
-                passFileName = Path.Combine(Server.MapPath("~/Areas/EventManagement/Passport/"), passFileName);
-                employee.PassportUrl.SaveAs(passFileName);
-                _employee.AddEmployee(employee, userId, userName, concernId);
-                ModelState.Clear();
-                return RedirectToAction(nameof(Employee));
+                    string passExtension = Path.GetExtension(employee.PassportUrl.FileName);
+                    string passFileName = employee.EmployeeCode + passExtension;
+                    employee.PassportImagePath = "~/Areas/EventManagement/Passport/" + passFileName;
+                    passFileName = Path.Combine(Server.MapPath("~/Areas/EventManagement/Passport/"), passFileName);
+                    employee.PassportUrl.SaveAs(passFileName);
+
+                    _employee.AddEmployee(employee, userId, userName, concernId);
+                    ModelState.Clear();
+                    return RedirectToAction(nameof(Employee));
+                }
+                catch (Exception ex)
+                {
+
+                    log.Error(ex.ToString());
+                }
+
+
+            }
+            return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
+        }
+        [HttpGet]
+        public ActionResult EditEmployee(int id)
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            if (concernId > 0 && userId > 0)
+            {
+                var entitle = _context.EmployeeEntitlements.ToList();
+                var emp = _context.Employees.FirstOrDefault(x => x.EmployeeId == id);
+                var active = _employee.IsActive();
+                EmployeeViewModels viewModels = new EmployeeViewModels()
+                {
+                    Entitlements = entitle,
+                    Employee = emp,
+                    IsActives = active
+                };
+                return View(viewModels);
+            }
+            return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
+        }
+        [HttpPost]
+        public ActionResult EditEmployee(int id, Employee employee)
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                var emp = _context.Employees.FirstOrDefault(x => x.EmployeeId == id);
+                var image = "";
+                var passport = "";
+                if (employee.ImageUrl != null)
+                {
+                    //deleting image 
+                    if (System.IO.File.Exists(emp.EmployeeImagePath))
+                    {
+                        System.IO.File.Delete(emp.EmployeeImagePath);
+                    }
+                    string empExtension = Path.GetExtension(employee.ImageUrl.FileName);
+                    string empFileName = employee.EmployeeCode + empExtension;
+                    image = "~/Areas/EventManagement/Image/" + empFileName;
+                    empFileName = Path.Combine(Server.MapPath("~/Areas/EventManagement/Image/"), empFileName);
+                    employee.ImageUrl.SaveAs(empFileName);
+                    _employee.Update(employee, id, userId, userName, image, emp.PassportImagePath);
+                }
+                else
+                {
+                    _employee.Update(employee, id, userId, userName, emp.EmployeeImagePath, emp.PassportImagePath);
+                }
+                if (employee.PassportUrl != null)
+                {
+                    //deleting passport 
+                    if (System.IO.File.Exists(emp.PassportImagePath))
+                    {
+                        System.IO.File.Delete(emp.PassportImagePath);
+                    }
+                    string passExtension = Path.GetExtension(employee.PassportUrl.FileName);
+                    string passFileName = employee.EmployeeCode + passExtension;
+                    passport = "~/Areas/EventManagement/Passport/" + passFileName;
+                    passFileName = Path.Combine(Server.MapPath("~/Areas/EventManagement/Passport/"), passFileName);
+                    employee.PassportUrl.SaveAs(passFileName);
+                    _employee.Update(employee, id, userId, userName, emp.EmployeeImagePath, passport);
+                }
+                else
+                {
+                    _employee.Update(employee, id, userId, userName, emp.EmployeeImagePath, emp.PassportImagePath);
+                }
+
+                return RedirectToAction(nameof(EditEmployees));
             }
             return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
         }
@@ -380,6 +489,84 @@ namespace EventManagement.Areas.EventManagement.Controllers
             }
             return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
         }
+
+        [HttpGet]
+        public ActionResult EventClient()
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                return View();
+            }
+            return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
+        }
+        [HttpGet]
+        public ActionResult EventClients()
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                var clients = _client.EventClients(concernId);
+                return View(clients);
+            }
+            return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
+        }
+        [HttpGet]
+        public ActionResult AddEventClient()
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                return View();
+            }
+            return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
+        }
+        [HttpPost]
+        public ActionResult AddEventClient(EventManagementClient eventManagementClient)
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                _client.Add(eventManagementClient, userName, userId, concernId);
+                return RedirectToAction(nameof(EventClient));
+            }
+            return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
+        }
+        [HttpGet]
+        public ActionResult EditEventClient(int id)
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                var client = _client.EventClientById(id);
+                return View(client);
+            }
+            return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
+        }
+        [HttpPost]
+        public ActionResult EditEventClient(int id, EventManagementClient eventManagementClient)
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                _client.Update(id, eventManagementClient, userName, userId);
+                return RedirectToAction(nameof(EventClient));
+            }
+            return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
+        }
+
         [HttpGet]
         public ActionResult WorkOrder()
         {
@@ -415,7 +602,7 @@ namespace EventManagement.Areas.EventManagement.Controllers
             var concernId = Convert.ToInt32(Session["ConcernId"]);
             var userId = Convert.ToInt32(Session["UserId"]);
             var userName = Convert.ToString(Session["UserName"]);
-            var orders = _work.GetWorkOrdersByStatusId("en-US", userName, userId, concernId,id);
+            var orders = _work.GetWorkOrdersByStatusId("en-US", userName, userId, concernId, id);
             WorkOrderViewModels viewModels = new WorkOrderViewModels()
             {
                 WorkOrderParents = orders
@@ -876,7 +1063,7 @@ namespace EventManagement.Areas.EventManagement.Controllers
                 var att = _attendance.Attendances(concernId, userName, userId);
                 ResponseAttendanceViewModels viewModels = new ResponseAttendanceViewModels()
                 {
-                    Attendances= att
+                    Attendances = att
                 };
                 return View(viewModels);
             }
@@ -908,7 +1095,7 @@ namespace EventManagement.Areas.EventManagement.Controllers
             var userName = Convert.ToString(Session["UserName"]);
             if (concernId > 0 && userId > 0)
             {
-                _attendance.AddAttendance(attendance, userName, userId,concernId);
+                _attendance.AddAttendance(attendance, userName, userId, concernId);
                 return View(nameof(Index));
             }
             return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
@@ -983,7 +1170,12 @@ namespace EventManagement.Areas.EventManagement.Controllers
             var userName = Convert.ToString(Session["UserName"]);
             if (concernId > 0 && userId > 0)
             {
-                return View();
+                var payments = _transaction.ResponseSalaries(concernId, userName, userId);
+                TransactionViewModels viewModels = new TransactionViewModels()
+                {
+                    SalaryPayments = payments
+                };
+                return View(viewModels);
             }
             return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
         }
@@ -995,12 +1187,42 @@ namespace EventManagement.Areas.EventManagement.Controllers
             var userName = Convert.ToString(Session["UserName"]);
             if (concernId > 0 && userId > 0)
             {
-                return View();
+                var employee = _context.Employees.Where(x => x.IsDelete == 0 && x.ConcernId == concernId).ToList();
+                var saltype = _transaction.SalaryTypes();
+                var trans = _transaction.TransactionTypes();
+                TransactionViewModels viewModels = new TransactionViewModels()
+                {
+                    Employees = employee,
+                    SalaryTypes = saltype,
+                    TransactionTypes = trans
+                };
+                return View(viewModels);
             }
             return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
         }
         [HttpPost]
-        public ActionResult AddSalary(SalaryPayment salaryPayment)
+        public JsonResult AddSalary(SalaryPayment salaryPayment)
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                _transaction.AddSalaryPayment(salaryPayment, concernId, userName, userId);
+                return Json(new
+                {
+                    redirectUrl = Url.Action("Salary", "EventManagementData", new { Area = "EventManagement" }),
+                    isRedirect = true
+                });
+            }
+            return Json(new
+            {
+                redirectUrl = Url.Action("LogIn", "GlobalData", new { Area = "Global" }),
+                isRedirect = true
+            });
+        }
+        [HttpGet]
+        public ActionResult Expenditure()
         {
             var concernId = Convert.ToInt32(Session["ConcernId"]);
             var userId = Convert.ToInt32(Session["UserId"]);
@@ -1011,7 +1233,370 @@ namespace EventManagement.Areas.EventManagement.Controllers
             }
             return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
         }
+        [HttpGet]
+        public ActionResult Expenditures()
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                var expense = _transaction.ResponseExpenditures(concernId, userName, userId);
+                TransactionViewModels viewModels = new TransactionViewModels()
+                {
+                    ResponseExpenditures = expense
+                };
+                return View(viewModels);
+            }
+            return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
+        }
+        [HttpGet]
+        public ActionResult AddExpenditure()
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                var heads = _transaction.ExpenditureHeads(concernId, userName, userId);
+                var type = _transaction.TransactionTypes();
+                TransactionViewModels viewModels = new TransactionViewModels()
+                {
+                    ExpenditureHeads = heads,
+                    TransactionTypes = type
+                };
+                return View(viewModels);
+            }
+            return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
+        }
+        [HttpPost]
+        public JsonResult AddExpenditure(Expenditure expenditure)
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                _transaction.AddExpenditure(expenditure, concernId, userName, userId);
+                return Json(new
+                {
+                    redirectUrl = Url.Action("Expenditure", "EventManagementData", new { Area = "EventManagement" }),
+                    isRedirect = true
+                });
+            }
+            return Json(new
+            {
+                redirectUrl = Url.Action("LogIn", "GlobalData", new { Area = "Global" }),
+                isRedirect = true
+            });
+        }
+        [HttpGet]
+        public ActionResult ExpendituresReport()
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                var heads = _transaction.ExpenditureHeads(concernId, userName, userId);
+                var type = _transaction.TransactionTypes();
+                TransactionViewModels viewModels = new TransactionViewModels()
+                {
+                    ExpenditureHeads = heads,
+                    TransactionTypes = type
+                };
+                return View(viewModels);
+            }
+            return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
+        }
+        [HttpPost]
+        public JsonResult ExpendituresReport(string fdate, string tDate, int transType, int head)
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                ExpenditureReport expenditure = new ExpenditureReport();
+                expenditure.FromDate = fdate;
+                expenditure.ToDate = tDate;
+                expenditure.TransType = transType;
+                expenditure.Expenditure = head;
+                var report = _transaction.ReportExpenditures(concernId, expenditure, userName, userId);
+                TransactionViewModels viewModels = new TransactionViewModels()
+                {
+                    ResponseExpenditures = report
+                };
+                return Json(viewModels, JsonRequestBehavior.AllowGet);
+            }
+            return Json(new
+            {
+                redirectUrl = Url.Action("LogIn", "GlobalData", new { Area = "Global" }),
+                isRedirect = true
+            });
 
+        }
+        [HttpGet]
+        public ActionResult ClientPayment()
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                return View();
+            }
+            return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
+        }
+        [HttpGet]
+        public ActionResult ClientPayments()
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                return View();
+            }
+            return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
+        }
+        [HttpGet]
+        public ActionResult AddClientPayment()
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                var type = _transaction.TransactionTypes();
+                var client = _transaction.Clients(concernId, userName, userId);
+                var bank = _transaction.Banks(concernId, userName, userId);
+                TransactionViewModels viewModels = new TransactionViewModels()
+                {
+                    TransactionTypes = type,
+                    Banks= bank,
+                    Clients= client
+                };
+                return View(viewModels);
+            }
+            return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
+        }
+        [HttpGet]
+        public ActionResult SalariesReport()
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                var employee = _context.Employees.Where(x => x.IsDelete == 0 && x.ConcernId == concernId).ToList();
+                var type = _transaction.TransactionTypes();
+                TransactionViewModels viewModels = new TransactionViewModels()
+                {
+                    Employees = employee,
+                    TransactionTypes = type
+                };
+                return View(viewModels);
+            }
+            return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
+        }
+        [HttpPost]
+        public JsonResult SalariesReport(string fdate, string tDate, int transType, int employeeId)
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                var payment = _transaction.ResponseSalariesRepor(concernId, userName, userId, fdate, tDate, employeeId, transType);
+                TransactionViewModels viewModels = new TransactionViewModels()
+                {
+                    SalaryPayments = payment
+                };
+                return Json(viewModels, JsonRequestBehavior.AllowGet);
+            }
+            return Json(new
+            {
+                redirectUrl = Url.Action("LogIn", "GlobalData", new { Area = "Global" }),
+                isRedirect = true
+            });
+
+        }
+
+        //---SDLC Reporting Testing Part
+        [HttpGet]
+        public ActionResult SalariesReportPDF(string fdate, string tDate, int transType = 0, int employeeId = 0)
+        {
+            var dae = "2019-01-01";
+            var dad = "2019-01-30";
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+
+                try
+                {
+                    var payment = _transaction.ResponseSalariesRepor(concernId, userName, userId, dae, dad, employeeId, transType);
+                    ReportDocument rd = new ReportDocument();
+                    //rd.Load(Path.Combine(Server.MapPath("~/Areas/EventManagement/Reports/Transaction"), "SalaryReport.rpt"));
+                    rd.Load(Path.Combine(Server.MapPath("~/CrystalReports"), "ReportCustomer.rpt"));
+                    rd.SetDataSource(payment);
+                    Response.Buffer = false;
+                    Response.ClearContent();
+                    Response.ClearHeaders();
+                    Stream stream = rd.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+                    stream.Seek(0, SeekOrigin.Begin);
+                    return File(stream, "application/pdf", "CustomerList.pdf");
+                }
+                catch (Exception ex)
+                {
+                    log.Error(ex.ToString());
+                    return View("Error", new HandleErrorInfo(ex, "EventManagementData", "SalariesReport"));
+
+                }
+            }
+            return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
+
+        }
+        [HttpGet]
+        public ActionResult SalariesReportExcel(string ReportType)
+        {
+
+            LocalReport local = new LocalReport();
+            local.ReportPath = Server.MapPath("~/Areas/Reports/Employee.rdlc");
+
+            ReportDataSource source = new ReportDataSource();
+            source.Name = "DataSet";
+            source.Value = _context.Employees.ToList();
+            local.DataSources.Add(source);
+            string reportType = ReportType;
+            string mimeType;
+            string encoding;
+            string fileNameExtension = "xlsx";
+
+            string[] streams;
+            Warning[] warnings;
+            byte[] renderByte;
+            renderByte = local.Render("Excel", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+            Response.AddHeader("content-disposition", "attachment:filename=employee_Report." + fileNameExtension);
+            return File(renderByte, fileNameExtension);
+
+        }
+        [HttpGet]
+        public ActionResult SalariesReportPDFTest(string ReportType)
+        {
+
+            Warning[] warnings;
+            string mimeType;
+            string[] streamids;
+            string encoding;
+            string filenameExtension;
+
+            var viewer = new ReportViewer();
+            viewer.LocalReport.ReportPath = Server.MapPath("~/Areas/Reports/Employee.rdlc");
+            var cus = _context.Employees.ToList();
+            ReportDataSource source = new ReportDataSource()
+            {
+                Name = "DataSet",
+                Value = _context.Employees.ToList()
+            };
+            viewer.LocalReport.DataSources.Add(source);
+            viewer.LocalReport.Refresh();
+
+            var bytes = viewer.LocalReport.Render("PDF", null, out mimeType, out encoding, out filenameExtension, out streamids, out warnings);
+
+            //return new FileContentResult(bytes, mimeType);
+
+            return File(bytes, mimeType, "Employee.pdf");
+
+        }
+        [HttpGet]
+        public ActionResult WOManpowerPDF(int id)
+        {
+
+            Warning[] warnings;
+            string mimeType;
+            string[] streamids;
+            string encoding;
+            string filenameExtension;
+
+            var viewer = new ReportViewer();
+            viewer.LocalReport.ReportPath = Server.MapPath("~/Areas/EventManagement/Reports/WorkOrderManpower.rdlc");
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            var assigned = _manpower.WorkOrderAssigneds(id, userId, userName, concernId);
+            ReportDataSource source = new ReportDataSource()
+            {
+                Name = "DataSet",
+                Value = assigned
+            };
+            viewer.LocalReport.DataSources.Add(source);
+            viewer.LocalReport.Refresh();
+
+            var bytes = viewer.LocalReport.Render("PDF", null, out mimeType, out encoding, out filenameExtension, out streamids, out warnings);
+
+            //return new FileContentResult(bytes, mimeType);
+
+            return File(bytes, mimeType, "Employee.pdf");
+
+        }
+
+        //----SDLC Reporting Testing Part
+        [HttpGet]
+        public ActionResult TimeSheet()
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                var orders = _work.GetUpcomingWorkOrders("en-US", userName, userId, concernId);
+                WorkOrderViewModels viewModels = new WorkOrderViewModels()
+                {
+                    WorkOrderParents = orders
+                };
+                return View(viewModels);
+            }
+            return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
+        }
+        [HttpGet]
+        public ActionResult DailyTimeSheet(int id)
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (userId > 0 && concernId > 0)
+            {
+                var today = DateTime.Now.ToString("yyyy-MM-dd");
+                var sheet = _report.DailyTimeSheet(userName, userId, id, today, "en-US");
+                ReportViewModels viewModels = new ReportViewModels
+                {
+                    ResponseTimeSheets = sheet
+                };
+                return View(viewModels);
+            }
+            return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
+        }
+        [HttpGet]
+        public ActionResult TimeSheetSummary(int id)
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (userId > 0 && concernId > 0)
+            {
+                var today = DateTime.Now.ToString("yyyy-MM-dd");
+                var sheet = _report.TimeSheetSummary(userName, userId, id, "en-US");
+                ReportViewModels viewModels = new ReportViewModels
+                {
+                    ResponseTimeSheets = sheet
+                };
+                return View(viewModels);
+            }
+            return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
+        }
 
     }
 }

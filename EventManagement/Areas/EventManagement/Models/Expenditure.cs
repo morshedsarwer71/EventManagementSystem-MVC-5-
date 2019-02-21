@@ -11,7 +11,7 @@ namespace EventManagement.Areas.EventManagement.Models
         [Key]
         public int ExpenditureId { get; set; }
         public int ExpenditureHeadId { get; set; }
-        public int MyProperty { get; set; }
+        public DateTime ExpenditureDate { get; set; }
         public int TransactionType { get; set; }
         public decimal Amount { get; set; }
         public int ConcernId { get; set; }
