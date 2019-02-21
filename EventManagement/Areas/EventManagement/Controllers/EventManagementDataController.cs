@@ -1100,6 +1100,27 @@ namespace EventManagement.Areas.EventManagement.Controllers
             }
             return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
         }
+        [HttpPost]
+        public JsonResult DeleteAttendance(int id)
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                _attendance.DeleteAttendance(id, userName, userId);
+                return Json(new
+                {
+                    redirectUrl = Url.Action("Attendance", "EventManagementData", new { Area = "EventManagement" }),
+                    isRedirect = true
+                });
+            }
+            return Json(new
+            {
+                redirectUrl = Url.Action("LogIn", "GlobalData", new { Area = "Global" }),
+                isRedirect = true
+            });
+        }
         [HttpGet]
         public ActionResult ExpenditureHead()
         {
@@ -1356,7 +1377,12 @@ namespace EventManagement.Areas.EventManagement.Controllers
             var userName = Convert.ToString(Session["UserName"]);
             if (concernId > 0 && userId > 0)
             {
-                return View();
+                var payment = _transaction.ClientPayments(concernId, userName, userId,"en-US");
+                TransactionViewModels viewModels = new TransactionViewModels()
+                {
+                    ClientPayments = payment
+                };
+                return View(viewModels);
             }
             return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
         }
@@ -1378,6 +1404,63 @@ namespace EventManagement.Areas.EventManagement.Controllers
                     Clients= client
                 };
                 return View(viewModels);
+            }
+            return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
+        }
+        [HttpPost]
+        public JsonResult AddClientPayment(ClientPayment clientPayment)
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                _transaction.AddClientPayment(clientPayment, concernId, userName, userId);
+                return Json(new
+                {
+                    redirectUrl = Url.Action("ClientPayment", "EventManagementData", new { Area = "EventManagement" }),
+                    isRedirect = true
+                });
+            }
+            return Json(new
+            {
+                redirectUrl = Url.Action("LogIn", "GlobalData", new { Area = "Global" }),
+                isRedirect = true
+            });
+        }
+        [HttpGet]
+        public ActionResult EditPayment(int id)
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                var type = _transaction.TransactionTypes();
+                var client = _transaction.Clients(concernId, userName, userId);
+                var bank = _transaction.Banks(concernId, userName, userId);
+                var clieint = _transaction.ClientPaymentById(id, concernId, userName, userId);
+                TransactionViewModels viewModels = new TransactionViewModels()
+                {
+                    TransactionTypes = type,
+                    Banks = bank,
+                    Clients = client,
+                    ClientPayment= clieint
+                };
+                return View(viewModels);
+            }
+            return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
+        }
+        [HttpPost]
+        public ActionResult EditPayment(int id,ClientPayment clientPayment)
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                _transaction.UpdateClientPayment(clientPayment, id, concernId, userName, userId);
+                return RedirectToAction(nameof(ClientPayment));
             }
             return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
         }
@@ -1567,8 +1650,10 @@ namespace EventManagement.Areas.EventManagement.Controllers
             var concernId = Convert.ToInt32(Session["ConcernId"]);
             var userId = Convert.ToInt32(Session["UserId"]);
             var userName = Convert.ToString(Session["UserName"]);
+            
             if (userId > 0 && concernId > 0)
             {
+                ViewBag.id = id;
                 var today = DateTime.Now.ToString("yyyy-MM-dd");
                 var sheet = _report.DailyTimeSheet(userName, userId, id, today, "en-US");
                 ReportViewModels viewModels = new ReportViewModels
@@ -1579,14 +1664,63 @@ namespace EventManagement.Areas.EventManagement.Controllers
             }
             return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
         }
-        [HttpGet]
-        public ActionResult TimeSheetSummary(int id)
+        [HttpPost]
+        public JsonResult DailyTimeSheetReport(int id,string date)
         {
             var concernId = Convert.ToInt32(Session["ConcernId"]);
             var userId = Convert.ToInt32(Session["UserId"]);
             var userName = Convert.ToString(Session["UserName"]);
             if (userId > 0 && concernId > 0)
             {
+                //var today = DateTime.Now.ToString("yyyy-MM-dd");
+                var sheet = _report.DailyTimeSheet(userName, userId, id, date, "en-US");
+                ReportViewModels viewModels = new ReportViewModels
+                {
+                    ResponseTimeSheets = sheet
+                };
+                return Json(viewModels,JsonRequestBehavior.AllowGet);
+            }
+            return Json(new
+            {
+                redirectUrl = Url.Action("LogIn", "GlobalData", new { Area = "Global" }),
+                isRedirect = true
+            });
+        }
+        [HttpPost]
+        public JsonResult DailyTimeSheetReportPDF(int id, string date)
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (userId > 0 && concernId > 0)
+            {
+                //var today = DateTime.Now.ToString("yyyy-MM-dd");
+                var sheet = _report.DailyTimeSheet(userName, userId, id, date, "en-US");
+                ReportViewModels viewModels = new ReportViewModels
+                {
+                    ResponseTimeSheets = sheet
+                };
+                return Json(new
+                {
+                    redirectUrl = Url.Action("DailyTimeSheet", "EventManagementReport", new { Area = "EventManagement",id= id, date= date }),
+                    isRedirect = true
+                });
+            }
+            return Json(new
+            {
+                redirectUrl = Url.Action("LogIn", "GlobalData", new { Area = "Global" }),
+                isRedirect = true
+            });
+        }
+        [HttpGet]
+        public ActionResult TimeSheetSummary(int id)
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (userId > 0 && concernId > 0 && id>0)
+            {
+                ViewBag.id = id;
                 var today = DateTime.Now.ToString("yyyy-MM-dd");
                 var sheet = _report.TimeSheetSummary(userName, userId, id, "en-US");
                 ReportViewModels viewModels = new ReportViewModels

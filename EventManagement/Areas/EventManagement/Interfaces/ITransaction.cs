@@ -13,8 +13,10 @@ namespace EventManagement.Areas.EventManagement.Interfaces
     {
         void AddExpenditure(Expenditure expenditure, int concernId, string userName, int userId);
         void AddSalaryPayment(SalaryPayment salaryPayment, int concernId, string userName, int userId);
-        void AddEventPayment(EventPayment eventPayment, int concernId, string userName, int userId);
         void AddExpenditureHead(ExpenditureHead expenditureHead, int concernId, string userName, int userId);
+        void AddClientPayment(ClientPayment clientPayment, int concernId, string userName, int userId);
+        ClientPayment ClientPaymentById(int id,int concernId, string userName, int userId);
+        void UpdateClientPayment(ClientPayment clientPayment,int id,int concernId, string userName, int userId);
         IEnumerable<ExpenditureHead> ExpenditureHeads(int concernId, string userName, int userId);
         IEnumerable<TransactionType> TransactionTypes();
         IEnumerable<SalaryType> SalaryTypes();
@@ -24,5 +26,6 @@ namespace EventManagement.Areas.EventManagement.Interfaces
         IEnumerable<ResponseExpenditure> ReportExpenditures(int concernId, ExpenditureReport expenditure, string userName, int userId);
         IEnumerable<Bank> Banks(int concernId, string userName, int userId);
         IEnumerable<EventManagementClient> Clients(int concernId, string userName, int userId);
+        IEnumerable<ResponseClientPayment> ClientPayments(int concernId, string userName, int userId,string culture);
     }
 }

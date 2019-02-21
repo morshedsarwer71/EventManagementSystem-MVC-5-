@@ -1,0 +1,137 @@
+﻿@model EventManagement.Areas.EventManagement.ViewModels.TransactionViewModels
+<section class="content-header">
+    <h1>
+        Edit Payment
+        <small>edit client payment information</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="@Url.Action("#")"><i class="fa fa-dashboard"></i> Home</a></li>
+    </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="box">
+            <!-- /.box-header -->
+            <div class="box-body">
+                <div class="col-md-6 col-sm-6">
+                    @using (Html.BeginForm("EditPayment", "EventManagementData", FormMethod.Post))
+                    {
+                        <div class="form-group">
+                            <label class="col-form-label">Client</label>
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <select class="form-control" name="ClientId">
+                                    @foreach (var item in Model.Clients)
+                                    {
+                                        if (item.ClientId == Model.ClientPayment.ClientId)
+                                        {
+                                            <option selected="selected" value="@item.ClientId">@item.ClientNameEN</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.ClientId">@item.ClientNameEN</option>
+                                        }
+
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-form-label">Payment Date <span style="color:red;"> *</span></label>
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <input type="text" value="@Model.ClientPayment.PaymentDate.ToShortDateString()" class="form-control" name="PaymentDate" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-form-label">Transaction Type<span style="color:red;"> *</span></label>
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <select class="form-control" id="paymentType">
+                                    @foreach (var item in Model.TransactionTypes)
+                                    {
+                                        <option value="@item.Id">@item.Name</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-form-label">Bank <span style="color:red;"> *</span></label>
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <select class="form-control" name="BankId">
+                                    <option value="0">--select bank name--</option>
+                                    @foreach (var item in Model.Banks)
+                                    {
+                                        if (item.BankId == Model.ClientPayment.BankId)
+                                        {
+                                            <option selected="selected" value="@item.BankId">@item.BankNameEN</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.BankId">@item.BankNameEN</option>
+                                        }
+
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-form-label">Payees Name<span style="color:red;"> *</span></label>
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <input type="text" value="@Model.ClientPayment.PayeesName" class="form-control" name="PayeesName" />
+                            </div>
+                        </div>
+                        <div class="form-group" style="display:none" id="note">
+                            <label class="col-form-label">Notes<span style="color:red;"> *</span></label>
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <textarea class="form-control" name="Notes">@Model.ClientPayment.Notes</textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-form-label">Payment Amount <span style="color:red;"> *</span></label>
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <input type="text" value="@Model.ClientPayment.PaymentAmount" class="form-control" name="PaymentAmount" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-form-label">Description <span style="color:red;"> *</span></label>
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <textarea class="form-control" name="Description">@Model.ClientPayment.Description</textarea>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <button type="submit" value="submit" class="btn btn-primary"><i class="fa fa-edit"></i> PAYMENT</button>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>

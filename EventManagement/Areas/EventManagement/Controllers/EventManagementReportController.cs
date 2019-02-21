@@ -26,6 +26,7 @@ namespace EventManagement.Areas.EventManagement.Controllers
         private readonly IDefaultSetting _setting;
         private readonly IAttendance _attendance;
         private readonly ITransaction _transaction;
+        private readonly IEventReport _report;
         public EventManagementReportController
             (
              DataContext context,
@@ -40,7 +41,8 @@ namespace EventManagement.Areas.EventManagement.Controllers
             IWorkOrderMiscellaneous orderMiscellaneous,
             IDefaultSetting setting,
             IAttendance attendance,
-            ITransaction transaction
+            ITransaction transaction,
+            IEventReport report
             )
         {
             _context = context;
@@ -56,6 +58,7 @@ namespace EventManagement.Areas.EventManagement.Controllers
             _setting = setting;
             _attendance = attendance;
             _transaction = transaction;
+            _report = report;
         }
         public ActionResult WOManpowerPDF(int id)
         {
@@ -76,6 +79,46 @@ namespace EventManagement.Areas.EventManagement.Controllers
             {
                 return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
             }
+        }
+
+        [HttpGet]
+        public ActionResult DailyTimeSheet(int id, string date)
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (userId > 0 && concernId > 0)
+            {
+                //var today = DateTime.Now.ToString("yyyy-MM-dd");
+                var sheet = _report.DailyTimeSheet(userName, userId, id, date, "en-US");
+                ReportViewModels viewModels = new ReportViewModels
+                {
+                    ResponseTimeSheets = sheet
+                };
+                var report = new PartialViewAsPdf("DailyTimeSheet", viewModels);
+                return report;
+            }
+            return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
+        }
+        [HttpGet]
+        public ActionResult TimeSheetSummary(int id)
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (userId > 0 && concernId > 0)
+            {
+                //var today = DateTime.Now.ToString("yyyy-MM-dd");
+                //var today = DateTime.Now.ToString("yyyy-MM-dd");
+                var sheet = _report.TimeSheetSummary(userName, userId, id, "en-US");
+                ReportViewModels viewModels = new ReportViewModels
+                {
+                    ResponseTimeSheets = sheet
+                };
+                var report = new PartialViewAsPdf("TimeSheetSummary", viewModels);
+                return report;
+            }
+            return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
         }
     }
 }

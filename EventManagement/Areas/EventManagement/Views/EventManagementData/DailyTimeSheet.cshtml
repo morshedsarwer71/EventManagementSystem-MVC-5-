@@ -13,64 +13,158 @@
 
 <!-- Main content -->
 <section class="content">
+    <div id="dvLoader" class="LoadingDiv" style="display: none; margin-top:150px;margin-top:50px;">
+        <center>
+            <img src="~/Content/img/ajax-loader.gif" alt="Loading" />
+        </center>
+    </div>
     <div class="row">
-        <div class="col-md-12">
-            <div class="box">
-                <!-- /.box-header -->
-                <div class="box-body">
-                    <table class="table table-bordered">
-                        <thead>
+        <div class="box">
+            <!-- /.box-header -->
+            <div class="box-body">
+                <div class="col-md-12">
+                    <input type="hidden" class="form-control" id="eventId" value="@ViewBag.id" required />
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="col-form-label">Date</label>
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <input type="text" class="form-control" id="date" required />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6" style="padding-top:25px;">
+                        <div class="form-group">
+                            <button type="submit" id="btnView" value="submit" class="btn btn-primary"><i class="fa fa-eye"></i> VIEW</button>
+                        </div>
+                    </div>
+                </div>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th style="width: 10px">#</th>
+                            <th>Code</th>
+                            <th>Client Name</th>
+                            <th>Employee Name</th>
+                            <th>Time Sheet Code</th>
+                            <th>In Time</th>
+                            <th>Out Time</th>
+                            <th>Total Hour</th>
+                            <th>Per Hour Rate</th>
+                            <th>Total</th>
+                            <th>Vat Amount</th>
+                            <th>Grand</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tBody">
+                        @foreach (var item in Model.ResponseTimeSheets)
+                        {
                             <tr>
-                                <th style="width: 10px">#</th>
-                                <th>Code</th>
-                                <th>Client Name</th>
-                                <th>Employee Name</th>
-                                <th>Time Sheet Code</th>
-                                <th>In Time</th>
-                                <th>Out Time</th>
-                                <th>Total Hour</th>
-                                <th>Per Hour Rate</th>
-                                <th>Total</th>
-                                <th>Vat Amount</th>
-                                <th>Grand</th>
+                                <td>@item.Serial</td>
+                                <td>@item.OrderCode</td>
+                                <td>@item.ClientName</td>
+                                <td>@item.EmployeeName</td>
+                                <td>@item.SheetCode</td>
+                                <td>@item.InTime</td>
+                                <td>@item.OutTime</td>
+                                <td>@item.TotalHour</td>
+                                <td>@item.PerHourRate</td>
+                                <td>@item.TotalWithoutVat</td>
+                                <td>@item.VatAmount</td>
+                                <td>@item.TotalAfterVat</td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model.ResponseTimeSheets)
-                            {
-                                <tr>
-                                    <td>@item.Serial</td>
-                                    <td>@item.OrderCode</td>
-                                    <td>@item.ClientName</td>
-                                    <td>@item.ClientName</td>
-                                    <td>@item.SheetCode</td>
-                                    <td>@item.InTime</td>
-                                    <td>@item.OutTime</td>
-                                    <td>@item.TotalHour</td>
-                                    <td>@item.PerHourRate</td>
-                                    <td>@item.TotalWithoutVat</td>
-                                    <td>@item.VatAmount</td>
-                                    <td>@item.TotalAfterVat</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-                <!-- /.box-body -->
-                <div class="box-footer clearfix">
-
-                    <ul class="pagination pagination-sm no-margin pull-right">
-                        <li><a href="#">&laquo;</a></li>
-                        <li><a href="#">1</a></li>
-                        <li><a href="#">2</a></li>
-                        <li><a href="#">3</a></li>
-                        <li><a href="#">&raquo;</a></li>
-                    </ul>
-                </div>
+                        }
+                    </tbody>
+                </table>
             </div>
-            <!-- /.box -->
+            <!-- /.box-body -->
+            <div class="col-md-4">
+                <a href="#" id="btnPdf" style="display:none"><i class="fa fa-file-pdf-o" style="color:red"></i> Export As PDF</a>
+                @*<button type="submit" id="btnPdf" style="display:none" value="submit"><i class="fa fa-eye"></i> VIEW</button>*@
+            </div>
+            <div class="box-footer clearfix">
+                <ul class="pagination pagination-sm no-margin pull-right"></ul>
+            </div>
         </div>
         <!-- /.col -->
 
     </div>
 </section>
+@section Scripts{
+    <script src="~/Content/bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+    <script>
+        $(document).ready(function () {            
+            $('#date').datepicker({
+                format: 'yyyy-mm-dd',
+                autoclose:true
+            });
+
+            $('#btnView').click(function () {
+                var date = $('#date').val();
+                var id = $('#eventId').val();
+                $('#dvLoader').show();                
+                $.ajax({
+                    url: "/EventManagementData/DailyTimeSheetReport",
+                    type: "POST",
+                    data: JSON.stringify({
+                        "id": id,
+                        "date": date
+                    }),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (json) {
+                        if (json.isRedirect) {
+                            window.location.href = json.redirectUrl;
+                        }
+                        else {
+                            var data = json.ResponseTimeSheets;
+                            var tr = "";
+                            data.forEach(function (dt)
+                            {
+                                tr += '<tr>';
+                                tr += '<td>' + dt.Serial + '</td>';
+                                tr += '<td>' + dt.OrderCode + '</td>';
+                                tr += '<td>' + dt.ClientName + '</td>';
+                                tr += '<td>' + dt.EmployeeName + '</td>';
+                                tr += '<td>' + dt.SheetCode + '</td>';
+                                tr += '<td>' + dt.InTime + '</td>';
+                                tr += '<td>' + dt.OutTime + '</td>';
+                                tr += '<td>' + dt.TotalHour + '</td>';
+                                tr += '<td>' + dt.PerHourRate + '</td>';
+                                tr += '<td>' + dt.TotalWithoutVat + '</td>';
+                                tr += '<td>' + dt.VatAmount + '</td>';
+                                tr += '<td>' + dt.TotalAfterVat + '</td>';
+                                tr += '</tr>';
+                            });
+                            $("#tBody").html(tr);
+                        }
+                        $('#dvLoader').hide();
+                        $('#btnPdf').show();
+                    }
+                });
+            });
+            $('#btnPdf').click(function () {
+                var date = $('#date').val();
+                var id = $('#eventId').val();
+                $.ajax({
+                    url: "/EventManagementData/DailyTimeSheetReportPDF",
+                    type: "POST",
+                    data: JSON.stringify({
+                        "id": id,
+                        "date": date
+                    }),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (json) {
+                        if (json.isRedirect) {
+                            window.location.href = json.redirectUrl;
+                        }                        
+                    }
+                });
+            });
+        });
+
+    </script>
+}

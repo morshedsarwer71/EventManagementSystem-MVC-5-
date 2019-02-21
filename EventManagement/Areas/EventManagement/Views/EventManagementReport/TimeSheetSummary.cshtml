@@ -1,0 +1,77 @@
+﻿@model EventManagement.Areas.EventManagement.ViewModels.ReportViewModels
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Daily Time Sheet Summary</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.7 -->
+    <link rel="stylesheet" href="~/Content/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="~/Content/bower_components/font-awesome/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="../../bower_components/Ionicons/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/Content/dist/css/AdminLTE.min.css">
+    <!-- iCheck -->
+    <link rel="stylesheet" href="~/Content/dist/css/blue.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+</head>
+<body>
+    @*class="hold-transition login-page" --- body class*@
+    <section class="content" style="padding-top:200px;padding-bottom:100px;">
+        <div class="row">
+            <div class="col-md-12">
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th style="width: 10px">#</th>
+                                    <th>Code</th>
+                                    <th>Date</th>
+                                    <th>Client Name</th>
+                                    <th>Time Sheet Code</th>
+                                    <th>Total Hour</th>
+                                    <th>Per Hour Rate</th>
+                                    <th>Total</th>
+                                    <th>Vat Amount</th>
+                                    <th>Grand</th>
+                                </tr>
+                            </thead>
+                            @{ var sl = 0;}
+                            <tbody>
+                                @foreach (var item in Model.ResponseTimeSheets)
+                                {
+                                    sl++;
+                                    <tr>
+                                        <td>@sl</td>
+                                        <td>@item.OrderCode</td>
+                                        <td>@item.Date</td>
+                                        <td>@item.ClientName</td>
+                                        <td>@item.SheetCode</td>
+                                        <td>@item.TotalHour</td>
+                                        <td>@item.PerHourRate</td>
+                                        <td>@item.TotalWithoutVat</td>
+                                        <td>@item.VatAmount</td>
+                                        <td>@item.TotalAfterVat</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- /.box -->
+            </div>
+    </section>
+
+    <script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="~/Content/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+</body>
+</html>

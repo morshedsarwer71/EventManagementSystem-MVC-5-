@@ -31,13 +31,13 @@
     <script src="~/Content/bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
     <script>
         $(document).ready(function () {
-            $('#expenditureDate').datepicker({
+            $('#paymentDate').datepicker({
                 format: 'yyyy-mm-dd',
                 autoclose: true
             });
             $(function () {
-                $('#transactionType').change(function () {
-                    var id = $('#transactionType').val();
+                $('#paymentType').change(function () {
+                    var id = $('#paymentType').val();
                     if (id == 2) {
                         $('#bank').show();
                         $('#name').show();
@@ -50,21 +50,27 @@
                 });
             });
             $("#btnSubmit").click(function () {
-                var expenditureHeadId = $("#expenditureHeadId").val();
-                var transactionType = $("#transactionType").val();
-                var expenditureDate = $("#expenditureDate").val();
-                var amount = $("#amount").val();
+                var clientId = $("#clientId").val();
+                var paymentDate = $("#paymentDate").val();
+                var paymentType = $("#paymentType").val();
+                var bankId = $("#bankId").val();
+                var payeesName = $("#payeesName").val();
+                var note = $("#txtNote").val();
+                var paymentAmount = $("#paymentAmount").val();
                 var description = $("#description").val();
                 $("#dvLoader").show();
                 $.ajax({
-                    url: "/EventManagementData/AddExpenditure",
+                    url: "/EventManagementData/AddClientPayment",
                     type: "POST",
                     data: JSON.stringify({
-                        "ExpenditureHeadId": expenditureHeadId,
-                        "TransactionType": transactionType,
-                        "ExpenditureDate": expenditureDate,
-                        "Amount": amount,
-                        "Description": description
+                        "ClientId": clientId,
+                        "PaymentDate": paymentDate,
+                        "PaymentType": paymentType,
+                        "BankId": bankId,
+                        "PayeesName": payeesName,
+                        "Note": note,
+                        "PaymentAmount": paymentAmount,
+                        "Description": description,
                     }),
                     dataType: "json",
                     contentType: "application/json; charset=utf-8",
@@ -72,18 +78,21 @@
                         if (json.isRedirect) {
                             window.location.href = json.redirectUrl;
                         }
-                        Clear();
+                        //Clear();
                         $('#dvLoader').hide();
                     }
                 });
             });
         });
         function Clear() {
-            $("#expenditureHeadId").val('');
-            $("#transactionType").val('');
-            $("#expenditureDate").val('');
-            $("#amount").val('');
-             $("#description").val('');
+            $("#clientId").val('');
+            $("#paymentDate").val('');
+            $("#paymentType").val('');
+            $("#bankId").val('');
+            $("#payeesName").val('');
+            $("#txtNote").val('');
+            $("#paymentAmount").val('');
+            $("#description").val('');
 
         };
     </script>

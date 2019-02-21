@@ -1,15 +1,13 @@
-﻿@model EventManagement.Areas.EventManagement.ViewModels.WorkOrderAssignedViewModels
+﻿@model EventManagement.Areas.EventManagement.ViewModels.ReportViewModels
 @{
-                /**/
-
-                Layout = null;
+    Layout = null;
 }
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>WOManpower</title>
+    <title>Daily Time Sheet</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.7 -->
@@ -26,40 +24,49 @@
 </head>
 <body>
     @*class="hold-transition login-page" --- body class*@
-    <section class="content" style="padding-top:200px; padding-bottom:100px;">
+    <section class="content" style="padding-top:200px;padding-bottom:100px;">
         <div class="row">
-            <div class="col-md-12">
+                <!-- /.box-header -->
                 <div class="box-body">
                     <table class="table table-bordered">
                         <thead>
                             <tr>
                                 <th style="width: 10px">#</th>
-                                <th>Name</th>
-                                <th>Nationality</th>
-                                <th>NID</th>
-                                <th>Passport ID</th>
-                                <th>Image</th>
-                                <th>Passport</th>
+                                <th>Code</th>
+                                <th>Client Name</th>
+                                <th>Employee Name</th>
+                                <th>Time Sheet Code</th>
+                                <th>In Time</th>
+                                <th>Out Time</th>
+                                <th>Total Hour</th>
+                                <th>Per Hour Rate</th>
+                                <th>Total</th>
+                                <th>Vat Amount</th>
+                                <th>Grand</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in Model.WorkOrderAssigneds)
+                            @foreach (var item in Model.ResponseTimeSheets)
                             {
                                 <tr>
                                     <td>@item.Serial</td>
-                                    <td>@item.Name</td>
-                                    <td>@item.Nationality</td>
-                                    <td>@item.NIDNumber</td>
-                                    <td>@item.PassNumber</td>
-                                    <td><img src="@Url.Content(item.ImagePath)" width="70" height="40" /></td>
-                                    <td><img src="@Url.Content(item.PassPath)" width="70" height="40" /></td>
+                                    <td>@item.OrderCode</td>
+                                    <td>@item.ClientName</td>
+                                    <td>@item.EmployeeName</td>
+                                    <td>@item.SheetCode</td>
+                                    <td>@item.InTime</td>
+                                    <td>@item.OutTime</td>
+                                    <td>@item.TotalHour</td>
+                                    <td>@item.PerHourRate</td>
+                                    <td>@item.TotalWithoutVat</td>
+                                    <td>@item.VatAmount</td>
+                                    <td>@item.TotalAfterVat</td>
                                 </tr>
                             }
                         </tbody>
                     </table>
                 </div>
             </div>
-        </div>
     </section>
 
     <script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>

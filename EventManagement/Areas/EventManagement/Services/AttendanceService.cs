@@ -101,11 +101,8 @@ namespace EventManagement.Areas.EventManagement.Services
 
         public void DeleteAttendance(int attendanceId, string userName, int userId)
         {
-            var attendance = AttendanceDetilsbyId(attendanceId, userName, userId);
-            var todayDate = DateTime.Now;
-            attendance.IsDelete = 1;
-            attendance.ModifierId = userId;
-            attendance.ModificationDate = todayDate;
+            var attendance = _context.Attendances.FirstOrDefault(x=>x.AttendanceId== attendanceId);
+            _context.Attendances.Remove(attendance);
             _context.SaveChanges();
         }
 

@@ -265,6 +265,7 @@
     <Compile Include="Areas\EventManagement\ResponseModels\PaymentStatus.cs" />
     <Compile Include="Areas\EventManagement\ResponseModels\ResponseAttendance.cs" />
     <Compile Include="Areas\EventManagement\ResponseModels\ResponseCategory.cs" />
+    <Compile Include="Areas\EventManagement\ResponseModels\ResponseClientPayment.cs" />
     <Compile Include="Areas\EventManagement\ResponseModels\ResponseEmployee.cs" />
     <Compile Include="Areas\EventManagement\ResponseModels\ResponseEmployeesMiscellaneousAssignment.cs" />
     <Compile Include="Areas\EventManagement\ResponseModels\ResponseEmployeesServiceAssignment.cs" />
@@ -7317,6 +7318,9 @@
     <Content Include="Areas\EventManagement\Views\EventManagementData\ClientPayment.cshtml" />
     <Content Include="Areas\EventManagement\Views\EventManagementData\ClientPayments.cshtml" />
     <Content Include="Areas\EventManagement\Views\EventManagementData\AddClientPayment.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\EditPayment.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementReport\DailyTimeSheet.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementReport\TimeSheetSummary.cshtml" />
     <None Include="EmployeeDataSet.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>EmployeeDataSet.Designer.cs</LastGenOutput>

@@ -49,7 +49,7 @@
                                     <td>@item.PassNumber</td>
                                     <td><img src="@Url.Content(item.ImagePath)" width="70" height="40" /></td>
                                     <td><img src="@Url.Content(item.PassPath)" width="70" height="40" /></td>
-                                    <td><a href="#" onclick="valDelete(@item.WOCMid,@item.OrderId)">Remove</a></td>
+                                    <td class="text-center"><a href="#" onclick="valDelete(@item.WOCMid,@item.OrderId)"><i class="fa fa-trash" style="color:red;font-size:15px;"></i></a></td>
                                 </tr>
                             }
                         </tbody>

@@ -20,22 +20,21 @@ namespace EventManagement.Areas.EventManagement.Services
             _context = context;
         }
 
-        public void AddEventPayment(EventPayment eventPayment, int concernId, string userName, int userId)
+        public void AddClientPayment(ClientPayment clientPayment, int concernId, string userName, int userId)
         {
             var date = DateTime.Now;
             using (DbContextTransaction transaction = _context.Database.BeginTransaction())
             {
-                eventPayment.CreationDate = date;
-                eventPayment.CreatorId = userId;
-                eventPayment.ModificationDate = date;
-                eventPayment.ModifierId = userId;
-                eventPayment.ConcernId = concernId;
-                _context.EventPayments.Add(eventPayment);
+                clientPayment.CreationDate = date;
+                clientPayment.CreatorId = userId;
+                clientPayment.ModificationDate = date;
+                clientPayment.ModifierId = userId;
+                clientPayment.ConcernId = concernId;
+                _context.ClientPayments.Add(clientPayment);
                 _context.SaveChanges();
                 transaction.Commit();
             };
-            
-        }
+        }       
 
         public void AddExpenditure(Expenditure expenditure, int concernId, string userName, int userId)
         {
@@ -85,6 +84,46 @@ namespace EventManagement.Areas.EventManagement.Services
         {
             var bank = _context.Banks.Where(x=>x.ConcernId== concernId).ToList();
             return bank;
+        }
+
+        public ClientPayment ClientPaymentById(int id, int concernId, string userName, int userId)
+        {
+            return _context.ClientPayments.FirstOrDefault(x=>x.ClientPaymentId==id);
+        }
+
+        public IEnumerable<ResponseClientPayment> ClientPayments(int concernId, string userName, int userId, string culture)
+        {
+            List<ResponseClientPayment> payments = new List<ResponseClientPayment>();
+            using (var command = _context.Database.Connection.CreateCommand())
+            {
+                command.CommandText = ("usp_EventManagement_ClientPaymentIndexByConcernId @concernId,@culture");
+                command.Parameters.Add(new SqlParameter("@concernId", concernId));
+                command.Parameters.Add(new SqlParameter("@culture", culture));
+                _context.Database.Connection.Open();
+                using (var result = command.ExecuteReader())
+                {
+                    if (result.HasRows)
+                    {
+                        while (result.Read())
+                        {
+                            payments.Add(new ResponseClientPayment()
+                            {
+                                Serial = Convert.ToInt32(result[0]),
+                                PaymentId = Convert.ToInt32(result[1]),
+                                ClientName = Convert.ToString(result[2]),
+                                Date = Convert.ToString(result[3]),
+                                PaymentStatus = Convert.ToString(result[4]),
+                                Amount = Convert.ToDecimal(result[5]),
+                                PayeesName = Convert.ToString(result[6]),
+                                Notes = Convert.ToString(result[7]),
+                                Description = Convert.ToString(result[8])
+                            });
+                        }
+                    }
+                }
+                _context.Database.Connection.Close();
+            }
+            return payments;
         }
 
         public IEnumerable<EventManagementClient> Clients(int concernId, string userName, int userId)
@@ -274,6 +313,22 @@ namespace EventManagement.Areas.EventManagement.Services
                 }
             };
             return transactions;
+        }
+
+        public void UpdateClientPayment(ClientPayment clientPayment, int id, int concernId, string userName, int userId)
+        {
+            var client = _context.ClientPayments.FirstOrDefault(x=>x.ClientPaymentId==id);
+            client.ClientId = clientPayment.ClientId;
+            client.PaymentDate = clientPayment.PaymentDate;
+            client.PaymentAmount = clientPayment.PaymentAmount;
+            client.PaymentType = clientPayment.PaymentType;
+            client.BankId = clientPayment.BankId;
+            client.PayeesName = clientPayment.PayeesName;
+            client.Notes = clientPayment.Notes;
+            client.Description = clientPayment.Description;
+            client.ModificationDate = DateTime.Now;
+            client.ModifierId = userId;
+            _context.SaveChanges();
         }
     }
 }

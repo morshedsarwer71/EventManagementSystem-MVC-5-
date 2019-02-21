@@ -18,5 +18,7 @@ namespace EventManagement.Areas.EventManagement.ViewModels
         public IEnumerable<ResponseExpenditure> ResponseExpenditures { get; set; }
         public IEnumerable<Bank> Banks { get; set; }
         public IEnumerable<EventManagementClient> Clients { get; set; }
+        public IEnumerable<ResponseClientPayment> ClientPayments { get; set; }
+        public ClientPayment ClientPayment { get; set; }
     }
 }
