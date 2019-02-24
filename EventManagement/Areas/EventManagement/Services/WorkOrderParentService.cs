@@ -126,6 +126,8 @@ namespace EventManagement.Areas.EventManagement.Services
                             responseWorkOrder.NoOfSetup = Convert.ToInt32(result[14]);
                             responseWorkOrder.TotalDays = Convert.ToString(result[15]);
                             responseWorkOrder.NumberOfRows = Convert.ToInt32(result[16]);
+                            responseWorkOrder.Start = Convert.ToDateTime(result[17]);
+                            responseWorkOrder.End = Convert.ToDateTime(result[18]);
 
                             ResponseWorkOrder.Add(responseWorkOrder);
 

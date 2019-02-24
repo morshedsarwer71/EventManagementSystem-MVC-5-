@@ -1377,7 +1377,7 @@ namespace EventManagement.Areas.EventManagement.Controllers
             var userName = Convert.ToString(Session["UserName"]);
             if (concernId > 0 && userId > 0)
             {
-                var payment = _transaction.ClientPayments(concernId, userName, userId,"en-US");
+                var payment = _transaction.ClientPayments(concernId, userName, userId, "en-US");
                 TransactionViewModels viewModels = new TransactionViewModels()
                 {
                     ClientPayments = payment
@@ -1400,8 +1400,8 @@ namespace EventManagement.Areas.EventManagement.Controllers
                 TransactionViewModels viewModels = new TransactionViewModels()
                 {
                     TransactionTypes = type,
-                    Banks= bank,
-                    Clients= client
+                    Banks = bank,
+                    Clients = client
                 };
                 return View(viewModels);
             }
@@ -1445,14 +1445,14 @@ namespace EventManagement.Areas.EventManagement.Controllers
                     TransactionTypes = type,
                     Banks = bank,
                     Clients = client,
-                    ClientPayment= clieint
+                    ClientPayment = clieint
                 };
                 return View(viewModels);
             }
             return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
         }
         [HttpPost]
-        public ActionResult EditPayment(int id,ClientPayment clientPayment)
+        public ActionResult EditPayment(int id, ClientPayment clientPayment)
         {
             var concernId = Convert.ToInt32(Session["ConcernId"]);
             var userId = Convert.ToInt32(Session["UserId"]);
@@ -1650,7 +1650,7 @@ namespace EventManagement.Areas.EventManagement.Controllers
             var concernId = Convert.ToInt32(Session["ConcernId"]);
             var userId = Convert.ToInt32(Session["UserId"]);
             var userName = Convert.ToString(Session["UserName"]);
-            
+
             if (userId > 0 && concernId > 0)
             {
                 ViewBag.id = id;
@@ -1665,7 +1665,7 @@ namespace EventManagement.Areas.EventManagement.Controllers
             return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
         }
         [HttpPost]
-        public JsonResult DailyTimeSheetReport(int id,string date)
+        public JsonResult DailyTimeSheetReport(int id, string date)
         {
             var concernId = Convert.ToInt32(Session["ConcernId"]);
             var userId = Convert.ToInt32(Session["UserId"]);
@@ -1678,7 +1678,7 @@ namespace EventManagement.Areas.EventManagement.Controllers
                 {
                     ResponseTimeSheets = sheet
                 };
-                return Json(viewModels,JsonRequestBehavior.AllowGet);
+                return Json(viewModels, JsonRequestBehavior.AllowGet);
             }
             return Json(new
             {
@@ -1702,7 +1702,7 @@ namespace EventManagement.Areas.EventManagement.Controllers
                 };
                 return Json(new
                 {
-                    redirectUrl = Url.Action("DailyTimeSheet", "EventManagementReport", new { Area = "EventManagement",id= id, date= date }),
+                    redirectUrl = Url.Action("DailyTimeSheet", "EventManagementReport", new { Area = "EventManagement", id = id, date = date }),
                     isRedirect = true
                 });
             }
@@ -1718,7 +1718,7 @@ namespace EventManagement.Areas.EventManagement.Controllers
             var concernId = Convert.ToInt32(Session["ConcernId"]);
             var userId = Convert.ToInt32(Session["UserId"]);
             var userName = Convert.ToString(Session["UserName"]);
-            if (userId > 0 && concernId > 0 && id>0)
+            if (userId > 0 && concernId > 0 && id > 0)
             {
                 ViewBag.id = id;
                 var today = DateTime.Now.ToString("yyyy-MM-dd");
@@ -1730,6 +1730,26 @@ namespace EventManagement.Areas.EventManagement.Controllers
                 return View(viewModels);
             }
             return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
+        }
+
+        //Calender Code
+        [HttpGet]
+        public ActionResult Calender()
+        {
+            return View();
+        }
+        public JsonResult GetEvents()
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            var orders = _work.GetUpcomingWorkOrders("en-US", userName, userId, concernId);
+            WorkOrderViewModels viewModels = new WorkOrderViewModels()
+            {
+                WorkOrderParents = orders
+            };
+            return new JsonResult { Data = viewModels.WorkOrderParents, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+
         }
 
     }

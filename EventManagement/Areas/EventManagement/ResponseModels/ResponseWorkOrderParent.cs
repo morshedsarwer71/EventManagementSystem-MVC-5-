@@ -25,6 +25,8 @@ namespace EventManagement.Areas.EventManagement.ResponseModels
         public decimal PerHourRate { get; set; }
         public string Status { get; set; }
         public string Description { get; set; }
+        public DateTime Start { get; set; }
+        public DateTime End { get; set; }
         public string CreatorName { get; set; }
         public DateTime CreationDate { get; set; }
         public string ModifierName { get; set; }

@@ -7321,6 +7321,7 @@
     <Content Include="Areas\EventManagement\Views\EventManagementData\EditPayment.cshtml" />
     <Content Include="Areas\EventManagement\Views\EventManagementReport\DailyTimeSheet.cshtml" />
     <Content Include="Areas\EventManagement\Views\EventManagementReport\TimeSheetSummary.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\Calender.cshtml" />
     <None Include="EmployeeDataSet.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>EmployeeDataSet.Designer.cs</LastGenOutput>
