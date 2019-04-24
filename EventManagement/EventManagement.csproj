@@ -225,6 +225,7 @@
     <Compile Include="Areas\EventManagement\Interfaces\IEmployeesMiscellaneousAssignment.cs" />
     <Compile Include="Areas\EventManagement\Interfaces\IEmployeesServiceAssignment.cs" />
     <Compile Include="Areas\EventManagement\Interfaces\IEmployeesSetupAssignment.cs" />
+    <Compile Include="Areas\EventManagement\Interfaces\IEventAccount.cs" />
     <Compile Include="Areas\EventManagement\Interfaces\IEventManagementClient.cs" />
     <Compile Include="Areas\EventManagement\Interfaces\IEventMiscellaneous.cs" />
     <Compile Include="Areas\EventManagement\Interfaces\IEventService.cs" />
@@ -252,11 +253,16 @@
     <Compile Include="Areas\EventManagement\Models\EventSetup.cs" />
     <Compile Include="Areas\EventManagement\Models\Expenditure.cs" />
     <Compile Include="Areas\EventManagement\Models\ExpenditureHead.cs" />
+    <Compile Include="Areas\EventManagement\Models\Lender.cs" />
+    <Compile Include="Areas\EventManagement\Models\Loan.cs" />
+    <Compile Include="Areas\EventManagement\Models\LoanInstallment.cs" />
+    <Compile Include="Areas\EventManagement\Models\ManpowerSupplier.cs" />
     <Compile Include="Areas\EventManagement\Models\SalaryPayment.cs" />
     <Compile Include="Areas\EventManagement\Models\WorkOrderChildManpower.cs" />
     <Compile Include="Areas\EventManagement\Models\WorkOrderChildMiscellaneous.cs" />
     <Compile Include="Areas\EventManagement\Models\WorkOrderChildService.cs" />
     <Compile Include="Areas\EventManagement\Models\WorkOrderChildSetup.cs" />
+    <Compile Include="Areas\EventManagement\Models\WorkOrderDailyManpower.cs" />
     <Compile Include="Areas\EventManagement\Models\WorkOrderParent.cs" />
     <Compile Include="Areas\EventManagement\Models\WorkOrderQuotation.cs" />
     <Compile Include="Areas\EventManagement\Models\WorkOrderStatus.cs" />
@@ -266,13 +272,17 @@
     <Compile Include="Areas\EventManagement\ResponseModels\ResponseAttendance.cs" />
     <Compile Include="Areas\EventManagement\ResponseModels\ResponseCategory.cs" />
     <Compile Include="Areas\EventManagement\ResponseModels\ResponseClientPayment.cs" />
+    <Compile Include="Areas\EventManagement\ResponseModels\ResponseDailyManPower.cs" />
     <Compile Include="Areas\EventManagement\ResponseModels\ResponseEmployee.cs" />
     <Compile Include="Areas\EventManagement\ResponseModels\ResponseEmployeesMiscellaneousAssignment.cs" />
     <Compile Include="Areas\EventManagement\ResponseModels\ResponseEmployeesServiceAssignment.cs" />
     <Compile Include="Areas\EventManagement\ResponseModels\ResponseEmployeesSetupAssignment.cs" />
+    <Compile Include="Areas\EventManagement\ResponseModels\ResponseEmployeeWork.cs" />
     <Compile Include="Areas\EventManagement\ResponseModels\ResponseEntitlement.cs" />
     <Compile Include="Areas\EventManagement\ResponseModels\ResponseEventClient.cs" />
     <Compile Include="Areas\EventManagement\ResponseModels\ResponseExpenditure.cs" />
+    <Compile Include="Areas\EventManagement\ResponseModels\ResponseLoan.cs" />
+    <Compile Include="Areas\EventManagement\ResponseModels\ResponsePaymentReport.cs" />
     <Compile Include="Areas\EventManagement\ResponseModels\ResponseProject.cs" />
     <Compile Include="Areas\EventManagement\ResponseModels\ResponseSalaryPayments.cs" />
     <Compile Include="Areas\EventManagement\ResponseModels\ResponseTimeSheet.cs" />
@@ -287,6 +297,7 @@
     <Compile Include="Areas\EventManagement\Services\EmployeesMiscellaneousAssignmentService.cs" />
     <Compile Include="Areas\EventManagement\Services\EmployeesServiceAssignmentService.cs" />
     <Compile Include="Areas\EventManagement\Services\EmployeesSetupAssignmentService.cs" />
+    <Compile Include="Areas\EventManagement\Services\EventAccountService.cs" />
     <Compile Include="Areas\EventManagement\Services\EventManagementClientService.cs" />
     <Compile Include="Areas\EventManagement\Services\EventMiscellaneousService.cs" />
     <Compile Include="Areas\EventManagement\Services\EventServiceService.cs" />
@@ -299,6 +310,8 @@
     <Compile Include="Areas\EventManagement\Services\WorkOrderServiceService.cs" />
     <Compile Include="Areas\EventManagement\Services\WorkOrderSetupService.cs" />
     <Compile Include="Areas\EventManagement\ViewModels\EmployeeViewModels.cs" />
+    <Compile Include="Areas\EventManagement\ViewModels\LoanViewModels.cs" />
+    <Compile Include="Areas\EventManagement\ViewModels\ManpowerViewModels.cs" />
     <Compile Include="Areas\EventManagement\ViewModels\ReportViewModels.cs" />
     <Compile Include="Areas\EventManagement\ViewModels\ResponseAttendanceViewModels.cs" />
     <Compile Include="Areas\EventManagement\ViewModels\TransactionViewModels.cs" />
@@ -420,6 +433,22 @@
     <Compile Include="Migrations\201902210902384_ClientPayment.cs" />
     <Compile Include="Migrations\201902210902384_ClientPayment.Designer.cs">
       <DependentUpon>201902210902384_ClientPayment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903130958182_supplierandmanpower.cs" />
+    <Compile Include="Migrations\201903130958182_supplierandmanpower.Designer.cs">
+      <DependentUpon>201903130958182_supplierandmanpower.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904151628479_loadInformation.cs" />
+    <Compile Include="Migrations\201904151628479_loadInformation.Designer.cs">
+      <DependentUpon>201904151628479_loadInformation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904151900054_loadInformation7.cs" />
+    <Compile Include="Migrations\201904151900054_loadInformation7.Designer.cs">
+      <DependentUpon>201904151900054_loadInformation7.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904221643354_perhourRate.cs" />
+    <Compile Include="Migrations\201904221643354_perhourRate.Designer.cs">
+      <DependentUpon>201904221643354_perhourRate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -7308,6 +7337,31 @@
     <Content Include="Areas\EventManagement\Views\EventManagementReport\DailyTimeSheet.cshtml" />
     <Content Include="Areas\EventManagement\Views\EventManagementReport\TimeSheetSummary.cshtml" />
     <Content Include="Areas\EventManagement\Views\EventManagementData\Calender.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\ManpowerSupplier.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\ManpowerSuppliers.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\AddManpowerSupplier.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\EditManpowerSupplier.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\DailyAssignManpower.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\DailyManpower.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\Lender.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\Lenders.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\AddLender.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\Loan.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\Loans.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\AddLoan.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\LoanInstallment.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\LoanInstallments.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\AddLoanInstallment.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\EditLender.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\EditLoan.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\EditLoanInstallment.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\InstallmentReport.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\LoanDue.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\DailyAssignManpowerList.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\EmployeeWork.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\AttendanceReport.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\ClientDueReport.cshtml" />
+    <Content Include="Areas\EventManagement\Views\EventManagementData\ClientAdvanceReport.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
@@ -7451,6 +7505,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201902210902384_ClientPayment.resx">
       <DependentUpon>201902210902384_ClientPayment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903130958182_supplierandmanpower.resx">
+      <DependentUpon>201903130958182_supplierandmanpower.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904151628479_loadInformation.resx">
+      <DependentUpon>201904151628479_loadInformation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904151900054_loadInformation7.resx">
+      <DependentUpon>201904151900054_loadInformation7.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904221643354_perhourRate.resx">
+      <DependentUpon>201904221643354_perhourRate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

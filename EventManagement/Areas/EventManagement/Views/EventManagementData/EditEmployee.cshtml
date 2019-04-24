@@ -309,6 +309,41 @@
                             </div>
                         </div>
 
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-form-label">Employee Provider Company <span style="color:red;"> *</span></label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <textarea class="form-control" name="ProviderCompany">@Model.Employee.ProviderCompany</textarea>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-form-label">Employee Supplier <span style="color:red;"> *</span></label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <select class="form-control" name="ManpowerSupplierId">
+                                        @foreach (var item in Model.ManpowerSuppliers)
+                                        {
+                                            if (Model.Employee.ManpowerSupplierId == item.ManpowerSupplierId)
+                                            {
+                                                <option selected="selected" value="@item.ManpowerSupplierId">@item.Name</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.ManpowerSupplierId">@item.Name</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                         <div class="col-md-12">
                             <div class="form-group">
                                 <button type="submit" value="submit" class="btn btn-primary"><i class="fa fa-plus"></i> NEW EMPLOYEE</button>

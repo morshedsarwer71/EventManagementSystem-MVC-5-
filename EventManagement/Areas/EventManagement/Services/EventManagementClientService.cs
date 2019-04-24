@@ -28,6 +28,29 @@ namespace EventManagement.Areas.EventManagement.Services
             _context.SaveChanges();
         }
 
+        public void AddManpowerSupplier(ManpowerSupplier manpowerSupplier, string UserName, int UserId, int concernId)
+        {
+            manpowerSupplier.ConcernId = concernId;
+            manpowerSupplier.CreatorId = UserId;
+            manpowerSupplier.ModificationDate = DateTime.Now;
+            manpowerSupplier.CreationDate = DateTime.Now;
+            manpowerSupplier.ModifierId = UserId;
+            _context.ManpowerSuppliers.Add(manpowerSupplier);
+            _context.SaveChanges();
+        }
+
+        public void UpdateManpowerSupplier(ManpowerSupplier manpowerSupplier, int id, string UserName, int UserId, int concernId)
+        {
+            var supplier = _context.ManpowerSuppliers.FirstOrDefault(x=>x.ManpowerSupplierId==id);
+            supplier.Name = manpowerSupplier.Name;
+            supplier.Address = manpowerSupplier.Address;
+            supplier.ContactNumber = manpowerSupplier.ContactNumber;
+            supplier.Description = manpowerSupplier.Description;
+            supplier.ModificationDate = DateTime.Now;
+            supplier.ModifierId = UserId;
+            _context.SaveChanges();
+        }
+
         public void Delete(int ClientId)
         {
             var Client = EventClientById(ClientId);
@@ -45,6 +68,12 @@ namespace EventManagement.Areas.EventManagement.Services
         {
             var EventClient = _context.EventManagementClients.Where(x => x.ConcernId == ConcernId && x.IsDelete == 0).ToList();
             return EventClient;
+        }
+
+        public IEnumerable<ManpowerSupplier> ManpowerSuppliers(int ConcernId)
+        {
+            var suppliers = _context.ManpowerSuppliers.ToList();
+            return suppliers;
         }
 
         public void Update(int ClientId, EventManagementClient eventManagementClient, string UserName, int UserId)

@@ -1,5 +1,7 @@
 ﻿@model EventManagement.Areas.EventManagement.Models.WorkOrderChildManpower
 @{
+    /**/
+
     Layout = null;
 }
 <section class="content-header">
@@ -28,7 +30,18 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-calendar"></i>
                                     </div>
-                                    <input type="text" name="AttendanceDate" class="form-control" id="attDate">
+                                    <input type="text" name="AttendanceDate" class="form-control" id="attDate" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="col-form-label">In Date <span style="color:red;"> *</span></label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" name="InTimeDate" class="form-control" id="attDate1" required>
                                 </div>
                             </div>
                         </div>
@@ -39,7 +52,29 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-clock-o"></i>
                                     </div>
-                                    <input type="text" name="InTime" class="form-control timepicker">
+                                    <input type="text" name="InTime" class="form-control timepicker" required>
+                                </div>
+                            </div>
+                        </div>
+                        @*<div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="col-form-label">In Time <span style="color:red;"> *</span></label>
+                                    <div class='input-group date' id="datetimepicker1">
+                                        <input type="text" class="form-control" />
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>*@
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="col-form-label">Out Date <span style="color:red;"> *</span></label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" name="OutTimeDate" class="form-control" id="attDate2" required>
                                 </div>
                             </div>
                         </div>
@@ -50,7 +85,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-clock-o"></i>
                                     </div>
-                                    <input type="text" name="OutTime" class="form-control timepicker">
+                                    <input type="text" name="OutTime" class="form-control timepicker" required>
                                 </div>
                             </div>
                         </div>
@@ -60,7 +95,7 @@
                                     <tr>
                                         <th style="width: 10px">#</th>
                                         <th>Name</th>
-                                        <th>Check Box</th>
+                                        <th>Employees</th>
                                     </tr>
                                 </thead>
                                 <tbody>

@@ -11,7 +11,9 @@ namespace EventManagement.Areas.EventManagement.ResponseModels
         public int SerialNumber { get; set; }
         public DateTime AttendanceDate { get; set; }
         public DateTime InTime { get; set; }
+        public DateTime InTimeDate { get; set; }
         public DateTime OutTime { get; set; }
+        public DateTime OutTimeDate { get; set; }
         public int EmployeeId { get; set; }
         public string EmployeeFirstName { get; set; }
         public string EmployeeLastName { get; set; }

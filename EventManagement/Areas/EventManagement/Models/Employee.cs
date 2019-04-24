@@ -57,6 +57,8 @@ namespace EventManagement.Areas.EventManagement.Models
         public string EmployeeImagePath { get; set; }
         public string PassportImagePath { get; set; }
         public string Nationality { get; set; }
+        public string ProviderCompany { get; set; }
+        public int ManpowerSupplierId { get; set; }
         [Required]
         public int IsActive { get; set; }
         [Required]

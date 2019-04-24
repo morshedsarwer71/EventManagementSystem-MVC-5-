@@ -23,5 +23,7 @@ namespace EventManagement.Areas.EventManagement.Models
         public bool IsChecked { get; set; }
         [NotMapped]
         public virtual List<Employee> Employee { get; set; }
+        [NotMapped]
+        public virtual List<EventManagementClient> Clients { get; set; }
     }
 }

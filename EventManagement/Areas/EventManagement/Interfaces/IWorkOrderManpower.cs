@@ -11,7 +11,10 @@ namespace EventManagement.Areas.EventManagement.Interfaces
     public interface IWorkOrderManpower
     {
         void AddWorkOrderManpower(WorkOrderChildManpower workOrderManpower, int workOrderId, int userId, string userName);
+        void AddWorkOrderDailyManpower(WorkOrderDailyManpower workOrderManpower,int userId, string userName, int workOrderId);
+        IEnumerable<ResponseDailyManPower> DailyManpowers(int wodId);
         IEnumerable<WorkOrderAssigned> WorkOrderAssigneds(int workOrderId, int userId, string userName,int concernId);
         void Delete(int WOCMID, int userId, string userName, int concernId);
+        void DeleteManpower(int id, int userId, string userName);
     }
 }

@@ -144,6 +144,46 @@ namespace EventManagement.Areas.EventManagement.Services
             return isActives;
         }
 
+        public IEnumerable<ResponseEmployeeWork> ResponseEmployeeWork(int EmployeeId, int userId, string userName, int concernId, string fromDate, string toDate, int clienTd)
+        {
+            List<ResponseEmployeeWork> ResponseEmployeeList = new List<ResponseEmployeeWork>();
+            using (var command = _context.Database.Connection.CreateCommand())
+            {
+                command.CommandText = ("usp_EventManagement_EmployeeWorkDetails @employeeId,@concernId,@fromDate,@toDate,@clientId");
+                command.Parameters.Add(new SqlParameter("employeeId", EmployeeId));
+                command.Parameters.Add(new SqlParameter("concernId", concernId));
+                command.Parameters.Add(new SqlParameter("fromDate", fromDate));
+                command.Parameters.Add(new SqlParameter("toDate", toDate));
+                command.Parameters.Add(new SqlParameter("clientId", clienTd));
+                _context.Database.Connection.Open();
+                using (var result = command.ExecuteReader())
+                {
+                    if (result.HasRows)
+                    {
+                        while (result.Read())
+                        {
+                            ResponseEmployeeList.Add(new ResponseModels.ResponseEmployeeWork()
+                            {
+                                InTime= Convert.ToString(result[0]),
+                                OutTime= Convert.ToString(result[1]),
+                                EmployeeId= Convert.ToInt32(result[2]),
+                                Name= Convert.ToString(result[3]),
+                                TotalHour= Convert.ToDecimal(result[4]),
+                                AttDate= Convert.ToString(result[5]),
+                                PerHourRate= Convert.ToDecimal(result[6]),
+                                ClientId= Convert.ToInt32(result[7]),
+                                ClientName= Convert.ToString(result[8]),
+                                Total= Convert.ToDecimal(result[9]),
+                                EventName= Convert.ToString(result[10])
+                            });
+                        }
+                    }
+                }
+                _context.Database.Connection.Close();
+            }
+            return ResponseEmployeeList;
+        }
+
         public void Update(Employee employee, int Employeeid, int userId, string userName, string image, string passport)
         {
 
@@ -167,6 +207,8 @@ namespace EventManagement.Areas.EventManagement.Services
             employeeById.IsActive = employee.IsActive;
             employeeById.ModificationDate = DateTime.Now;
             employeeById.ModifierId = userId;
+            employeeById.ProviderCompany = employee.ProviderCompany;
+            employeeById.ManpowerSupplierId = employee.ManpowerSupplierId;
             _context.SaveChanges();
 
 
@@ -198,6 +240,8 @@ namespace EventManagement.Areas.EventManagement.Services
             employeeById.PassportImagePath = passport;
             employeeById.ModificationDate = DateTime.Now;
             employeeById.ModifierId = userId;
+            employeeById.ProviderCompany = employee.ProviderCompany;
+            employeeById.ManpowerSupplierId = employee.ManpowerSupplierId;
             _context.SaveChanges();
         }
 

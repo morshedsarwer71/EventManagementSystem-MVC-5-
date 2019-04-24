@@ -14,5 +14,7 @@ namespace EventManagement.Areas.EventManagement.ViewModels
         public Employee Employee { get; set; }
         public IEnumerable<EmployeeEntitlement> Entitlements { get; set; }
         public IEnumerable<IsActive> IsActives { get; set; }
+        public IEnumerable<ManpowerSupplier> ManpowerSuppliers { get; set; }
+        public IEnumerable<ResponseEmployeeWork> EmployeeWorks { get; set; }
     }
 }

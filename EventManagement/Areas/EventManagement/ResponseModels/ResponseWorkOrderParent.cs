@@ -12,6 +12,7 @@ namespace EventManagement.Areas.EventManagement.ResponseModels
         public int NumberOfRows { get; set; }
         public string WorkOrderCode { get; set; }
         public string ConcernName { get; set; }
+        public string EventName { get; set; }
         public string ClientName { get; set; }
         public string StartingDate { get; set; }
         public string EndingDate { get; set; }

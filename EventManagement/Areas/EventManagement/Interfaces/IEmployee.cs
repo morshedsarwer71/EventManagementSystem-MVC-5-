@@ -20,5 +20,6 @@ namespace EventManagement.Areas.EventManagement.Interfaces
         ResponseEmployee EmployeeDetails(int EmployeeId, int userId, string userName, int concernId);
         Employee EmployeeById(int employeeId, int userId, string userName);
         IEnumerable<IsActive> IsActive ();
+        IEnumerable<ResponseEmployeeWork> ResponseEmployeeWork(int EmployeeId, int userId, string userName, int concernId,string fromDate,string toDate,int clienTd);
     }
 }

@@ -28,7 +28,7 @@
                                 <th>Name</th>
                                 <th>Date</th>
                                 <th>In Time</th>
-                                <th>Out Time</th>
+                                <th>Out Date</th>
                                 <th>Total Hour</th>
                                 <th>Remove</th>
                             </tr>
@@ -40,10 +40,10 @@
                                     <td>@item.SerialNumber</td>
                                     <td>@item.EmployeeFirstName @item.EmployeeLastName</td>
                                     <td>@item.AttendanceDate.ToShortDateString()</td>
-                                    <td>@item.InTime.ToShortTimeString()</td>
-                                    <td>@item.OutTime.ToShortTimeString()</td>
+                                    <td>@item.InTimeDate</td>
+                                    <td>@item.OutTimeDate</td>
                                     <td>@item.TotalHour</td>
-                                    <td><a href="#" onclick="valDelete(@item.AttendanceId)"><i class="fa fa-trash" style="color:red; font-size:15px;"></i></a></td>
+                                    <td  class="text-center"><a href="#" onclick="valDelete(@item.AttendanceId)"><i class="fa fa-trash" style="color:red; font-size:15px;"></i></a></td>
                                 </tr>
                             }
                         </tbody>
@@ -67,25 +67,3 @@
 
     </div>
 </section>
-@section Scripts{
-    <script>
-        function valDelete(valId) {
-            var result = confirm("Do you want to delete this men");
-            if (result) {
-                $('#dvLoader').show();
-                $.ajax({
-                    url: "/EventManagementData/DeleteAttendance?id=" + valId,
-                    type: "POST",
-                    dataType: "json",
-                    contentType: "application/json; charset=utf-8",
-                    success: function (json) {
-                        if (json.isRedirect) {
-                            window.location.href = json.redirectUrl;
-                        }
-                        $('#dvLoader').hide();
-                    }
-                });
-            }
-        };
-    </script>
-}

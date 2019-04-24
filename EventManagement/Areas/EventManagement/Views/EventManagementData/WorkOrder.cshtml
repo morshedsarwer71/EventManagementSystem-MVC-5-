@@ -54,6 +54,7 @@
                 var status = $('#status').val();
                 var notes = $('#notes').val();
                 var description = $('#description').val();
+                var eventName = $('#eventName').val();
                 $('#dvLoader').show();
                 $.ajax({
                     url: "/EventManagementData/AddWorkOrder",
@@ -73,6 +74,7 @@
                         "Status": status,
                         "Description": description,
                         "Notes": notes,
+                        "EventName": eventName,
                     }),
                     dataType: "json",
                     contentType: "application/json; charset=utf-8",

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<EventManagement.Areas.EventManagement.Models.EmployeeEntitlement>
+﻿@model EventManagement.Areas.EventManagement.ViewModels.EmployeeViewModels
 @{
     Layout = null;
 }
@@ -184,7 +184,7 @@
                                         <i class="fa fa-calendar"></i>
                                     </div>
                                     <select class="form-control" name="EmployeeEntitlementId">
-                                        @foreach (var item in Model)
+                                        @foreach (var item in Model.Entitlements)
                                         {
                                             <option value="@item.EntitlementId">@item.EmployeeTypeEN</option>
                                         }
@@ -222,8 +222,10 @@
                                         <i class="fa fa-calendar"></i>
                                     </div>
                                     <select class="form-control" name="IsActive">
-                                        <option value="1">Active</option>
-                                        <option value="0">Deactive</option>
+                                        @foreach (var item in Model.IsActives)
+                                        {
+                                            <option value="@item.Id">@item.Name</option>
+                                        }
                                     </select>
                                 </div>
                             </div>
@@ -273,7 +275,34 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-form-label">Employee Provider Company <span style="color:red;"> *</span></label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <textarea class="form-control" name="ProviderCompany"></textarea>
+                                </div>
+                            </div>
 
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-form-label">Employee Supplier <span style="color:red;"> *</span></label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <select class="form-control" name="ManpowerSupplierId">
+                                        @foreach (var item in Model.ManpowerSuppliers)
+                                        {
+                                            <option value="@item.ManpowerSupplierId">@item.Name</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>     
                         <div class="col-md-12">
                             <div class="form-group">
                                 <button type="submit" value="submit" class="btn btn-primary"><i class="fa fa-plus"></i> NEW EMPLOYEE</button>

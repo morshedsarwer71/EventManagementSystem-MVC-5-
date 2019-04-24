@@ -1,0 +1,80 @@
+﻿@model EventManagement.Areas.EventManagement.ViewModels.ManpowerViewModels
+<section class="content-header">
+    <h1>
+        Manpower List
+        <small>preview of manpower lists</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i>Home</a></li>
+        <li><a href="#">Manpower</a></li>
+        <li class="active">Index</li>
+    </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                <!-- /.box-header -->
+                <div class="box-body">
+                    @{ var sl = 0;}
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th style="width: 10px">#</th>
+                                <th>Name</th>
+                                <th>Date</th>
+                                <th>Per Hour Rate</th>
+                                <th>Client Name</th>
+                                <th>Event Name</th>
+                                <th>Remove</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.ResponseDailyManPowers)
+                            {
+                                sl++;
+                                <tr>
+                                    <td>@sl</td>
+                                    <td>@item.Date.ToShortDateString()</td>
+                                    <td>@item.Name</td>
+                                    <td>@item.PerHourRate</td>
+                                    <td>@item.ClientName</td>
+                                    <td>@item.EventName</td>
+                                    <td class="text-center text-danger"><a href="#" onclick="valDelete(@item.Id)"><i class="fa fa-trash" style="color:red; font-size:15px;"></i></a></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+
+    </div>
+</section>
+@section Scripts{    
+<script>
+    function valDelete(valId) {
+        var result = confirm("Do you want to delete this attendance");
+        if (result) {
+            $('#dvLoader').show();
+            $.ajax({
+                url: "/EventManagementData/DeleteDailyAssignedManpower?id=" + valId,
+                type: "POST",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (json) {
+                    if (json.isRedirect) {
+                        window.location.href = json.redirectUrl;
+                    }
+                    $('#dvLoader').hide();
+                }
+            });
+        }
+    };
+</script>
+
+}

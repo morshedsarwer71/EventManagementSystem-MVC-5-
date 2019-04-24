@@ -32,6 +32,8 @@ namespace EventManagement.Areas.EventManagement.Services
                         attendances.Add(new Attendance()
                         {
                             AttendanceDate = attendance.AttendanceDate,
+                            InTimeDate = attendance.InTimeDate,
+                            OutTimeDate = attendance.OutTimeDate,
                             ConcernId= concernId,
                             CreationDate= todayDate,
                             EmployeeId=item.EmployeeId,
@@ -82,13 +84,15 @@ namespace EventManagement.Areas.EventManagement.Services
                                 SerialNumber = Convert.ToInt32(result[0]),
                                 AttendanceId = Convert.ToInt32(result[1]),
                                 AttendanceDate = Convert.ToDateTime(result[2]),
-                                InTime = Convert.ToDateTime(result[3]),
-                                OutTime = Convert.ToDateTime(result[4]),
-                                EmployeeId = Convert.ToInt32(result[5]),
-                                EmployeeFirstName = Convert.ToString(result[6]),
-                                EmployeeLastName = Convert.ToString(result[7]),
-                                TotalHour = Convert.ToInt32(result[8]),
-                                NumberOfRows = Convert.ToInt32(result[9])
+                                InTimeDate = Convert.ToDateTime(result[3]),
+                                InTime = Convert.ToDateTime(result[4]),
+                                OutTimeDate = Convert.ToDateTime(result[5]),
+                                OutTime = Convert.ToDateTime(result[6]),
+                                EmployeeId = Convert.ToInt32(result[7]),
+                                EmployeeFirstName = Convert.ToString(result[8]),
+                                EmployeeLastName = Convert.ToString(result[9]),
+                                TotalHour = Convert.ToInt32(result[10]),
+                                NumberOfRows = Convert.ToInt32(result[11])
                             };
                             responseAttendancesList.Add(responseAttendance);
                         }

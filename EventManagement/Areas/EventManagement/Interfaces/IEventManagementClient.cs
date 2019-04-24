@@ -14,5 +14,8 @@ namespace EventManagement.Areas.EventManagement.Interfaces
         void Delete(int ClientId);
         IEnumerable<EventManagementClient> EventClients(int ConcernId);
         EventManagementClient EventClientById(int ClientId);
+        void AddManpowerSupplier(ManpowerSupplier manpowerSupplier, string UserName, int UserId, int concernId);
+        IEnumerable<ManpowerSupplier> ManpowerSuppliers(int ConcernId);
+        void UpdateManpowerSupplier(ManpowerSupplier manpowerSupplier,int id, string UserName, int UserId, int concernId);
     }
 }

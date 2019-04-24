@@ -19,10 +19,12 @@ namespace EventManagement.Areas.EventManagement.Models
         [DataType(DataType.DateTime)]
         //[DisplayFormat(DataFormatString = "{0:yyy-MM-dd HH:mm}", ApplyFormatInEditMode = true)]
         public DateTime InTime { get; set; }
+        public DateTime InTimeDate { get; set; }
         [Required(AllowEmptyStrings = false, ErrorMessage = "Out time required ")]
         [DataType(DataType.DateTime)]
         //[DisplayFormat(DataFormatString = "{0:yyy-MM-dd HH:mm}", ApplyFormatInEditMode = true)]
         public DateTime OutTime { get; set; }
+        public DateTime OutTimeDate { get; set; }
         [Required(AllowEmptyStrings = false, ErrorMessage = "Employee name required")]
         public int EmployeeId { get; set; }
         public int ConcernId { get; set; }

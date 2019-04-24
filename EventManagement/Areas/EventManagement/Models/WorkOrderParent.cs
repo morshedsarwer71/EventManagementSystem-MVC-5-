@@ -20,6 +20,7 @@ namespace EventManagement.Areas.EventManagement.Models
         public int NoOfPax { get; set; }
         public int PaymentStatus { get; set; }
         public string Notes { get; set; }
+        public string EventName { get; set; }
         public decimal PerHourRate { get; set; }
         public DateTime StartingDate { get; set; }
         public DateTime EndingDate { get; set; }

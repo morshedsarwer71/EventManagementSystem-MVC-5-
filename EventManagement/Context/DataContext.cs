@@ -49,6 +49,11 @@ namespace EventManagement.Context
         public DbSet<Expenditure> Expenditures { get; set; }
         public DbSet<ExpenditureHead> ExpenditureHeads { get; set; }
         public DbSet<ClientPayment> ClientPayments { get; set; }
+        public DbSet<WorkOrderDailyManpower> WorkOrderDailyManpowers { get; set; }
+        public DbSet<ManpowerSupplier> ManpowerSuppliers { get; set; }
+        public DbSet<Loan> Loans { get; set; }
+        public DbSet<LoanInstallment> LoanInstallments { get; set; }
+        public DbSet<Lender> Lender { get; set; }
 
     }
 }

@@ -205,6 +205,7 @@ namespace EventManagement.Areas.EventManagement.Services
             work.Notes = workOrder.Notes;
             work.Status = workOrder.Status;
             work.VATCode = workOrder.VATCode;
+            work.EventName = workOrder.EventName;
             _context.SaveChanges();
         }
 
@@ -303,7 +304,7 @@ namespace EventManagement.Areas.EventManagement.Services
                             responseWorkOrder.NoOfSetup = Convert.ToInt32(result[13]);
                             responseWorkOrder.TotalDays = Convert.ToString(result[14]);
                             responseWorkOrder.NumberOfRows = Convert.ToInt32(result[15]);
-
+                            responseWorkOrder.EventName = Convert.ToString(result[16]);
                             ResponseWorkOrder.Add(responseWorkOrder);
 
                         }
