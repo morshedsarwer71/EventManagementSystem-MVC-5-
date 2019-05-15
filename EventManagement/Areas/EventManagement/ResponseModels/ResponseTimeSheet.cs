@@ -10,13 +10,16 @@ namespace EventManagement.Areas.EventManagement.ResponseModels
         public int Serial { get; set; }
         public string OrderCode { get; set; }
         public int OrderId { get; set; }
+        public string VatNumber { get; set; }
         public string ClientName { get; set; }
         public int EmployeeId { get; set; }
         public string EmployeeName { get; set; }
         public string Date { get; set; }
         public string SheetCode { get; set; }
         public string InTime { get; set; }
+        public string InTimeDate { get; set; }
         public string OutTime { get; set; }
+        public string OutTimeDate { get; set; }
         public decimal TotalHour { get; set; }
         public decimal PerHourRate { get; set; }
         public decimal TotalWithoutVat { get; set; }

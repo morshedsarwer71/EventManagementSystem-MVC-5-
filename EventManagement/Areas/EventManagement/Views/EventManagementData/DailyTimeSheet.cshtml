@@ -94,17 +94,16 @@
 </section>
 @section Scripts{
     <script src="~/Content/bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
-    <script>
-        $(document).ready(function () {            
+    <script>$(document).ready(function () {
             $('#date').datepicker({
                 format: 'yyyy-mm-dd',
-                autoclose:true
+                autoclose: true
             });
 
             $('#btnView').click(function () {
                 var date = $('#date').val();
                 var id = $('#eventId').val();
-                $('#dvLoader').show();                
+                $('#dvLoader').show();
                 $.ajax({
                     url: "/EventManagementData/DailyTimeSheetReport",
                     type: "POST",
@@ -121,16 +120,15 @@
                         else {
                             var data = json.ResponseTimeSheets;
                             var tr = "";
-                            data.forEach(function (dt)
-                            {
+                            data.forEach(function (dt) {
                                 tr += '<tr>';
                                 tr += '<td>' + dt.Serial + '</td>';
                                 tr += '<td>' + dt.OrderCode + '</td>';
                                 tr += '<td>' + dt.ClientName + '</td>';
                                 tr += '<td>' + dt.EmployeeName + '</td>';
                                 tr += '<td>' + dt.SheetCode + '</td>';
-                                tr += '<td>' + dt.InTime + '</td>';
-                                tr += '<td>' + dt.OutTime + '</td>';
+                                tr += '<td>' + dt.InTimeDate + '</td>';
+                                tr += '<td>' + dt.OutTimeDate + '</td>';
                                 tr += '<td>' + dt.TotalHour + '</td>';
                                 tr += '<td>' + dt.PerHourRate + '</td>';
                                 tr += '<td>' + dt.TotalWithoutVat + '</td>';
@@ -160,11 +158,9 @@
                     success: function (json) {
                         if (json.isRedirect) {
                             window.location.href = json.redirectUrl;
-                        }                        
+                        }
                     }
                 });
             });
-        });
-
-    </script>
+        });</script>
 }

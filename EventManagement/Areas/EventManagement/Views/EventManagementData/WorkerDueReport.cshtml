@@ -1,13 +1,13 @@
 ﻿@model EventManagement.Areas.EventManagement.ViewModels.TransactionViewModels
 <section class="content-header">
     <h1>
-        Client Advance Report
-        <small>preview of client advance report</small>
+        Worker Due Report
+        <small>preview of worker advance report</small>
     </h1>
     <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i>Home</a></li>
         <li><a href="#">Report</a></li>
-        <li class="active">Client Report</li>
+        <li class="active">Worker Report</li>
     </ol>
 </section>
 <section class="content">
@@ -26,13 +26,13 @@
                             <tr>
                                 <th style="width: 10px">#</th>
                                 <th>Name</th>
-                                <th>Total Advance Due</th>
+                                <th>Total Due</th>
                             </tr>
                         </thead>
                         <tbody id="tBody">
                             @foreach (var item in Model.PaymentReport)
                             {
-                                if (item.Total < 0)
+                                if (item.Total > 0)
                                 {
                                     sl++;
                                     <tr>

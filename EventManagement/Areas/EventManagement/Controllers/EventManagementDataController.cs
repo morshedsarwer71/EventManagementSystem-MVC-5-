@@ -1529,6 +1529,161 @@ namespace EventManagement.Areas.EventManagement.Controllers
                 isRedirect = true
             });
         }
+
+        [HttpGet]
+        public ActionResult PettyCash()
+        {
+            return View();
+        }
+        [HttpGet]
+        public ActionResult PettyCashes()
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                var petty = _account.PettyCashes(concernId);
+
+                TransactionViewModels viewModels = new TransactionViewModels()
+                {
+                   ResponsePettyCash=petty
+                };
+                return View(viewModels);
+            }
+            return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
+        }
+        [HttpGet]
+        public ActionResult PettyCashInHand()
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                var petty = _account.PettyCashInHand(concernId);
+
+                TransactionViewModels viewModels = new TransactionViewModels()
+                {
+                    ResponsePettyCash = petty
+                };
+                return View(viewModels);
+            }
+            return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
+        }
+        [HttpGet]
+        public ActionResult PettyCashReport()
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                var banks = _transaction.Banks(concernId, userName, userId);
+                TransactionViewModels viewModels = new TransactionViewModels()
+                {
+                    Banks=banks
+                };
+                return View(viewModels);
+            }
+            return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
+        }
+        [HttpPost]
+        public JsonResult PettyCashReport(string fdate, string tDate, int transType)
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                var result = _account.PettyCashesReport(concernId, fdate, tDate, transType);
+                TransactionViewModels viewModels = new TransactionViewModels()
+                {
+                    ResponsePettyCash=result
+                };
+                return Json(viewModels, JsonRequestBehavior.AllowGet);
+            }
+            return Json(new
+            {
+                redirectUrl = Url.Action("LogIn", "GlobalData", new { Area = "Global" }),
+                isRedirect = true
+            });
+
+        }
+        [HttpGet]
+        public ActionResult AddPettyCash()
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                var type = _transaction.TransactionTypes();
+                var bank = _transaction.Banks(concernId, userName, userId);
+                TransactionViewModels viewModels = new TransactionViewModels()
+                {
+                    TransactionTypes = type,
+                    Banks = bank
+                };
+                return View(viewModels);
+            }
+            return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
+        }
+        [HttpPost]
+        public JsonResult AddPettyCash(PettyCash pettyCash)
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                _account.AddPettyCash(pettyCash, userId, userName, concernId);
+                return Json(new
+                {
+                    redirectUrl = Url.Action("PettyCash", "EventManagementData", new { Area = "EventManagement" }),
+                    isRedirect = true
+                });
+            }
+            return Json(new
+            {
+                redirectUrl = Url.Action("LogIn", "GlobalData", new { Area = "Global" }),
+                isRedirect = true
+            });
+        }
+        [HttpGet]
+        public ActionResult UpdatePettyCash(int id)
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                var type = _transaction.TransactionTypes();
+                var bank = _transaction.Banks(concernId, userName, userId);
+                var petty = _context.PettyCash.FirstOrDefault(x=>x.PettyCasId==id);
+                TransactionViewModels viewModels = new TransactionViewModels()
+                {
+                    TransactionTypes = type,
+                    Banks = bank,
+                    PettyCash=petty
+                };
+                return View(viewModels);
+            }
+            return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
+        }
+        [HttpPost]
+        public ActionResult UpdatePettyCash(int id,PettyCash pettyCash)
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                _account.UpdatePettyCash(pettyCash, userId, userName, concernId, id);
+                return RedirectToAction(nameof(PettyCash));
+            }
+            return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
+        }
         [HttpGet]
         public ActionResult EditPayment(int id)
         {
@@ -2218,7 +2373,40 @@ namespace EventManagement.Areas.EventManagement.Controllers
             }
             return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
         }
-
+        [HttpGet]
+        public ActionResult WorkerDueReport()
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                var client = _account.WorkerPaymentReport(concernId);
+                TransactionViewModels viewModels = new TransactionViewModels()
+                {
+                    PaymentReport = client
+                };
+                return View(viewModels);
+            }
+            return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
+        }
+        [HttpGet]
+        public ActionResult WorkerAdvanceReport()
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (concernId > 0 && userId > 0)
+            {
+                var client = _account.WorkerPaymentReport(concernId);
+                TransactionViewModels viewModels = new TransactionViewModels()
+                {
+                    PaymentReport = client
+                };
+                return View(viewModels);
+            }
+            return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
+        }
         [HttpGet]
         public ActionResult Calender()
         {
@@ -2238,7 +2426,7 @@ namespace EventManagement.Areas.EventManagement.Controllers
 
         }
 
-        //
+        // testing from mac pc over flow  nothing fff
 
     }
 }

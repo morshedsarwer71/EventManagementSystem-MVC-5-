@@ -17,12 +17,9 @@ namespace EventManagement.Context
         public DbSet<ReportHead> ReportHeads { get; set; }
         public DbSet<Journal> Journals { get; set; }
 
-
         //Global Data Context
         public DbSet<Concern> Concerns { get; set; }
         public DbSet<SystemUser> SystemUsers { get; set; }
-
-
         //EventManagement Data Context
 
         public DbSet<Attendance> Attendances { get; set; }
@@ -54,6 +51,7 @@ namespace EventManagement.Context
         public DbSet<Loan> Loans { get; set; }
         public DbSet<LoanInstallment> LoanInstallments { get; set; }
         public DbSet<Lender> Lender { get; set; }
+        public DbSet<PettyCash> PettyCash { get; set; }
 
     }
 }

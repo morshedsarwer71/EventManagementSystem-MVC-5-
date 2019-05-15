@@ -14,6 +14,8 @@ namespace EventManagement.Areas.EventManagement.Interfaces
         void UpdateLender(Lender lender,int userId, string userName,int concernId,int id);
         Lender Lender(int userId, string userName,int concernId,int id);
         void AddLoan(Loan loan, int userId, string userName, int concernId);
+        void AddPettyCash(PettyCash pettyCash, int userId, string userName, int concernId);
+        void UpdatePettyCash(PettyCash pettyCash, int userId, string userName, int concernId,int id);
         void UpdateLoan(Loan loan, int userId, string userName, int concernId,int id);
         Loan Loan(int userId, string userName, int concernId, int id);
         IEnumerable<ResponseLoan> Loans(int userId, string userName, int concernId);
@@ -24,6 +26,9 @@ namespace EventManagement.Areas.EventManagement.Interfaces
         void UpdateLoanInstallment(LoanInstallment loanInstallment, int userId, string userName, int concernId,int id);
         LoanInstallment LoanInstallment(int userId, string userName, int concernId, int id);
         IEnumerable<ResponseLoan> TotalDueLoan(int concernId);
+        IEnumerable<ResponsePettyCash> PettyCashes(int concernId);
+        IEnumerable<ResponsePettyCash> PettyCashesReport(int concernId,string fromDate,string toDate,int transId);
+        IEnumerable<ResponsePettyCash> PettyCashInHand(int concernId);
         IEnumerable<ResponsePaymentReport> ClientPaymentReport(int concernId);
         IEnumerable<ResponsePaymentReport> WorkerPaymentReport(int concernId);
     }

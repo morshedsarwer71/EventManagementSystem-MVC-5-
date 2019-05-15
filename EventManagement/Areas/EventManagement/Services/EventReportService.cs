@@ -35,21 +35,24 @@ namespace EventManagement.Areas.EventManagement.Services
                             responses.Add(new ResponseTimeSheet()
                             {
                                 Serial=Convert.ToInt32(result[0]),
-                                OrderCode=Convert.ToString(result[1]),
-                                EmployeeId=Convert.ToInt32(result[2]),
-                                OrderId=Convert.ToInt32(result[3]),
-                                ClientName=Convert.ToString(result[4]),
-                                EmployeeName=Convert.ToString(result[5]),
-                                Date=Convert.ToString(result[6]),
-                                SheetCode=Convert.ToString(result[7]),
-                                InTime=Convert.ToString(result[8]),
-                                OutTime=Convert.ToString(result[9]),
-                                TotalHour=Convert.ToDecimal(result[10]),
-                                PerHourRate=Convert.ToDecimal(result[11]),
-                                TotalWithoutVat=Convert.ToDecimal(result[12]),
-                                VatValue=Convert.ToDecimal(result[13]),
-                                VatAmount = Convert.ToDecimal(result[14]),
-                                TotalAfterVat=Convert.ToDecimal(result[15])
+                                OrderCode = Convert.ToString(result[1]),
+                                EmployeeId = Convert.ToInt32(result[2]),
+                                OrderId= Convert.ToInt32(result[3]),
+                                PerHourRate= Convert.ToDecimal(result[4]),
+                                VatValue= Convert.ToDecimal(result[5]),
+                                VatNumber= Convert.ToString(result[6]),
+                                ClientName= Convert.ToString(result[7]),
+                                SheetCode= Convert.ToString(result[8]),
+                                EmployeeName= Convert.ToString(result[9]),
+                                Date= Convert.ToString(result[10]),
+                                InTimeDate= Convert.ToString(result[11]),
+                                InTime= Convert.ToString(result[12]),
+                                OutTimeDate= Convert.ToString(result[13]),
+                                OutTime= Convert.ToString(result[14]),
+                                TotalHour= Convert.ToDecimal(result[15]),
+                                TotalWithoutVat= Convert.ToDecimal(result[16]),
+                                VatAmount= Convert.ToDecimal(result[17]),
+                                TotalAfterVat= Convert.ToDecimal(result[18])
                             });
 
                         }

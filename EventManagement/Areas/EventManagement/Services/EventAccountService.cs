@@ -301,5 +301,123 @@ namespace EventManagement.Areas.EventManagement.Services
             }
             return responses;
         }
+
+        public void AddPettyCash(PettyCash pettyCash, int userId, string userName, int concernId)
+        {
+            pettyCash.CreationDate = DateTime.Now;
+            pettyCash.ModificationDate = DateTime.Now;
+            pettyCash.ConcernId = concernId;
+            pettyCash.CreatorId = userId;
+            pettyCash.ModifierId = userId;
+            _context.PettyCash.Add(pettyCash);
+            _context.SaveChanges();
+        }
+
+        public IEnumerable<ResponsePettyCash> PettyCashes(int concernId)
+        {
+            List<ResponsePettyCash> responses = new List<ResponsePettyCash>();
+            using (var command = _context.Database.Connection.CreateCommand())
+            {
+                command.CommandText = ("EventManagement_PettyCashes @concernId");
+                command.Parameters.Add(new SqlParameter("@concernId", concernId));
+                _context.Database.Connection.Open();
+                using (var result = command.ExecuteReader())
+                {
+                    if (result.HasRows)
+                    {
+                        while (result.Read())
+                        {
+                            responses.Add(new ResponsePettyCash()
+                            {
+                                Date = Convert.ToString(result[0]),
+                                BankName = Convert.ToString(result[1]),
+                                Amount = Convert.ToDecimal(result[2]),
+                                Description = Convert.ToString(result[3]),
+                                id = Convert.ToInt32(result[4]),
+
+                            });
+                        }
+
+                    }
+                }
+                _context.Database.Connection.Close();
+            }
+            return responses;
+        }
+
+        public void UpdatePettyCash(PettyCash pettyCash, int userId, string userName, int concernId, int id)
+        {
+            var petty = _context.PettyCash.FirstOrDefault(x=>x.PettyCasId==id);
+            petty.Amount = pettyCash.Amount;
+            petty.BankId = pettyCash.BankId;
+            petty.CashDate = pettyCash.CashDate;
+            petty.Description = pettyCash.Description;
+            petty.ModifierId = userId;
+            petty.ModificationDate = DateTime.Now;
+            _context.SaveChanges();
+        }
+
+        public IEnumerable<ResponsePettyCash> PettyCashInHand(int concernId)
+        {
+            List<ResponsePettyCash> responses = new List<ResponsePettyCash>();
+            using (var command = _context.Database.Connection.CreateCommand())
+            {
+                command.CommandText = ("usp_EventManagement_PettyCashInHand @concernId");
+                command.Parameters.Add(new SqlParameter("@concernId", concernId));
+                _context.Database.Connection.Open();
+                using (var result = command.ExecuteReader())
+                {
+                    if (result.HasRows)
+                    {
+                        while (result.Read())
+                        {
+                            responses.Add(new ResponsePettyCash()
+                            {
+                                Amount = Convert.ToDecimal(result[0])
+
+                            });
+                        }
+
+                    }
+                }
+                _context.Database.Connection.Close();
+            }
+            return responses;
+        }
+
+        public IEnumerable<ResponsePettyCash> PettyCashesReport(int concernId, string fromDate, string toDate, int transId)
+        {
+            List<ResponsePettyCash> responses = new List<ResponsePettyCash>();
+            using (var command = _context.Database.Connection.CreateCommand())
+            {
+                command.CommandText = ("EventManagement_PettyCashesReport @concernId,@fromDate,@toDate,@Trans");
+                command.Parameters.Add(new SqlParameter("@concernId", concernId));
+                command.Parameters.Add(new SqlParameter("@fromDate", fromDate));
+                command.Parameters.Add(new SqlParameter("@toDate", toDate));
+                command.Parameters.Add(new SqlParameter("@Trans", transId));
+                _context.Database.Connection.Open();
+                using (var result = command.ExecuteReader())
+                {
+                    if (result.HasRows)
+                    {
+                        while (result.Read())
+                        {
+                            responses.Add(new ResponsePettyCash()
+                            {
+                                Date = Convert.ToString(result[0]),
+                                BankName = Convert.ToString(result[1]),
+                                Amount = Convert.ToDecimal(result[3]),
+                                Description = Convert.ToString(result[4]),
+
+
+                            });
+                        }
+
+                    }
+                }
+                _context.Database.Connection.Close();
+            }
+            return responses;
+        }
     }
 }
