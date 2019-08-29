@@ -29,6 +29,7 @@
                                 <th style="width: 10px">#</th>
                                 <th>Client EN</th>
                                 <th>Client AR</th>
+                                <th>Client Tax Registration Number</th>
                                 <th>Contact Number</th>
                                 <th>Address</th>
                                 <th>Edit</th>
@@ -42,6 +43,7 @@
                                     <td>@sl</td>
                                     <td>@item.ClientNameEN</td>
                                     <td>@item.ClientNameAR</td>
+                                    <td>@item.TaxRegNumber</td>
                                     <td>@item.ClientContactInfo</td>
                                     <td>@item.ClientAddress</td>
                                     <td><a href="@Url.Action("EditEventClient","EventManagementData", new { id=item.ClientId})"><i class="fa fa-edit" style="font-size:20px;"></i></a></td>

@@ -87,6 +87,7 @@ namespace EventManagement.Areas.EventManagement.Services
             Client.ClientContactInfo = eventManagementClient.ClientContactInfo;
             Client.ClientNameAR = eventManagementClient.ClientNameAR;
             Client.ClientNameEN = eventManagementClient.ClientNameEN;
+            Client.TaxRegNumber = eventManagementClient.TaxRegNumber;
             _context.SaveChanges();
         }
     }

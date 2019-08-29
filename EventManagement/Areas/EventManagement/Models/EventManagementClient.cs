@@ -23,6 +23,8 @@ namespace EventManagement.Areas.EventManagement.Models
         public string ClientContactInfo { get; set; }
         [Required(AllowEmptyStrings = false, ErrorMessage = "Client address required")]
         public string ClientAddress { get; set; }
+        [Required]
+        public string TaxRegNumber { get; set; }
         public DateTime CreationDate { get; set; }
         public int CreatorId { get; set; }
         public DateTime ModificationDate { get; set; }

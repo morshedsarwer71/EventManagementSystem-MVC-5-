@@ -52,7 +52,11 @@ namespace EventManagement.Areas.EventManagement.Services
                                 TotalHour= Convert.ToDecimal(result[15]),
                                 TotalWithoutVat= Convert.ToDecimal(result[16]),
                                 VatAmount= Convert.ToDecimal(result[17]),
-                                TotalAfterVat= Convert.ToDecimal(result[18])
+                                TotalAfterVat= Convert.ToDecimal(result[18]),
+                                ConcernName = Convert.ToString(result[19]),
+                                ClientTaxNumber = Convert.ToString(result[20]),
+                                VatName = Convert.ToString(result[21]),
+                                TotalBeforeVat=Convert.ToDecimal(result[22])
                             });
 
                         }

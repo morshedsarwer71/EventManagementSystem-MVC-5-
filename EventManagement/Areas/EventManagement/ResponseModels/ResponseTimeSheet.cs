@@ -14,6 +14,9 @@ namespace EventManagement.Areas.EventManagement.ResponseModels
         public string ClientName { get; set; }
         public int EmployeeId { get; set; }
         public string EmployeeName { get; set; }
+        public string ConcernName { get; set; }
+        public string VatName { get; set; }
+        public string ClientTaxNumber { get; set; }
         public string Date { get; set; }
         public string SheetCode { get; set; }
         public string InTime { get; set; }
@@ -25,6 +28,7 @@ namespace EventManagement.Areas.EventManagement.ResponseModels
         public decimal TotalWithoutVat { get; set; }
         public decimal VatValue { get; set; }
         public decimal VatAmount { get; set; }
+        public decimal TotalBeforeVat { get; set; }
         public decimal TotalAfterVat { get; set; }
     }
 }

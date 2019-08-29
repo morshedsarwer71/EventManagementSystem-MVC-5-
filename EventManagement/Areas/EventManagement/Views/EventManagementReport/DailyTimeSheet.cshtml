@@ -1,5 +1,7 @@
 ﻿@model EventManagement.Areas.EventManagement.ViewModels.ReportViewModels
 @{
+    /**/
+
     Layout = null;
 }
 <!DOCTYPE html>
@@ -26,47 +28,126 @@
     @*class="hold-transition login-page" --- body class*@
     <section class="content" style="padding-top:200px;padding-bottom:100px;">
         <div class="row">
-                <!-- /.box-header -->
-                <div class="box-body">
+            <!-- /.box-header -->
+            <div class="box-body">
+                @{
+                    var clientName = "";
+                    var ClientRegNumb = "";
+                    //var clientAddress = "";
+                    var companyName = "";
+                    var companyTaxNumb = "";
+                    //var companyAddress = "";
+                    var timeSheetNumb = "";
+                    decimal total = 0;
+                    decimal totalHour = 0;
+                    foreach (var item in Model.ResponseTimeSheets)
+                    {
+                        clientName = item.ClientName;
+                        ClientRegNumb = item.ClientTaxNumber;
+                        companyName = item.ConcernName;
+                        companyTaxNumb = item.VatName;
+                        timeSheetNumb = item.SheetCode;
+                        total = item.TotalBeforeVat;
+                        totalHour += item.TotalHour;
+
+                    }
+                }
+                <div class="row">
+                    <table class="table">
+                        <tr>
+                            <td>
+                                <div class="col-sm-6">
+                                    <div class="col-sm-12">
+                                        <div class="col-sm-12">
+                                            <h3>Services Provider:</h3>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <p><b>Legal Name: </b> @companyName</p>
+                                            <p><b>Registered Address: Dubai</b> </p>
+                                            <p><b>Tax Registration Number: </b> @companyTaxNumb</p>
+                                            <p><b>Time Sheet Number: </b> @timeSheetNumb</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="text-right">
+                                <div class="col-sm-6">
+                                    <div class="col-sm-12">
+                                        <div class="col-sm-12">
+                                            <h3>Services To:</h3>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <p><b>Legal Name: </b> @clientName</p>
+                                            <p><b>Registered Address: </b> Dubai</p>
+                                            <p><b>Tax Registration Number: </b> @ClientRegNumb</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+
+
+                </div>
+                <div class="row">
                     <table class="table table-bordered">
                         <thead>
                             <tr>
                                 <th style="width: 10px">#</th>
-                                <th>Code</th>
-                                <th>Client Name</th>
                                 <th>Employee Name</th>
-                                <th>Time Sheet Code</th>
                                 <th>In Time</th>
                                 <th>Out Time</th>
                                 <th>Total Hour</th>
                                 <th>Per Hour Rate</th>
                                 <th>Total</th>
-                                <th>Vat Amount</th>
-                                <th>Grand</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody style="margin-top:200px;">
                             @foreach (var item in Model.ResponseTimeSheets)
                             {
                                 <tr>
                                     <td>@item.Serial</td>
-                                    <td>@item.OrderCode</td>
-                                    <td>@item.ClientName</td>
                                     <td>@item.EmployeeName</td>
-                                    <td>@item.SheetCode</td>
-                                    <td>@item.InTime</td>
-                                    <td>@item.OutTime</td>
+                                    <td>@item.InTimeDate</td>
+                                    <td>@item.OutTimeDate</td>
                                     <td>@item.TotalHour</td>
                                     <td>@item.PerHourRate</td>
                                     <td>@item.TotalWithoutVat</td>
-                                    <td>@item.VatAmount</td>
-                                    <td>@item.TotalAfterVat</td>
                                 </tr>
                             }
                         </tbody>
                     </table>
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr>
+                                <td colspan="4" class="text-right"><b>Total Hour:  @totalHour</b></td>
+                                <td colspan="5" class="text-center"><b>Total Before Tax:  @total</b></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4>In Words: <b>@ViewBag.Value</b></h4>
+                    </div>
+                </div>
+                <div class="row" style="margin-top:100px;">
+                    <div class="col-sm-12">
+                        <table class="table">
+                            <tr>
+                                <td>
+                                    <div><h5>For @clientName</h5></div>
+                                </td>
+                                <td class="text-right">
+                                    <div><h5>For @companyName</h5></div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
             </div>
+        </div>
     </section>
 
     <script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>

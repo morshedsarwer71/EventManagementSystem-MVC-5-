@@ -1,4 +1,5 @@
 ﻿using EventManagement.Areas.EventManagement.Interfaces;
+using EventManagement.Areas.EventManagement.ValueInWords;
 using EventManagement.Areas.EventManagement.ViewModels;
 using EventManagement.Context;
 using Microsoft.Reporting.WebForms;
@@ -89,12 +90,21 @@ namespace EventManagement.Areas.EventManagement.Controllers
             var userName = Convert.ToString(Session["UserName"]);
             if (userId > 0 && concernId > 0)
             {
-                //var today = DateTime.Now.ToString("yyyy-MM-dd");
+                int totalValue = 0;
                 var sheet = _report.DailyTimeSheet(userName, userId, id, date, "en-US");
+                foreach (var item in sheet)
+                {
+                    totalValue = Convert.ToInt32(item.TotalBeforeVat);
+                }
+                WordValue value = new WordValue();
+                var final = value.NumberToWords(totalValue);
+                //var today = DateTime.Now.ToString("yyyy-MM-dd");
+
                 ReportViewModels viewModels = new ReportViewModels
                 {
                     ResponseTimeSheets = sheet
                 };
+                ViewBag.Value = final;
                 var report = new PartialViewAsPdf("DailyTimeSheet", viewModels);
                 return report;
             }
@@ -117,6 +127,34 @@ namespace EventManagement.Areas.EventManagement.Controllers
                 };
                 var report = new PartialViewAsPdf("TimeSheetSummary", viewModels);
                 return report;
+            }
+            return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
+        }
+        [HttpGet]
+        public ActionResult Test(int id, string date)
+        {
+            var concernId = Convert.ToInt32(Session["ConcernId"]);
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var userName = Convert.ToString(Session["UserName"]);
+            if (userId > 0 && concernId > 0)
+            {
+                int totalValue = 0;
+                var sheet = _report.DailyTimeSheet(userName, userId, id, date, "en-US");
+                foreach (var item in sheet)
+                {
+                    totalValue = Convert.ToInt32(item.TotalBeforeVat);
+                }
+                WordValue value = new WordValue();
+                var final = value.NumberToWords(totalValue);
+                //var today = DateTime.Now.ToString("yyyy-MM-dd");
+                
+                ReportViewModels viewModels = new ReportViewModels
+                {
+                    ResponseTimeSheets = sheet
+                };
+                ViewBag.Value = final;
+                //var report = new PartialViewAsPdf("DailyTimeSheet", viewModels);
+                return View(viewModels);
             }
             return RedirectToAction("LogIn", "GlobalData", new { Area = "Global" });
         }
